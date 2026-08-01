@@ -193,28 +193,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+function generateUserWaMessage(booking) {
+  const totalFormatted = Number(booking.totalPrice || booking.total_biaya || 0).toLocaleString('id-ID');
+  const catatan = booking.catatan || booking.notes || '-';
+  const bookingId = booking.id || booking._id || booking.booking_id || '-';
+  const name = booking.customerName || booking.nama_pemesan || booking.nama || '-';
+  const email = booking.email || '-';
+  const phone = booking.phone || booking.whatsapp || '-';
+  const dest = booking.destinationName || booking.destinasi || booking.paket_wisata || '-';
+  const date = booking.travelDate || booking.tgl_berangkat || '-';
+  const participants = booking.participants || booking.jumlah_peserta || 1;
+
+  return `🌱 Halo Admin Adventure Travel Indonesia!\n\n` +
+    `Saya ingin mengonfirmasi pesanan tiket/trip saya yang baru saja dibuat melalui website. Berikut adalah detail pemesanannya:\n\n` +
+    `🗺 *DETAIL PEMESANAN:*\n` +
+    `• ID Booking   : ${bookingId}\n` +
+    `• Nama Pemesan : ${name}\n` +
+    `• Email        : ${email}\n` +
+    `• No. WhatsApp : ${phone}\n\n` +
+    `🎒 *DETAIL DESTINASI TRIP:*\n` +
+    `• Paket Wisata : ${dest}\n` +
+    `• Tgl Berangkat: ${date}\n` +
+    `• Jumlah Peserta: ${participants} Orang\n` +
+    `💵 Total Biaya  : Rp${totalFormatted}\n` +
+    `• Catatan Khusus: ${catatan}\n\n` +
+    `Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan selanjutnya ya, Min. Terima kasih! ✨`;
+}
+
+function openUserWhatsApp(bookingData, targetPhone = '089517846680') {
+  const cleanPhone = String(targetPhone).replace(/^0/, '62').replace(/[^0-9]/g, '');
+  const messageText = generateUserWaMessage(bookingData);
+  const waUrl = "https://api.whatsapp.com/send?phone=" + cleanPhone + "&text=" + encodeURIComponent(messageText);
+  window.open(waUrl, '_blank');
+}
+
+window.generateUserWaMessage = generateUserWaMessage;
+window.openUserWhatsApp = openUserWhatsApp;
+
   function showSuccessModal(data) {
     const bookingId = data.id || data._id || ('BK-' + Math.floor(100000 + Math.random() * 900000));
-    const waText = `🌱 Halo Admin Adventure Travel Indonesia!\n\n` +
-      `Saya ingin mengonfirmasi pesanan tiket/trip saya yang baru saja dibuat melalui website. Berikut adalah detail pemesanannya:\n\n` +
-      `🗺️ *DETAIL PEMESANAN*\n` +
-      `• ID Booking: ${bookingId}\n` +
-      `• Nama Pemesan: ${data.customerName}\n` +
-      `• Email: ${data.email || '-'}\n` +
-      `• No. WhatsApp: ${data.phone || '-'}\n\n` +
-      `🎒 *DETAIL DESTINASI TRIP*\n` +
-      `• Paket Wisata: ${data.destinationName}\n` +
-      `• Tgl Berangkat: ${data.travelDate}\n` +
-      `• Jumlah Peserta: ${data.participants} Orang\n` +
-      `💵 Total Biaya: ${formatIDR(data.totalPrice)}\n` +
-      `• Catatan Khusus: ${data.notes || '-'}\n\n` +
-      `Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan selanjutnya ya, Min. Terima kasih! ✨`;
-
-    const waLink = `https://wa.me/6289517846680?text=${encodeURIComponent(waText)}`;
-
-
-
-
+    data.id = bookingId;
+    const cleanPhone = '089517846680'.replace(/^0/, '62');
+    const waText = generateUserWaMessage(data);
+    const waLink = "https://api.whatsapp.com/send?phone=" + cleanPhone + "&text=" + encodeURIComponent(waText);
 
     const modalHtml = `
       <div class="modal fade" id="bookingSuccessModal" tabindex="-1">
