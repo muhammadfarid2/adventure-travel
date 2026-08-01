@@ -255,7 +255,7 @@
                   </tr>
                 </thead>
                 <tbody id="adminBookingsTable">
-                  <tr>
+                  <tr data-booking-id="3770b527-d0f0-4033-acd3-05d5becd5058">
                     <td><span class="badge bg-dark font-monospace">BK-3770B5</span></td>
                     <td>
                       <strong>Farid</strong><br>
@@ -265,15 +265,15 @@
                     <td><i class="fas fa-calendar-alt text-primary me-1"></i> 2026-08-13</td>
                     <td>1 Org</td>
                     <td class="text-success font-weight-bold">Rp 550.000</td>
-                    <td><span class="badge bg-warning text-dark px-3 py-2 fs-6">Pending</span></td>
+                    <td><span class="badge bg-warning text-dark px-3 py-2 fs-6 booking-status-badge">Pending</span></td>
                     <td>
-                      <button class="btn btn-sm btn-info text-white font-weight-bold me-1" onclick="openBookingDetailModal('3770b527-d0f0-4033-acd3-05d5becd5058')"><i class="fas fa-eye me-1"></i> Detail</button>
-                      <button class="btn btn-sm btn-success font-weight-bold me-1" onclick="updateBookingStatusItem('3770b527-d0f0-4033-acd3-05d5becd5058', 'Approved')"><i class="fas fa-check me-1"></i> Setujui</button>
-                      <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1" onclick="updateBookingStatusItem('3770b527-d0f0-4033-acd3-05d5becd5058', 'Cancelled')"><i class="fas fa-ban me-1"></i> Batal</button>
-                      <button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="deleteBookingItem('3770b527-d0f0-4033-acd3-05d5becd5058')"><i class="fas fa-trash"></i></button>
+                      <button class="btn btn-sm btn-info text-white font-weight-bold me-1 mb-1" onclick="openBookingDetailModal('3770b527-d0f0-4033-acd3-05d5becd5058')"><i class="fas fa-eye me-1"></i> Detail</button>
+                      <button class="btn btn-sm btn-success font-weight-bold me-1 mb-1" onclick="handleSetujuiAction('3770b527-d0f0-4033-acd3-05d5becd5058')"><i class="fas fa-check me-1"></i> Setujui</button>
+                      <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1 mb-1" onclick="updateBookingStatusItem('3770b527-d0f0-4033-acd3-05d5becd5058', 'Cancelled')"><i class="fas fa-ban me-1"></i> Batal</button>
+                      <button class="btn btn-sm btn-outline-danger font-weight-bold mb-1" onclick="deleteBookingItem('3770b527-d0f0-4033-acd3-05d5becd5058')"><i class="fas fa-trash"></i></button>
                     </td>
                   </tr>
-                  <tr>
+                  <tr data-booking-id="6c8fc89d-2e2a-4192-8ade-fe61d5129f46">
                     <td><span class="badge bg-dark font-monospace">BK-6C8FC8</span></td>
                     <td>
                       <strong>Sely Nurfadila</strong><br>
@@ -283,15 +283,15 @@
                     <td><i class="fas fa-calendar-alt text-primary me-1"></i> 2026-08-16</td>
                     <td>1 Org</td>
                     <td class="text-success font-weight-bold">Rp 850.000</td>
-                    <td><span class="badge bg-success px-3 py-2 fs-6">Approved</span></td>
+                    <td><span class="badge bg-success px-3 py-2 fs-6 booking-status-badge">Approved</span></td>
                     <td>
-                      <button class="btn btn-sm btn-info text-white font-weight-bold me-1" onclick="openBookingDetailModal('6c8fc89d-2e2a-4192-8ade-fe61d5129f46')"><i class="fas fa-eye me-1"></i> Detail</button>
-                      <button class="btn btn-sm btn-success font-weight-bold me-1" onclick="updateBookingStatusItem('6c8fc89d-2e2a-4192-8ade-fe61d5129f46', 'Approved')"><i class="fas fa-check me-1"></i> Setujui</button>
-                      <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1" onclick="updateBookingStatusItem('6c8fc89d-2e2a-4192-8ade-fe61d5129f46', 'Cancelled')"><i class="fas fa-ban me-1"></i> Batal</button>
-                      <button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="deleteBookingItem('6c8fc89d-2e2a-4192-8ade-fe61d5129f46')"><i class="fas fa-trash"></i></button>
+                      <button class="btn btn-sm btn-info text-white font-weight-bold me-1 mb-1" onclick="openBookingDetailModal('6c8fc89d-2e2a-4192-8ade-fe61d5129f46')"><i class="fas fa-eye me-1"></i> Detail</button>
+                      <button class="btn btn-sm btn-success font-weight-bold me-1 mb-1" onclick="handleSetujuiAction('6c8fc89d-2e2a-4192-8ade-fe61d5129f46')"><i class="fas fa-check me-1"></i> Setujui</button>
+                      <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1 mb-1" onclick="updateBookingStatusItem('6c8fc89d-2e2a-4192-8ade-fe61d5129f46', 'Cancelled')"><i class="fas fa-ban me-1"></i> Batal</button>
+                      <button class="btn btn-sm btn-outline-danger font-weight-bold mb-1" onclick="deleteBookingItem('6c8fc89d-2e2a-4192-8ade-fe61d5129f46')"><i class="fas fa-trash"></i></button>
                     </td>
                   </tr>
-                  <tr>
+                  <tr data-booking-id="f722f939-1c34-4b07-a814-b71a255e74ff">
                     <td><span class="badge bg-dark font-monospace">BK-F722F9</span></td>
                     <td>
                       <strong>Sely Nurfadila</strong><br>
@@ -301,12 +301,12 @@
                     <td><i class="fas fa-calendar-alt text-primary me-1"></i> 2026-08-16</td>
                     <td>1 Org</td>
                     <td class="text-success font-weight-bold">Rp 3.850.000</td>
-                    <td><span class="badge bg-warning text-dark px-3 py-2 fs-6">Pending</span></td>
+                    <td><span class="badge bg-warning text-dark px-3 py-2 fs-6 booking-status-badge">Pending</span></td>
                     <td>
-                      <button class="btn btn-sm btn-info text-white font-weight-bold me-1" onclick="openBookingDetailModal('f722f939-1c34-4b07-a814-b71a255e74ff')"><i class="fas fa-eye me-1"></i> Detail</button>
-                      <button class="btn btn-sm btn-success font-weight-bold me-1" onclick="updateBookingStatusItem('f722f939-1c34-4b07-a814-b71a255e74ff', 'Approved')"><i class="fas fa-check me-1"></i> Setujui</button>
-                      <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1" onclick="updateBookingStatusItem('f722f939-1c34-4b07-a814-b71a255e74ff', 'Cancelled')"><i class="fas fa-ban me-1"></i> Batal</button>
-                      <button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="deleteBookingItem('f722f939-1c34-4b07-a814-b71a255e74ff')"><i class="fas fa-trash"></i></button>
+                      <button class="btn btn-sm btn-info text-white font-weight-bold me-1 mb-1" onclick="openBookingDetailModal('f722f939-1c34-4b07-a814-b71a255e74ff')"><i class="fas fa-eye me-1"></i> Detail</button>
+                      <button class="btn btn-sm btn-success font-weight-bold me-1 mb-1" onclick="handleSetujuiAction('f722f939-1c34-4b07-a814-b71a255e74ff')"><i class="fas fa-check me-1"></i> Setujui</button>
+                      <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1 mb-1" onclick="updateBookingStatusItem('f722f939-1c34-4b07-a814-b71a255e74ff', 'Cancelled')"><i class="fas fa-ban me-1"></i> Batal</button>
+                      <button class="btn btn-sm btn-outline-danger font-weight-bold mb-1" onclick="deleteBookingItem('f722f939-1c34-4b07-a814-b71a255e74ff')"><i class="fas fa-trash"></i></button>
                     </td>
                   </tr>
                 </tbody>
@@ -1281,8 +1281,29 @@
     }
 
 
-    // Fast Onclick Handler for Native Anchor Setujui Link
-    async function markBookingApproved(id) {
+    // Mobile & Desktop Responsive WhatsApp Deep-Link Launcher
+    function openWhatsAppUrl(phone, text) {
+      let cleanPhone = String(phone || '').replace(/\D/g, '');
+      if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
+      if (!cleanPhone.startsWith('62')) cleanPhone = '62' + cleanPhone;
+
+      const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
+
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (isMobile) {
+        // Mobile iOS & Android: Direct location navigation opens native WhatsApp mobile app 100% cleanly
+        window.location.href = waUrl;
+      } else {
+        // Laptop Desktop: Open WhatsApp Web in a new tab
+        const win = window.open(waUrl, '_blank');
+        if (!win || win.closed || typeof win.closed === 'undefined') {
+          window.location.href = waUrl;
+        }
+      }
+    }
+
+    // Fast Handler for Setujui Action (Approved)
+    function handleSetujuiAction(id) {
       const b = getBookingById(id);
       if (!b) return;
 
@@ -1291,19 +1312,33 @@
 
       saveBookingsData(currentBookingsList);
       updateAdminStats();
+      renderAdminBookingsTable(currentBookingsList);
 
-      const badgeEl = document.querySelector(`tr[data-booking-id="${realId}"] .booking-status-badge`);
-      if (badgeEl) {
-        badgeEl.className = 'badge bg-success px-3 py-2 fs-6 booking-status-badge';
-        badgeEl.textContent = 'Approved';
-      }
+      const accMessage = 
+        `🎉 *KABAR GEMBIRA! PEMESANAN ANDA DISETUJUI (ACC)* 🎉\n\n` +
+        `Halo Kak *${b.customerName}*, pemesanan trip Anda di *Adventure Travel Indonesia* telah diverifikasi dan disetujui oleh Admin!\n\n` +
+        `🗺️ *DETAIL PEMESANAN APPROVED*\n` +
+        `• ID Booking: ${realId}\n` +
+        `• Paket Wisata: ${b.destinationName}\n` +
+        `• Tgl Berangkat: ${b.travelDate}\n` +
+        `• Jumlah Peserta: ${b.participants} Orang\n` +
+        `• Total Biaya: ${formatIDR(b.totalPrice)}\n` +
+        `• Status: ✅ APPROVED / DISETUJUI\n\n` +
+        `💳 *INSTRUKSI SELANJUTNYA:*\n` +
+        `Silakan lakukan pembayaran DP/Pelunasan ke rekening resmi kami:\n` +
+        `• *Bank BCA*: 123-456-7890 a/n PT Adventure Travel\n` +
+        `• *Bank Mandiri*: 098-765-4321 a/n PT Adventure Travel\n\n` +
+        `Setelah melakukan transfer, mohon kirimkan foto bukti transfer ke chat ini ya Kak. Terima kasih! ✨`;
 
+      openWhatsAppUrl(b.phone, accMessage);
+
+      // Async API sync in background
       try {
         const token = localStorage.getItem('adventure_token');
         const headers = { 'Content-Type': 'application/json' };
         if (token) headers['Authorization'] = `Bearer ${token}`;
 
-        await fetch(`/api/bookings/${realId}/status`, {
+        fetch(`/api/bookings/${realId}/status`, {
           method: 'PUT',
           headers,
           body: JSON.stringify({ status: 'Approved' })
@@ -1311,50 +1346,30 @@
       } catch (err) {}
     }
 
+    // Fast Onclick Handler for Native Anchor Setujui Link
+    async function markBookingApproved(id) {
+      handleSetujuiAction(id);
+    }
+
     // Update Booking Status (Approved / Cancelled) & Auto-Open WhatsApp ACC
     async function updateBookingStatusItem(id, newStatus) {
+      if (newStatus === 'Approved') {
+        handleSetujuiAction(id);
+        return;
+      }
+
       const b = getBookingById(id);
       if (!b) return;
 
       const realId = b.id || b._id || id;
       b.status = newStatus;
 
-      // If Approved, trigger WhatsApp IMMEDIATELY using window.location.href (unblockable)
-      if (newStatus === 'Approved') {
-        let cleanPhone = (b.phone || '').replace(/\D/g, '');
-        if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
-        if (!cleanPhone.startsWith('62')) cleanPhone = '62' + cleanPhone;
+      alert(`Status pemesanan ${realId} (${b.customerName}) berhasil diubah menjadi "${newStatus}".`);
 
-        const accMessage = 
-          `🎉 *KABAR GEMBIRA! PEMESANAN ANDA DISETUJUI (ACC)* 🎉\n\n` +
-          `Halo Kak *${b.customerName}*, pemesanan trip Anda di *Adventure Travel Indonesia* telah diverifikasi dan disetujui oleh Admin!\n\n` +
-          `🗺️ *DETAIL PEMESANAN APPROVED*\n` +
-          `• ID Booking: ${realId}\n` +
-          `• Paket Wisata: ${b.destinationName}\n` +
-          `• Tgl Berangkat: ${b.travelDate}\n` +
-          `• Jumlah Peserta: ${b.participants} Orang\n` +
-          `• Total Biaya: ${formatIDR(b.totalPrice)}\n` +
-          `• Status: ✅ APPROVED / DISETUJUI\n\n` +
-          `💳 *INSTRUKSI SELANJUTNYA:*\n` +
-          `Silakan lakukan pembayaran DP/Pelunasan ke rekening resmi kami:\n` +
-          `• *Bank BCA*: 123-456-7890 a/n PT Adventure Travel\n` +
-          `• *Bank Mandiri*: 098-765-4321 a/n PT Adventure Travel\n\n` +
-          `Setelah melakukan transfer, mohon kirimkan foto bukti transfer ke chat ini ya Kak. Terima kasih! ✨`;
-
-        const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(accMessage)}`;
-
-        // Open WhatsApp directly via location navigation
-        window.location.href = waUrl;
-      } else {
-        alert(`Status pemesanan ${realId} (${b.customerName}) berhasil diubah menjadi "${newStatus}".`);
-      }
-
-      // Update local UI immediately
       saveBookingsData(currentBookingsList);
       updateAdminStats();
       renderAdminBookingsTable(currentBookingsList);
 
-      // Background API sync
       try {
         const token = localStorage.getItem('adventure_token');
         const headers = { 'Content-Type': 'application/json' };
