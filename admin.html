@@ -846,17 +846,17 @@
 
       const waMsgText = `${emojiHi} Halo Kak *${b.customerName}*!\n\n` +
         `Kami dari Admin Adventure Travel Indonesia ingin mengonfirmasi pesanan tiket/trip Anda:\n\n` +
-        `${emojiMap} *DETAIL PEMESANAN:*\n` +
-        `• ID Booking   : ${id}\n` +
-        `• Nama Pemesan : ${b.customerName}\n` +
-        `• Email        : ${b.email || '-'}\n` +
-        `• No. WhatsApp : ${b.phone || '-'}\n\n` +
-        `${emojiBackpack} *DETAIL DESTINASI TRIP:*\n` +
-        `• Paket Wisata : ${b.destinationName}\n` +
+        `${emojiMap} *DETAIL PEMESANAN*\n` +
+        `• ID Booking: ${id}\n` +
+        `• Nama Pemesan: ${b.customerName}\n` +
+        `• Email: ${b.email || '-'}\n` +
+        `• No. WhatsApp: ${b.phone || '-'}\n\n` +
+        `${emojiBackpack} *DETAIL DESTINASI TRIP*\n` +
+        `• Paket Wisata: ${b.destinationName}\n` +
         `• Tgl Berangkat: ${b.travelDate}\n` +
         `• Jumlah Peserta: ${b.participants} Orang\n` +
-        `${emojiDollar} Total Biaya  : ${formatIDR(b.totalPrice)}\n` +
-        `• Status       : ${b.status || 'Pending'}\n` +
+        `${emojiDollar} Total Biaya: ${formatIDR(b.totalPrice)}\n` +
+        `• Status: ${b.status || 'Pending'}\n` +
         `• Catatan Khusus: ${b.notes || '-'}\n\n` +
         `${emojiCheck} Halo Kak, pesanan Anda telah kami verifikasi. Silakan balas pesan ini untuk informasi pembayaran & instruksi keberangkatan selanjutnya. Terima kasih! ${emojiSparkles}`;
 
@@ -1046,13 +1046,13 @@
         const accMessage = 
           `${emojiParty} *KABAR GEMBIRA! PEMESANAN ANDA DISETUJUI (ACC)* ${emojiParty}\n\n` +
           `Halo Kak *${b.customerName}*, pemesanan trip Anda di *Adventure Travel Indonesia* telah diverifikasi dan disetujui oleh Admin!\n\n` +
-          `${emojiMap} *DETAIL PEMESANAN APPROVED:*\n` +
-          `• ID Booking   : ${id}\n` +
-          `• Paket Wisata : ${b.destinationName}\n` +
+          `${emojiMap} *DETAIL PEMESANAN APPROVED*\n` +
+          `• ID Booking: ${id}\n` +
+          `• Paket Wisata: ${b.destinationName}\n` +
           `• Tgl Berangkat: ${b.travelDate}\n` +
           `• Jumlah Peserta: ${b.participants} Orang\n` +
-          `• Total Biaya  : ${formatIDR(b.totalPrice)}\n` +
-          `• Status       : ${emojiCheck} APPROVED / DISETUJUI\n\n` +
+          `• Total Biaya: ${formatIDR(b.totalPrice)}\n` +
+          `• Status: ${emojiCheck} APPROVED / DISETUJUI\n\n` +
           `${emojiCard} *INSTRUKSI SELANJUTNYA:*\n` +
           `Silakan lakukan pembayaran DP/Pelunasan ke rekening resmi kami:\n` +
           `• *Bank BCA*: 123-456-7890 a/n PT Adventure Travel\n` +

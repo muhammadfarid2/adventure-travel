@@ -206,16 +206,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const waText = `${emojiPalm} Halo Admin Adventure Travel Indonesia!\n\n` +
       `Saya ingin mengonfirmasi pesanan tiket/trip saya yang baru saja dibuat melalui website. Berikut adalah detail pemesanannya:\n\n` +
-      `${emojiMap} *DETAIL PEMESANAN:*\n` +
-      `• ID Booking   : ${bookingId}\n` +
-      `• Nama Pemesan : ${data.customerName}\n` +
-      `• Email        : ${data.email || '-'}\n` +
-      `• No. WhatsApp : ${data.phone || '-'}\n\n` +
-      `${emojiBackpack} *DETAIL DESTINASI TRIP:*\n` +
-      `• Paket Wisata : ${data.destinationName}\n` +
+      `${emojiMap} *DETAIL PEMESANAN*\n` +
+      `• ID Booking: ${bookingId}\n` +
+      `• Nama Pemesan: ${data.customerName}\n` +
+      `• Email: ${data.email || '-'}\n` +
+      `• No. WhatsApp: ${data.phone || '-'}\n\n` +
+      `${emojiBackpack} *DETAIL DESTINASI TRIP*\n` +
+      `• Paket Wisata: ${data.destinationName}\n` +
       `• Tgl Berangkat: ${data.travelDate}\n` +
       `• Jumlah Peserta: ${data.participants} Orang\n` +
-      `${emojiDollar} Total Biaya  : ${formatIDR(data.totalPrice)}\n` +
+      `${emojiDollar} Total Biaya: ${formatIDR(data.totalPrice)}\n` +
       `• Catatan Khusus: ${data.notes || '-'}\n\n` +
       `Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan selanjutnya ya, Min. Terima kasih! ${emojiSparkles}`;
 
