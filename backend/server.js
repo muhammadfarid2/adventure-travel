@@ -18,6 +18,7 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const userRoutes = require('./routes/userRoutes');
 
 const app = express();
+app.set('trust proxy', 1);
 
 // Initialize DB Connection & Auto-Sync Schema + Seeding
 (async () => {
