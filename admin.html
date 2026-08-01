@@ -1190,7 +1190,43 @@
       });
     }
 
-    // 1. FUNGSI TOMBOL SETUJUI (DIRECT TO WHATSAPP WITH EMOJI)
+    // Helper generator pesan WhatsApp dengan Unicode Escape Sequences (100% Bebas Emoji Corrupt)
+    function getWaMessage(booking) {
+      const name = booking.nama_pemesan || booking.nama || booking.customerName || '';
+      const bookingId = booking.id || booking.booking_id || booking._id || '';
+      const email = booking.email || '';
+      const phone = booking.whatsapp || booking.phone || '';
+      const destination = booking.destinasi || booking.paket_wisata || booking.destinationName || '';
+      const date = booking.tgl_berangkat || booking.travelDate || '';
+      const qty = booking.jumlah_peserta || booking.participants || 1;
+      const total = Number(booking.total_biaya || booking.totalPrice || 0).toLocaleString('id-ID');
+      const status = booking.status || 'Approved';
+      const note = booking.catatan || booking.notes || '-';
+
+      // Menggunakan Unicode Escape Sequence agar 100% aman di semua server/encoding
+      return `\uD83D\uDC4B *Halo Kak ${name}!*
+
+Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan tiket/trip Anda:
+
+\uD83D\uDCCB *DETAIL PEMESANAN*
+\u2022 ID Booking: ${bookingId}
+\u2022 Nama Pemesan: ${name}
+\u2022 Email: ${email}
+\u2022 No. WhatsApp: ${phone}
+
+\uD83C\uDFDD\uFE0F *DETAIL DESTINASI TRIP*
+\u2022 Paket Wisata: ${destination}
+\u2022 Tgl Berangkat: ${date}
+\u2022 Jumlah Peserta: ${qty} Orang
+\uD83D\uDCB2 *Total Biaya: Rp ${total}*
+\u2022 Status: ${status}
+\u2022 Catatan Khusus: ${note}
+
+\uD83D\uDCAC *Halo Kak, pesanan Anda telah kami verifikasi.*
+Silakan lakukan pembayaran sesuai dengan instruksi yang diberikan. Terima kasih! \u2708\uFE0F`;
+    }
+
+    // 1. FUNGSI TOMBOL SETUJUI (DIRECT TO WHATSAPP WITH UNICODE EMOJI ESCAPES)
     function handleApproveBooking(bookingData) {
       try {
         let booking = (typeof bookingData === 'object' && bookingData !== null) ? bookingData : getBookingById(bookingData);
@@ -1204,35 +1240,17 @@
         renderAdminBookingsTable(currentBookingsList);
 
         let phone = booking.whatsapp || booking.phone || booking.telepon || '082127663876';
-        // Format nomor WA ke 62xxx
-        phone = String(phone).replace(/^0/, '62').replace(/[^0-9]/g, '');
+        const formattedPhone = String(phone).replace(/^0/, '62').replace(/[^0-9]/g, '');
 
-        let text = "👋 *Halo Kak " + (booking.nama_pemesan || booking.nama || booking.customerName || '') + "*\n\n" +
-                   "Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan tiket/trip Anda:\n\n" +
-                   "📋 *DETAIL PEMESANAN*\n" +
-                   "• ID Booking: " + (booking.id || booking.booking_id || booking._id || '') + "\n" +
-                   "• Nama Pemesan: " + (booking.nama_pemesan || booking.nama || booking.customerName || '') + "\n" +
-                   "• Email: " + (booking.email || '') + "\n" +
-                   "• No. WhatsApp: " + (booking.whatsapp || booking.phone || '') + "\n\n" +
-                   "🏝️ *DETAIL DESTINASI TRIP*\n" +
-                   "• Paket Wisata: " + (booking.destinasi || booking.paket_wisata || booking.destinationName || '') + "\n" +
-                   "• Tgl Berangkat: " + (booking.tgl_berangkat || booking.travelDate || '') + "\n" +
-                   "• Jumlah Peserta: " + (booking.jumlah_peserta || booking.participants || 1) + " Orang\n" +
-                   "💰 *Total Biaya: Rp " + Number(booking.total_biaya || booking.totalPrice || 0).toLocaleString('id-ID') + "*\n" +
-                   "• Status: " + (booking.status || 'Approved') + "\n" +
-                   "• Catatan Khusus: " + (booking.catatan || booking.notes || '-') + "\n\n" +
-                   "💬 *Halo Kak, pesanan Anda telah kami verifikasi.*\n" +
-                   "Silakan lakukan pembayaran sesuai dengan instruksi yang diberikan. Terima kasih! ✈️";
-
-        const waUrl = "https://wa.me/" + phone + "?text=" + encodeURIComponent(text);
+        const fullUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(getWaMessage(booking))}`;
 
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         if (isMobile) {
-          window.location.href = waUrl;
+          window.location.href = fullUrl;
         } else {
-          const win = window.open(waUrl, '_blank');
+          const win = window.open(fullUrl, '_blank');
           if (!win || win.closed || typeof win.closed === 'undefined') {
-            window.location.href = waUrl;
+            window.location.href = fullUrl;
           }
         }
 
