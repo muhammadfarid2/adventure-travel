@@ -1192,13 +1192,6 @@
                     <div class="p-3 bg-white border rounded-3 shadow-sm">
                       <h6 class="font-weight-bold text-success mb-3 border-bottom pb-2">
                         <i class="fas fa-calculator me-2"></i> Keberangkatan & Pembayaran
-                      </h6>
-                      <div class="row text-center g-3">
-                        <div class="col-md-4">
-                          <small class="text-muted d-block">Tanggal Keberangkatan</small>
-                          <strong class="fs-6 text-primary"><i class="fas fa-calendar-alt me-1"></i> ${b.travelDate}</strong>
-                        </div>
-                        <div class="col-md-4">
                 <div class="row g-3">
 
                   <div class="col-md-6">
@@ -1274,39 +1267,32 @@
       const realId = b.id || b._id || id;
       b.status = newStatus;
 
-      // If Approved, trigger WhatsApp IMMEDIATELY on user click gesture (before async await)
+      // If Approved, trigger WhatsApp IMMEDIATELY using window.location.href (unblockable)
       if (newStatus === 'Approved') {
         let cleanPhone = (b.phone || '').replace(/\D/g, '');
         if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
         if (!cleanPhone.startsWith('62')) cleanPhone = '62' + cleanPhone;
 
-        const emojiParty = '\uD83C\uDF89';    // 🎉
-        const emojiCheck = '\u2705';         // ✅
-        const emojiMap = '\uD83D\uDDFA';     // 🗺️
-        const emojiCard = '\uD83D\uDCB3';    // 💳
-        const emojiSparkles = '\u2728';     // ✨
-
         const accMessage = 
-          `${emojiParty} *KABAR GEMBIRA! PEMESANAN ANDA DISETUJUI (ACC)* ${emojiParty}\n\n` +
+          `🎉 *KABAR GEMBIRA! PEMESANAN ANDA DISETUJUI (ACC)* 🎉\n\n` +
           `Halo Kak *${b.customerName}*, pemesanan trip Anda di *Adventure Travel Indonesia* telah diverifikasi dan disetujui oleh Admin!\n\n` +
-          `${emojiMap} *DETAIL PEMESANAN APPROVED*\n` +
+          `🗺️ *DETAIL PEMESANAN APPROVED*\n` +
           `• ID Booking: ${realId}\n` +
           `• Paket Wisata: ${b.destinationName}\n` +
           `• Tgl Berangkat: ${b.travelDate}\n` +
           `• Jumlah Peserta: ${b.participants} Orang\n` +
           `• Total Biaya: ${formatIDR(b.totalPrice)}\n` +
-          `• Status: ${emojiCheck} APPROVED / DISETUJUI\n\n` +
-          `${emojiCard} *INSTRUKSI SELANJUTNYA:*\n` +
+          `• Status: ✅ APPROVED / DISETUJUI\n\n` +
+          `💳 *INSTRUKSI SELANJUTNYA:*\n` +
           `Silakan lakukan pembayaran DP/Pelunasan ke rekening resmi kami:\n` +
           `• *Bank BCA*: 123-456-7890 a/n PT Adventure Travel\n` +
           `• *Bank Mandiri*: 098-765-4321 a/n PT Adventure Travel\n\n` +
-          `Setelah melakukan transfer, mohon kirimkan foto bukti transfer ke chat ini ya Kak. Terima kasih! ${emojiSparkles}`;
+          `Setelah melakukan transfer, mohon kirimkan foto bukti transfer ke chat ini ya Kak. Terima kasih! ✨`;
 
-        const encodedAccMessage = encodeURIComponent(accMessage);
-        const waUrl = `https://wa.me/${cleanPhone}?text=${encodedAccMessage}`;
+        const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(accMessage)}`;
 
-        // Direct browser open on user click gesture
-        window.open(waUrl, '_blank') || (window.location.href = waUrl);
+        // Open WhatsApp directly via location navigation
+        window.location.href = waUrl;
       } else {
         alert(`Status pemesanan ${realId} (${b.customerName}) berhasil diubah menjadi "${newStatus}".`);
       }

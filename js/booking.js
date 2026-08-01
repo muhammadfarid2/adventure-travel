@@ -195,29 +195,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showSuccessModal(data) {
     const bookingId = data.id || data._id || ('BK-' + Math.floor(100000 + Math.random() * 900000));
-    const emojiHi = '\uD83D\uDC4B';        // 👋 (Waving Hand)
-
-    const emojiMap = '\uD83D\uDDFA';       // 🗺️ (World Map)
-    const emojiPalm = '\uD83C\uDF31';      // 🌱 (Seedling)
-    const emojiBackpack = '\uD83C\uDF92';  // 🎒 (Backpack)
-    const emojiDollar = '\uD83D\uDCB5';    // 💵 (Banknote)
-    const emojiCheck = '\u2705';           // ✅ (Check Mark)
-    const emojiSparkles = '\u2728';       // ✨ (Sparkles)
-
-    const waText = `${emojiPalm} Halo Admin Adventure Travel Indonesia!\n\n` +
+    const waText = `🌱 Halo Admin Adventure Travel Indonesia!\n\n` +
       `Saya ingin mengonfirmasi pesanan tiket/trip saya yang baru saja dibuat melalui website. Berikut adalah detail pemesanannya:\n\n` +
-      `${emojiMap} *DETAIL PEMESANAN*\n` +
+      `🗺️ *DETAIL PEMESANAN*\n` +
       `• ID Booking: ${bookingId}\n` +
       `• Nama Pemesan: ${data.customerName}\n` +
       `• Email: ${data.email || '-'}\n` +
       `• No. WhatsApp: ${data.phone || '-'}\n\n` +
-      `${emojiBackpack} *DETAIL DESTINASI TRIP*\n` +
+      `🎒 *DETAIL DESTINASI TRIP*\n` +
       `• Paket Wisata: ${data.destinationName}\n` +
       `• Tgl Berangkat: ${data.travelDate}\n` +
       `• Jumlah Peserta: ${data.participants} Orang\n` +
-      `${emojiDollar} Total Biaya: ${formatIDR(data.totalPrice)}\n` +
+      `💵 Total Biaya: ${formatIDR(data.totalPrice)}\n` +
       `• Catatan Khusus: ${data.notes || '-'}\n\n` +
-      `Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan selanjutnya ya, Min. Terima kasih! ${emojiSparkles}`;
+      `Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan selanjutnya ya, Min. Terima kasih! ✨`;
 
     const waLink = `https://wa.me/6289517846680?text=${encodeURIComponent(waText)}`;
 
