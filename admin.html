@@ -510,24 +510,68 @@
   <!-- Detail Modal -->
   <div class="modal fade" id="detailModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content rounded-4 border-0 shadow">
+      <div class="modal-content rounded-4 border-0 shadow-lg">
         <div class="modal-header bg-dark text-white p-3">
-          <h5 class="modal-title font-weight-bold"><i class="fas fa-file-invoice text-warning me-2"></i> Rincian Pemesanan Trip</h5>
+          <h5 class="modal-title font-weight-bold d-flex align-items-center">
+            <i class="fas fa-file-invoice text-warning me-2"></i> Rincian Pemesanan Trip
+          </h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-4">
-          <p><strong>ID Booking:</strong> <span id="modalBookingId"></span></p>
-          <p><strong>Nama Pemesan:</strong> <span id="modalNama"></span></p>
-          <p><strong>Destinasi:</strong> <span id="modalDestinasi"></span></p>
-          <p><strong>Tanggal Berangkat:</strong> <span id="modalTanggal"></span></p>
-          <p><strong>Total Biaya:</strong> <span id="modalTotal" class="text-success font-weight-bold"></span></p>
-          <p><strong>Status:</strong> <span id="modalStatus" class="badge bg-warning text-dark"></span></p>
-          <p><strong>Catatan:</strong> <span id="modalCatatan"></span></p>
+          <!-- Top Status Bar -->
+          <div class="p-3 bg-light rounded-3 mb-3 border d-flex justify-content-between align-items-center">
+            <div>
+              <small class="text-muted d-block fw-bold">ID BOOKING</small>
+              <strong id="modalBookingId" class="font-monospace fs-6 text-dark">-</strong>
+            </div>
+            <div>
+              <small class="text-muted d-block fw-bold text-end">STATUS</small>
+              <span id="modalStatus" class="badge bg-warning text-dark px-3 py-2 fs-6">-</span>
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <!-- Card Data Pemesan -->
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3 border h-100">
+                <h6 class="fw-bold text-success mb-2"><i class="fas fa-user-circle me-1"></i> Data Pemesan</h6>
+                <p class="mb-1"><strong>Nama:</strong> <span id="modalNama">-</span></p>
+                <p class="mb-1"><strong>Email:</strong> <span id="modalEmail">-</span></p>
+                <p class="mb-0"><strong>WhatsApp:</strong> <span id="modalPhone">-</span></p>
+              </div>
+            </div>
+
+            <!-- Card Detail Wisata -->
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3 border h-100">
+                <h6 class="fw-bold text-success mb-2"><i class="fas fa-compass me-1"></i> Detail Wisata</h6>
+                <p class="mb-1"><strong>Paket Wisata:</strong> <span id="modalDestinasi">-</span></p>
+                <p class="mb-1"><strong>Tgl Berangkat:</strong> <span id="modalTanggal">-</span></p>
+                <p class="mb-0"><strong>Jumlah Peserta:</strong> <span id="modalPeserta">1</span> Orang</p>
+              </div>
+            </div>
+
+            <!-- Total Biaya -->
+            <div class="col-12">
+              <div class="p-3 bg-light border rounded-3 d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-muted"><i class="fas fa-wallet text-success me-1"></i> Total Biaya Pemesanan:</span>
+                <strong id="modalTotal" class="fs-4 text-success">Rp 0</strong>
+              </div>
+            </div>
+
+            <!-- Catatan Khusus -->
+            <div class="col-12">
+              <div class="p-3 bg-light border rounded-3">
+                <h6 class="fw-bold text-dark mb-1"><i class="fas fa-sticky-note text-warning me-1"></i> Catatan Khusus</h6>
+                <p id="modalCatatan" class="mb-0 text-muted fst-italic">-</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="modal-footer bg-light">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-          <button type="button" class="btn btn-success" id="btnModalWa" style="background-color: #25D366; border:none;">
-            <i class="fab fa-whatsapp me-1"></i> Konfirmasi via WhatsApp
+        <div class="modal-footer bg-light px-4 py-3 justify-content-between">
+          <button type="button" class="btn btn-secondary px-4 fw-bold rounded-3" data-bs-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-success fw-bold rounded-3 px-4" id="btnModalWa" style="background-color: #25D366; border: none;">
+            <i class="fab fa-whatsapp me-2"></i> Konfirmasi via WhatsApp
           </button>
         </div>
       </div>
@@ -816,19 +860,58 @@
       window.open("https://api.whatsapp.com/send?phone=" + formattedPhone + "&text=" + encodeURIComponent(rawMsg), '_blank');
     }
 
+    function getWaFormattedMessage(b) {
+      const totalFormatted = Number(b.totalPrice || b.total_biaya || 0).toLocaleString('id-ID');
+      const noteText = b.catatan || b.notes || 'Tidak ada';
+
+      return `🌱 Halo Admin Adventure Travel Indonesia!
+
+Saya ingin mengonfirmasi pesanan tiket/trip saya yang baru saja dibuat melalui website. Berikut adalah detail pemesanannya:
+
+🗺 *DETAIL PEMESANAN*
+• ID Booking: ${b.id || b._id}
+• Nama Pemesan: ${b.customerName || b.nama_pemesan || '-'}
+• Email: ${b.email || '-'}
+• No. WhatsApp: ${b.phone || b.whatsapp || '-'}
+
+🎒 *DETAIL DESTINASI TRIP*
+• Paket Wisata: ${b.destinationName || b.destinasi || '-'}
+• Tgl Berangkat: ${b.travelDate || b.tgl_berangkat || '-'}
+• Jumlah Peserta: ${b.participants || 1} Orang
+💵 Total Biaya: Rp${totalFormatted}
+• Catatan Khusus: ${noteText}
+
+Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan selanjutnya ya, Min. Terima kasih! ✨`;
+    }
+
     function handleShowDetail(id) {
       let b = getBookingById(id);
       if (!b) return;
 
       document.getElementById('modalBookingId').innerText = b.id || b._id;
       document.getElementById('modalNama').innerText = b.customerName || b.nama_pemesan || '-';
+      document.getElementById('modalEmail').innerText = b.email || '-';
+      document.getElementById('modalPhone').innerText = b.phone || b.whatsapp || '-';
       document.getElementById('modalDestinasi').innerText = b.destinationName || b.destinasi || '-';
       document.getElementById('modalTanggal').innerText = b.travelDate || b.tgl_berangkat || '-';
-      document.getElementById('modalTotal').innerText = formatIDR(b.totalPrice || b.total_biaya || 0);
+      document.getElementById('modalPeserta').innerText = b.participants || 1;
+      document.getElementById('modalTotal').innerText = formatIDR(b.totalPrice || b.total_biaya);
       document.getElementById('modalStatus').innerText = b.status || 'Pending';
-      document.getElementById('modalCatatan').innerText = b.catatan || b.notes || '-';
+      document.getElementById('modalCatatan').innerText = b.catatan || b.notes || 'Tidak ada catatan khusus';
 
-      document.getElementById('btnModalWa').onclick = () => handleApproveBooking(b.id);
+      const statusBadge = document.getElementById('modalStatus');
+      if (b.status === 'Approved') {
+        statusBadge.className = 'badge bg-success px-3 py-2 fs-6';
+      } else {
+        statusBadge.className = 'badge bg-warning text-dark px-3 py-2 fs-6';
+      }
+
+      document.getElementById('btnModalWa').onclick = function() {
+        let phone = String(b.phone || b.whatsapp || '082127663876').replace(/^0/, '62').replace(/[^0-9]/g, '');
+        const rawMsg = getWaFormattedMessage(b);
+        window.open("https://api.whatsapp.com/send?phone=" + phone + "&text=" + encodeURIComponent(rawMsg), '_blank');
+      };
+
       new bootstrap.Modal(document.getElementById('detailModal')).show();
     }
 
