@@ -1199,25 +1199,45 @@
                           <strong class="fs-6 text-primary"><i class="fas fa-calendar-alt me-1"></i> ${b.travelDate}</strong>
                         </div>
                         <div class="col-md-4">
-                          <small class="text-muted d-block">Jumlah Peserta</small>
-                          <strong class="fs-6 text-dark"><i class="fas fa-users me-1"></i> ${b.participants} Orang</strong>
-                        </div>
-                        <div class="col-md-4">
-                          <small class="text-muted d-block">Total Pembayaran</small>
-                          <strong class="fs-5 text-success"><i class="fas fa-wallet me-1"></i> ${formatIDR(b.totalPrice)}</strong>
-                        </div>
+                <div class="row g-3">
+
+                  <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 border">
+                      <h6 class="font-weight-bold text-success mb-2"><i class="fas fa-user me-2"></i> Data Pemesan</h6>
+                      <p class="mb-1"><strong>Nama:</strong> ${b.customerName}</p>
+                      <p class="mb-1"><strong>Email:</strong> ${b.email || '-'}</p>
+                      <p class="mb-0"><strong>No. WhatsApp:</strong> <a href="https://wa.me/${cleanPhone}" target="_blank" class="text-success font-weight-bold">${b.phone || '-'}</a></p>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 border">
+                      <h6 class="font-weight-bold text-success mb-2"><i class="fas fa-compass me-2"></i> Detail Wisata</h6>
+                      <p class="mb-1"><strong>Paket Wisata:</strong> ${b.destinationName}</p>
+                      <p class="mb-1"><strong>Tgl Berangkat:</strong> ${b.travelDate}</p>
+                      <p class="mb-0"><strong>Jumlah Peserta:</strong> ${b.participants} Orang</p>
+                    </div>
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="p-3 bg-light rounded-3 border d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 class="font-weight-bold text-muted mb-1">Total Biaya Pemesanan</h6>
+                        <strong class="fs-4 text-success">${formatIDR(b.totalPrice)}</strong>
+                      </div>
+                      <div>
+                        <span class="badge ${badgeClass} px-3 py-2 fs-6">${b.status || 'Pending'}</span>
                       </div>
                     </div>
                   </div>
 
-                  <!-- Special Requests / Notes Box -->
                   <div class="col-12">
                     <div class="p-3 bg-light border rounded-3">
                       <h6 class="font-weight-bold text-dark mb-2">
-                        <i class="fas fa-sticky-note me-2 text-warning"></i> Catatan / Permintaan Khusus
+                        <i class="fas fa-sticky-note me-2 text-warning"></i> Catatan Khusus
                       </h6>
                       <p class="mb-0 text-muted fst-italic">
-                        ${b.notes ? `"${b.notes}"` : 'Tidak ada catatan atau permintaan khusus.'}
+                        ${b.notes ? `"${b.notes}"` : 'Tidak ada catatan khusus.'}
                       </p>
                     </div>
                   </div>
@@ -1225,8 +1245,11 @@
                 </div>
               </div>
 
-              <div class="modal-footer bg-light p-3">
+              <div class="modal-footer bg-light p-3 justify-content-between">
                 <button type="button" class="btn btn-secondary px-4 font-weight-bold rounded-pill" data-bs-dismiss="modal">Tutup</button>
+                <a href="${waUrl}" target="_blank" class="btn btn-success px-4 py-2 font-weight-bold rounded-pill shadow-lg" style="background-color: #25D366; border: none;">
+                  <i class="fab fa-whatsapp fa-lg me-2"></i> Chat Langsung via WhatsApp
+                </a>
               </div>
             </div>
           </div>
@@ -1245,15 +1268,15 @@
 
     // Update Booking Status (Approved / Cancelled) & Auto-Open WhatsApp ACC
     async function updateBookingStatusItem(id, newStatus) {
-      const index = currentBookingsList.findIndex(b => b.id === id || b._id === id);
-      if (index === -1) return;
+      const b = getBookingById(id);
+      if (!b) return;
 
-      const b = currentBookingsList[index];
+      const realId = b.id || b._id || id;
       b.status = newStatus;
 
       try {
         const token = localStorage.getItem('adventure_token');
-        await fetch(`/api/bookings/${id}/status`, {
+        await fetch(`/api/bookings/${realId}/status`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -1282,7 +1305,7 @@
           `${emojiParty} *KABAR GEMBIRA! PEMESANAN ANDA DISETUJUI (ACC)* ${emojiParty}\n\n` +
           `Halo Kak *${b.customerName}*, pemesanan trip Anda di *Adventure Travel Indonesia* telah diverifikasi dan disetujui oleh Admin!\n\n` +
           `${emojiMap} *DETAIL PEMESANAN APPROVED*\n` +
-          `• ID Booking: ${id}\n` +
+          `• ID Booking: ${realId}\n` +
           `• Paket Wisata: ${b.destinationName}\n` +
           `• Tgl Berangkat: ${b.travelDate}\n` +
           `• Jumlah Peserta: ${b.participants} Orang\n` +
@@ -1292,16 +1315,13 @@
           `Silakan lakukan pembayaran DP/Pelunasan ke rekening resmi kami:\n` +
           `• *Bank BCA*: 123-456-7890 a/n PT Adventure Travel\n` +
           `• *Bank Mandiri*: 098-765-4321 a/n PT Adventure Travel\n\n` +
+          `Setelah melakukan transfer, mohon kirimkan foto bukti transfer ke chat ini ya Kak. Terima kasih! ${emojiSparkles}`;
+
         const encodedAccMessage = encodeURIComponent(accMessage);
         const waUrl = `https://wa.me/${cleanPhone}?text=${encodedAccMessage}`;
-
-        // Directly open WhatsApp without blocking alert modal
-        const newWin = window.open(waUrl, '_blank');
-        if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
-          window.location.href = waUrl;
-        }
+        window.open(waUrl, '_blank') || (window.location.href = waUrl);
       } else {
-        alert(`Status pemesanan ${id} (${b.customerName}) berhasil diubah menjadi "${newStatus}".`);
+        alert(`Status pemesanan ${realId} (${b.customerName}) berhasil diubah menjadi "${newStatus}".`);
       }
     }
 
