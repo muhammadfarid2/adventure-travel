@@ -62,9 +62,8 @@ function updateNavbarAuthUI() {
 function checkAdminAccess() {
   const currentPath = window.location.pathname.split('/').pop();
   if (currentPath === 'admin.html') {
-    const user = getLoggedInUser();
-    if (!user || user.role !== 'admin') {
-      alert('Akses Ditolak! Halaman Dashboard Admin hanya dapat diakses oleh akun dengan Role Admin (admin@adventuretravel.id).');
+    const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
+    if (!isLoggedIn || isLoggedIn !== 'true') {
       window.location.href = 'login.html';
     }
   }

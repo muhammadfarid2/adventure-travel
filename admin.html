@@ -3,6 +3,14 @@
 
 <head>
   <meta charset="UTF-8">
+  <script>
+    // Cek apakah admin sudah login di sesi ini
+    const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
+    if (!isLoggedIn || isLoggedIn !== 'true') {
+      // Jika belum login, lempar kembali ke halaman login.html
+      window.location.href = 'login.html';
+    }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Adventure Travel Indonesia</title>
 
@@ -185,6 +193,11 @@
           <a class="nav-link text-gold" href="index.html">
             <i class="fas fa-globe me-1"></i> Lihat Website Utama
           </a>
+        </li>
+        <li class="nav-item mt-2 pt-2 border-top border-secondary">
+          <button class="nav-link text-danger bg-transparent border-0 font-weight-bold w-100 text-start" onclick="handleAdminLogout()">
+            <i class="fas fa-sign-out-alt me-1"></i> Logout Admin
+          </button>
         </li>
       </ul>
     </div>
@@ -1118,7 +1131,16 @@ Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan sel
       }
     }
 
+    function handleAdminLogout() {
+      if (confirm('Apakah Anda yakin ingin keluar dari Admin Panel?')) {
+        sessionStorage.clear();
+        localStorage.removeItem('adminLoggedIn');
+        window.location.href = 'login.html';
+      }
+    }
+
     // Global Alias
+    window.handleAdminLogout = handleAdminLogout;
     window.openBookingDetailModal = handleShowDetail;
     window.handleShowDetail = handleShowDetail;
     window.handleSetujuiAction = handleApproveBooking;
