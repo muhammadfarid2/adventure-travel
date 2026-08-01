@@ -1190,7 +1190,7 @@
       });
     }
 
-    // Helper generator pesan WhatsApp ACC dengan Hex Percent Decoding & SeaBank
+    // Helper generator pesan WhatsApp ACC (SeaBank & encodeURIComponent murni)
     function getWaApproveMessage(booking) {
       const name = booking.nama_pemesan || booking.nama || booking.customerName || '';
       const bookingId = booking.id || booking.booking_id || booking._id || '';
@@ -1203,46 +1203,37 @@
       const status = booking.status || 'Approved';
       const note = booking.catatan || booking.notes || '-';
 
-      // Pesan dengan URL encoding langsung agar emoji (👋, 📋, 🏝️, 💰, 💳, 💬, ✈️) tidak pernah rusak
-      const wave = decodeURIComponent('%F0%9F%91%8B'); // 👋
-      const clip = decodeURIComponent('%F0%9F%93%8B'); // 📋
-      const island = decodeURIComponent('%F0%9F%8F%9D%EF%B8%8F'); // 🏝️
-      const money = decodeURIComponent('%F0%9F%92%B0'); // 💰
-      const card = decodeURIComponent('%F0%9F%92%B3'); // 💳
-      const chat = decodeURIComponent('%F0%9F%92%AC'); // 💬
-      const plane = decodeURIComponent('%E2%9C%88%EF%B8%8F'); // ✈️
-
-      return `${wave} *Halo Kak ${name}!*
+      return `👋 *Halo Kak ${name}!*
 
 Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan tiket/trip Anda:
 
-${clip} *DETAIL PEMESANAN*
+📋 *DETAIL PEMESANAN*
 • ID Booking: ${bookingId}
 • Nama Pemesan: ${name}
 • Email: ${email}
 • No. WhatsApp: ${phone}
 
-${island} *DETAIL DESTINASI TRIP*
+🏝️ *DETAIL DESTINASI TRIP*
 • Paket Wisata: ${destination}
 • Tgl Berangkat: ${date}
 • Jumlah Peserta: ${qty} Orang
-${money} *Total Biaya: Rp ${total}*
+💰 *Total Biaya: Rp ${total}*
 • Status: ${status}
 • Catatan Khusus: ${note}
 
-${card} *INSTRUKSI PEMBAYARAN*
+💳 *INSTRUKSI PEMBAYARAN*
 Silakan lakukan pembayaran DP/Pelunasan ke rekening resmi kami:
 • *SeaBank:* 901151723579 a/n PT Adventure Travel
 
-${chat} *Halo Kak, pesanan Anda telah kami verifikasi.*
-Setelah melakukan transfer, mohon kirimkan foto bukti transfer ke chat ini ya Kak. Terima kasih! ${plane}`;
+💬 *Halo Kak, pesanan Anda telah kami verifikasi.*
+Setelah melakukan transfer, mohon kirimkan foto bukti transfer ke chat ini ya Kak. Terima kasih! ✈️`;
     }
 
     // Aliases for WhatsApp message generator compatibility
     function getCleanWaMessage(booking) { return getWaApproveMessage(booking); }
     function getWaMessage(booking) { return getWaApproveMessage(booking); }
 
-    // 1. FUNGSI TOMBOL SETUJUI (DIRECT TO WHATSAPP WITH HEX ENCODED EMOJIS & SEABANK)
+    // 1. FUNGSI TOMBOL SETUJUI (DIRECT TO WHATSAPP API ENDPOINT)
     function handleApproveBooking(bookingData) {
       try {
         let booking = (typeof bookingData === 'object' && bookingData !== null) ? bookingData : getBookingById(bookingData);
@@ -1258,7 +1249,9 @@ Setelah melakukan transfer, mohon kirimkan foto bukti transfer ke chat ini ya Ka
         let phone = booking.whatsapp || booking.phone || booking.telepon || '082127663876';
         const formattedPhone = String(phone).replace(/^0/, '62').replace(/[^0-9]/g, '');
 
-        const waUrl = "https://wa.me/" + formattedPhone + "?text=" + encodeURIComponent(getWaApproveMessage(booking));
+        // Menggunakan encodeURIComponent murni & api.whatsapp.com
+        const rawMsg = getWaApproveMessage(booking);
+        const waUrl = "https://api.whatsapp.com/send?phone=" + formattedPhone + "&text=" + encodeURIComponent(rawMsg);
 
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         if (isMobile) {
