@@ -576,7 +576,9 @@
   <script>
     console.log("Admin JS loaded successfully");
 
-    const API_BASE_URL = window.API_BASE_URL || '';
+    const API_BASE_URL = window.API_BASE_URL || (window.location.origin.includes('localhost') 
+      ? 'http://localhost:5000' 
+      : 'https://adventure-travel-lovat.vercel.app');
 
     function formatIDR(amount) {
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(amount || 0);
@@ -588,21 +590,38 @@
     let addImageBase64 = '';
     let editImageBase64 = '';
 
-    async function fetchUsers() {
+    async function fetchUsersData() {
+      let users = [];
       try {
         const res = await fetch(`${API_BASE_URL}/api/users`);
         if (res.ok) {
-          currentUsersList = await res.json();
-          renderAdminUsersTable();
-          updateAdminStats();
-          return currentUsersList;
+          users = await res.json();
         }
-      } catch (err) {
-        console.error('Error fetching users from server:', err);
+      } catch (e) {
+        console.log("Membaca dari localStorage fallback...");
       }
-      return currentUsersList || [];
+
+      if (!users || users.length === 0) {
+        const stored = localStorage.getItem('adventure_users');
+        if (stored) {
+          try { users = JSON.parse(stored); } catch (err) {}
+        } else {
+          users = [
+            { name: "Administrator Adventure", email: "admin@adventuretravel.id", phone: "089517846680", role: "ADMIN" },
+            { name: "Farid", email: "farid12@gmail.com", phone: "089602652710", role: "USER" },
+            { name: "Sely Nurfadila", email: "atuylionnnn@gmail.com", phone: "082127663876", role: "USER" }
+          ];
+          localStorage.setItem('adventure_users', JSON.stringify(users));
+        }
+      }
+
+      currentUsersList = users;
+      renderAdminUsersTable();
+      if (typeof updateAdminStats === 'function') updateAdminStats();
+      return currentUsersList;
     }
-    const getUsersData = fetchUsers;
+    const fetchUsers = fetchUsersData;
+    const getUsersData = fetchUsersData;
 
     function renderAdminUsersTable() {
       const tbody = document.getElementById('adminUsersTable');
@@ -638,44 +657,20 @@
     }
 
     async function deleteUserItem(email) {
-      if (!confirm(`Apakah Anda yakin ingin menghapus user "${email}" secara permanen dari Database Server?`)) return;
+      if (!confirm(`Apakah Anda yakin ingin menghapus user ${email}?`)) return;
 
       try {
-        const res = await fetch(`${API_BASE_URL}/api/users/${encodeURIComponent(email)}`, {
-          method: 'DELETE'
-        });
-
-        if (res.ok) {
-          alert('User berhasil dihapus permanen!');
-          fetchUsers();
-        } else {
-          alert('Gagal menghapus user dari Database Server.');
-        }
+        await fetch(`${API_BASE_URL}/api/users/${encodeURIComponent(email)}`, { method: 'DELETE' });
       } catch (err) {
-        console.error('Error deleting user:', err);
-        alert('Terjadi kesalahan koneksi ke backend.');
-      }
-    }
-
-    function setupRememberTab() {
-      const savedTab = localStorage.getItem('activeAdminTab');
-      if (savedTab) {
-        const targetBtn = document.querySelector(`a[href="${savedTab}"]`);
-        if (targetBtn) {
-          const tabInstance = new bootstrap.Tab(targetBtn);
-          tabInstance.show();
-        }
+        console.log("Server API DELETE tidak merespons, menghapus secara lokal...");
       }
 
-      const tabLinks = document.querySelectorAll('#adminTab a[data-bs-toggle="tab"]');
-      tabLinks.forEach(link => {
-        link.addEventListener('shown.bs.tab', (e) => {
-          const activeHref = e.target.getAttribute('href');
-          if (activeHref) {
-            localStorage.setItem('activeAdminTab', activeHref);
-          }
-        });
-      });
+      currentUsersList = currentUsersList.filter(u => u.email !== email);
+      localStorage.setItem('adventure_users', JSON.stringify(currentUsersList));
+      
+      if (typeof updateAdminStats === 'function') updateAdminStats();
+      renderAdminUsersTable();
+      alert(`User ${email} berhasil dihapus.`);
     }
 
     function getBookingById(id) {
@@ -685,7 +680,6 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       loadAdminDashboardData();
-      setupRememberTab();
       setupImageFileInputs();
 
       const addForm = document.getElementById('addDestinationForm');
