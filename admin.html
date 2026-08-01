@@ -565,6 +565,8 @@
   <script>
     console.log("Admin JS loaded successfully");
 
+    const API_BASE_URL = window.API_BASE_URL || '';
+
     function formatIDR(amount) {
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(amount || 0);
     }
@@ -577,7 +579,7 @@
 
     async function getUsersData() {
       try {
-        const res = await fetch('/api/users');
+        const res = await fetch(`${API_BASE_URL}/api/users`);
         if (res.ok) {
           const apiUsers = await res.json();
           if (Array.isArray(apiUsers) && apiUsers.length > 0) {
@@ -649,7 +651,7 @@
 
       if (confirm(`Apakah Anda yakin ingin menghapus user "${user.name || email}"?`)) {
         try {
-          await fetch(`/api/users/${encodeURIComponent(email)}`, { method: 'DELETE' });
+          await fetch(`${API_BASE_URL}/api/users/${encodeURIComponent(email)}`, { method: 'DELETE' });
         } catch (err) { }
 
         currentUsersList = currentUsersList.filter(u => u.email !== email);
@@ -678,7 +680,7 @@
 
     async function getBookingsData() {
       try {
-        const res = await fetch('/api/bookings');
+        const res = await fetch(`${API_BASE_URL}/api/bookings`);
         if (res.ok) {
           const apiBookings = await res.json();
           if (Array.isArray(apiBookings) && apiBookings.length > 0) {
@@ -726,7 +728,7 @@
 
     async function getDestinationsData() {
       try {
-        const res = await fetch('/api/destinations');
+        const res = await fetch(`${API_BASE_URL}/api/destinations`);
         if (res.ok) {
           const apiDestinations = await res.json();
           if (Array.isArray(apiDestinations) && apiDestinations.length > 0) {
@@ -1018,7 +1020,7 @@ Silakan transfer ke SeaBank:
       if (typeof renderAdminBookingsTable === 'function') renderAdminBookingsTable();
 
       try {
-        await fetch(`/api/bookings/${id}/status`, {
+        await fetch(`${API_BASE_URL}/api/bookings/${id}/status`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ status: 'Approved' })
@@ -1095,7 +1097,7 @@ Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan sel
       renderAdminBookingsTable();
 
       try {
-        await fetch(`/api/bookings/${id}/status`, {
+        await fetch(`${API_BASE_URL}/api/bookings/${id}/status`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ status: newStatus })
@@ -1111,7 +1113,7 @@ Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan sel
         renderAdminBookingsTable();
 
         try {
-          await fetch(`/api/bookings/${id}`, { method: 'DELETE' });
+          await fetch(`${API_BASE_URL}/api/bookings/${id}`, { method: 'DELETE' });
         } catch (err) { }
       }
     }

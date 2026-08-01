@@ -2,6 +2,8 @@
    ADVENTURE TRAVEL INDONESIA - MAIN SCRIPT JS
    ================================================== */
 
+const API_BASE_URL = window.API_BASE_URL || '';
+
 // Global Currency Formatter
 function formatIDR(amount) {
   return new Intl.NumberFormat('id-ID', {
@@ -445,7 +447,7 @@ async function renderDestinations(category = 'All', searchQuery = '') {
 
   let list = [];
   try {
-    const res = await fetch('/api/destinations');
+    const res = await fetch(`${API_BASE_URL}/api/destinations`);
     if (res.ok) {
       list = await res.json();
     } else {

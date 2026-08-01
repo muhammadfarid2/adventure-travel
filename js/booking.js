@@ -2,6 +2,8 @@
    ADVENTURE TRAVEL INDONESIA - BOOKING LOGIC
    ================================================== */
 
+const API_BASE_URL = window.API_BASE_URL || '';
+
 document.addEventListener('DOMContentLoaded', () => {
   const bookingForm = document.getElementById('bookingForm');
   const destinationSelect = document.getElementById('destinationSelect');
@@ -32,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       let data = [];
-      const res = await fetch('/api/destinations');
+      const res = await fetch(`${API_BASE_URL}/api/destinations`);
       if (res.ok) {
         data = await res.json();
       } else {
@@ -170,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let finalBooking = { ...savedLocal, ...bookingData };
 
     try {
-      const response = await fetch('/api/bookings', {
+      const response = await fetch(`${API_BASE_URL}/api/bookings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bookingData)
