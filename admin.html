@@ -209,7 +209,7 @@
           <h2 class="font-weight-bold text-dark mb-0">Dashboard Admin</h2>
           <p class="text-muted mb-0">Kelola destinasi wisata, upload gambar dari laptop, pemesanan & user.</p>
         </div>
-        <button id="btnRefreshData" class="btn btn-outline-success font-weight-bold shadow-sm" onclick="loadAdminDashboardData(true)">
+        <button id="btnRefreshData" class="btn btn-outline-success font-weight-bold shadow-sm" onclick="loadAllAdminData(true)">
           <i class="fas fa-sync-alt me-1"></i> Refresh Data
         </button>
       </div>
@@ -1139,12 +1139,19 @@ Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan sel
       }
     }
 
-    // Global Alias
+    // Global Helper & API Function Aliases
+    window.fetchBookings = getBookingsData;
+    window.fetchUsers = getUsersData;
+    window.loadAllAdminData = loadAdminDashboardData;
+    window.loadAdminDashboardData = loadAdminDashboardData;
     window.handleAdminLogout = handleAdminLogout;
     window.openBookingDetailModal = handleShowDetail;
     window.handleShowDetail = handleShowDetail;
     window.handleSetujuiAction = handleApproveBooking;
     window.handleApproveBooking = handleApproveBooking;
+    window.updateBookingStatusItem = updateBookingStatusItem;
+    window.deleteBookingItem = deleteBookingItem;
+    window.deleteUserItem = deleteUserItem;
   </script>
 </body>
 
