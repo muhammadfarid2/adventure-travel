@@ -3,7 +3,9 @@ const path = require('path');
 const fs = require('fs');
 const child_process = require('child_process');
 
-const dbUrl = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/adventure_travel';
+const rawDbUrl = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/adventure_travel';
+const dbUrl = typeof rawDbUrl === 'string' ? rawDbUrl.trim().replace(/^["'`]|["'`]$/g, '').trim() : '';
+
 const isProduction = process.env.NODE_ENV === 'production';
 
 // Check if DATABASE_URL points to a cloud database or requires SSL
@@ -31,7 +33,7 @@ const isLocalPgActive = () => {
 };
 
 let sequelize;
-const usePostgres = isCloudPostgres || (!isLocalhost) || isLocalPgActive();
+const usePostgres = (isCloudPostgres || (!isLocalhost) || isLocalPgActive()) && dbUrl.length > 0;
 
 if (usePostgres) {
   let dialectOptions = {};
@@ -46,17 +48,30 @@ if (usePostgres) {
     };
   }
 
-  sequelize = new Sequelize(dbUrl, {
-    dialect: 'postgres',
-    logging: false,
-    dialectOptions,
-    pool: {
-      max: 10,
-      min: 0,
-      acquire: 30000,
-      idle: 10000
+  try {
+    sequelize = new Sequelize(dbUrl, {
+      dialect: 'postgres',
+      logging: false,
+      dialectOptions,
+      pool: {
+        max: 10,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+      }
+    });
+  } catch (parseErr) {
+    console.warn(`[PostgreSQL Warning]: Failed to parse DATABASE_URL (${parseErr.message}). Using SQLite fallback.`);
+    const dataDir = path.join(__dirname, '../data');
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
     }
-  });
+    sequelize = new Sequelize({
+      dialect: 'sqlite',
+      storage: path.join(dataDir, 'database.sqlite'),
+      logging: false
+    });
+  }
 } else {
   const dataDir = path.join(__dirname, '../data');
   if (!fs.existsSync(dataDir)) {
