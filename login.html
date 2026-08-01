@@ -211,6 +211,7 @@
           alert(`Selamat Datang, ${data.user.name}! Login Berhasil.`);
 
           if (data.user.role === 'admin' || data.user.role === 'ADMIN' || data.user.email === 'admin@adventuretravel.id') {
+            sessionStorage.setItem('isAdminLoggedIn', 'true');
             sessionStorage.setItem('adminLoggedIn', 'true');
             window.location.href = 'admin.html';
           } else {
@@ -231,6 +232,7 @@
       if (email.toLowerCase() === 'admin@adventuretravel.id' && password === 'admin123') {
         const adminUser = { id: 'admin1', name: 'Administrator Adventure', email: 'admin@adventuretravel.id', role: 'admin', phone: '089517846680' };
         setLoggedInUser(adminUser, 'mock_token_admin');
+        sessionStorage.setItem('isAdminLoggedIn', 'true');
         sessionStorage.setItem('adminLoggedIn', 'true');
         alert(`Login Admin Berhasil! Selamat datang, ${adminUser.name}.`);
         window.location.href = 'admin.html';

@@ -62,8 +62,7 @@ function updateNavbarAuthUI() {
 function checkAdminAccess() {
   const currentPath = window.location.pathname.split('/').pop();
   if (currentPath === 'admin.html') {
-    const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
-    if (!isLoggedIn || isLoggedIn !== 'true') {
+    if (sessionStorage.getItem('isAdminLoggedIn') !== 'true' && sessionStorage.getItem('adminLoggedIn') !== 'true') {
       window.location.href = 'login.html';
     }
   }

@@ -4,10 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <script>
-    // Cek apakah admin sudah login di sesi ini
-    const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
-    if (!isLoggedIn || isLoggedIn !== 'true') {
-      // Jika belum login, lempar kembali ke halaman login.html
+    // Strict Admin Session Auth Check
+    if (sessionStorage.getItem('isAdminLoggedIn') !== 'true' && sessionStorage.getItem('adminLoggedIn') !== 'true') {
       window.location.href = 'login.html';
     }
   </script>
@@ -1151,7 +1149,9 @@ Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan sel
     function handleAdminLogout() {
       if (confirm('Apakah Anda yakin ingin keluar dari Admin Panel?')) {
         sessionStorage.clear();
+        localStorage.removeItem('adminToken');
         localStorage.removeItem('adminLoggedIn');
+        localStorage.removeItem('isAdminLoggedIn');
         window.location.href = 'login.html';
       }
     }
