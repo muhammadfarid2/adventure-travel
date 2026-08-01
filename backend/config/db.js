@@ -14,7 +14,8 @@ const getValidPostgresUrl = () => {
   for (const raw of candidates) {
     if (raw && typeof raw === 'string') {
       const cleaned = raw.trim().replace(/^["'`]|["'`]$/g, '').trim();
-      if (cleaned.startsWith('postgres://') || cleaned.startsWith('postgresql://')) {
+      // Ensure string starts with postgres scheme AND has a valid hostname (not broken '@:')
+      if ((cleaned.startsWith('postgres://') || cleaned.startsWith('postgresql://')) && !cleaned.includes('@:')) {
         return cleaned;
       }
     }
@@ -49,7 +50,7 @@ if (process.env.DB_SSL === 'false' || isRailwayInternal) {
 }
 
 if (postgresUrl) {
-  console.log('[Database Config]: Initializing PostgreSQL via URL connection string...');
+  console.log('[Database Config]: Initializing PostgreSQL via connection URL...');
   sequelize = new Sequelize(postgresUrl, {
     dialect: 'postgres',
     logging: false,
@@ -69,7 +70,7 @@ if (postgresUrl) {
 } else {
   // Fallback to standard PostgreSQL local string
   const defaultUrl = 'postgres://postgres:postgres@localhost:5432/adventure_travel';
-  console.log('[Database Config]: Using default PostgreSQL connection string...');
+  console.log('[Database Config]: No valid cloud connection string found. Using default PostgreSQL connection string...');
   sequelize = new Sequelize(defaultUrl, {
     dialect: 'postgres',
     logging: false,
