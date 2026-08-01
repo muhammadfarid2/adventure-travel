@@ -589,6 +589,19 @@
     let editImageBase64 = '';
 
     async function getUsersData() {
+      const rawData = localStorage.getItem('adventure_users');
+      
+      // HANYA buat data bawaan jika localStorage BENAR-BENAR belum pernah dibuat sebelumnya (null)
+      if (rawData === null) {
+        const initialUsers = [
+          { name: "Administrator Adventure", email: "admin@adventuretravel.id", phone: "089517846680", role: "ADMIN" },
+          { name: "Farid", email: "farid12@gmail.com", phone: "089602652710", role: "USER" },
+          { name: "Sely Nurfadila", email: "atuylionnnn@gmail.com", phone: "082127663876", role: "USER" }
+        ];
+        localStorage.setItem('adventure_users', JSON.stringify(initialUsers));
+        return initialUsers;
+      }
+
       try {
         const res = await fetch(`${API_BASE_URL}/api/users`);
         if (res.ok) {
@@ -601,20 +614,14 @@
       } catch (err) {
         console.warn('[PostgreSQL API Notice] Using LocalStorage cache for users.', err.message);
       }
-      let stored = localStorage.getItem('adventure_users');
-      if (stored !== null) {
-        try {
-          let parsed = JSON.parse(stored);
-          if (Array.isArray(parsed)) return parsed;
-        } catch (e) { }
+
+      try {
+        const parsed = JSON.parse(rawData);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        console.error("Gagal parse data users:", e);
+        return [];
       }
-      const defaultUsers = [
-        { name: "Administrator Adventure", email: "admin@adventuretravel.id", phone: "089517846680", role: "ADMIN" },
-        { name: "Farid", email: "farid12@gmail.com", phone: "089602652710", role: "USER" },
-        { name: "Sely Nurfadila", email: "atuylionnnn@gmail.com", phone: "082127663876", role: "USER" }
-      ];
-      localStorage.setItem('adventure_users', JSON.stringify(defaultUsers));
-      return defaultUsers;
     }
 
     function saveUsersData(list) {
@@ -663,7 +670,7 @@
 
         currentUsersList = currentUsersList.filter(u => u.email !== email);
         saveUsersData(currentUsersList);
-        updateAdminStats();
+        if (typeof updateAdminStats === 'function') updateAdminStats();
         renderAdminUsersTable();
       }
     }
