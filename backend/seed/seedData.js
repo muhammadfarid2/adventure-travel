@@ -50,8 +50,17 @@ const seedPostgreSQLDatabase = async (options = { force: false }) => {
       console.log(`[PostgreSQL Seed] Reset/Verified Admin User (${adminEmail}).`);
     }
 
-    // Check existing data for destinations
-    const existingDestinations = await Destination.count();
+    // Ensure initial bookings exist if table is empty
+    const existingBookingsCount = await Booking.count();
+    if (existingBookingsCount === 0) {
+      const bromoDest = (await Destination.findOne({ where: { name: 'Gunung Bromo' } })) || { id: 'dest_1' };
+      const komodoDest = (await Destination.findOne({ where: { name: 'Pulau Komodo' } })) || { id: 'dest_2' };
+      await Booking.bulkCreate([
+        { customerName: "Budi Santoso", email: "budi@gmail.com", phone: "081298765432", destinationId: String(bromoDest.id), destinationName: "Gunung Bromo", travelDate: "2026-08-15", participants: 2, totalPrice: 1700000, status: "Approved", notes: "Minta guide ramah" },
+        { customerName: "Siti Rahma", email: "siti@gmail.com", phone: "081311223344", destinationId: String(komodoDest.id), destinationName: "Pulau Komodo", travelDate: "2026-08-20", participants: 1, totalPrice: 3850000, status: "Pending", notes: "Kabin atas" }
+      ]);
+      console.log('[PostgreSQL Seed] Seeded Initial Bookings because table was empty.');
+    }
 
     if (existingDestinations > 0 && !options.force) {
       console.log('[PostgreSQL Seed] Database already contains destination data. Auto-seed verified.');

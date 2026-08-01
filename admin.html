@@ -507,7 +507,12 @@
           headers: { Authorization: `Bearer ${token}` }
         });
         if (resB.ok) {
-          currentBookingsList = await resB.json();
+          const apiBookings = await resB.json();
+          if (Array.isArray(apiBookings) && apiBookings.length > 0) {
+            currentBookingsList = apiBookings;
+          } else {
+            currentBookingsList = getBookingsData();
+          }
         } else {
           currentBookingsList = getBookingsData();
         }
@@ -1059,11 +1064,12 @@
           `• *Bank Mandiri*: 098-765-4321 a/n PT Adventure Travel\n\n` +
         const encodedAccMessage = encodeURIComponent(accMessage);
         const waUrl = `https://wa.me/${cleanPhone}?text=${encodedAccMessage}`;
+
+        // Directly open WhatsApp without blocking alert modal
         const newWin = window.open(waUrl, '_blank');
         if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
           window.location.href = waUrl;
         }
-        alert(`Status pemesanan ${id} (${b.customerName}) berhasil DISETUJU (Approved)! Link WhatsApp Bot ACC otomatis dibuka.`);
       } else {
         alert(`Status pemesanan ${id} (${b.customerName}) berhasil diubah menjadi "${newStatus}".`);
       }
