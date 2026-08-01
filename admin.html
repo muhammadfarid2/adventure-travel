@@ -1075,7 +1075,47 @@
       });
     }
 
-    // Open Booking Detail Modal (With try-catch & console.log per instructions)
+    // Helper to launch WhatsApp Detail Chat directly by ID (No inline nested template strings)
+    function openWhatsAppDetailChat(id) {
+      const b = getBookingById(id);
+      if (!b) return;
+
+      const realId = b.id || b.booking_id || b._id || id;
+      const phone = b.whatsapp || b.phone || '';
+      const formattedPhone = phone.replace(/^0/, '62').replace(/[^0-9]/g, '');
+      const nama = b.nama_pemesan || b.nama || b.customerName || 'Pelanggan';
+      const email = b.email || '-';
+      const destinasi = b.destinasi || b.paket_wisata || b.destinationName || '-';
+      const tgl = b.tgl_berangkat || b.travelDate || '-';
+      const peserta = b.jumlah_peserta || b.participants || 1;
+      const total = Number(b.total_biaya || b.totalPrice || 0);
+      const catatan = b.catatan || b.notes || '-';
+
+      const text = `👋 *Halo Kak ${nama}!*
+
+Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan tiket/trip Anda:
+
+📋 *DETAIL PEMESANAN*
+• ID Booking: ${realId}
+• Nama Pemesan: ${nama}
+• Email: ${email}
+• No. WhatsApp: ${formattedPhone}
+
+🏝️ *DETAIL DESTINASI TRIP*
+• Paket Wisata: ${destinasi}
+• Tgl Berangkat: ${tgl}
+• Jumlah Peserta: ${peserta} Orang
+💰 *Total Biaya: ${formatIDR(total)}*
+• Status: ${b.status || 'Pending'}
+• Catatan Khusus: ${catatan}
+
+💬 *Halo Kak, pesanan Anda telah kami verifikasi.*
+Silakan lakukan pembayaran sesuai instruksi. Terima kasih! ✈️`;
+
+      openWhatsAppUrl(formattedPhone, text);
+    }
+
+    // Open Booking Detail Modal (Pure In-Memory Array - 0 Extra Fetch Calls)
     function openDetailModal(id) {
       try {
         console.log("Tombol Detail untuk ID:", id, "telah diklik");
@@ -1086,28 +1126,21 @@
           return;
         }
 
-        const realId = b.id || b._id || id;
-        let cleanPhone = cleanPhoneNumber(b.phone);
-
-        const waMsgText = `👋 *Halo Kak ${b.customerName}!*\n\n` +
-          `Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan tiket/trip Anda:\n\n` +
-          `📋 *DETAIL PEMESANAN*\n` +
-          `• ID Booking: ${realId}\n` +
-          `• Nama Pemesan: ${b.customerName}\n` +
-          `• Email: ${b.email || '-'}\n` +
-          `• No. WhatsApp: ${b.phone || '-'}\n\n` +
-          `🏝️ *DETAIL DESTINASI TRIP*\n` +
-          `• Paket Wisata: ${b.destinationName}\n` +
-          `• Tgl Berangkat: ${b.travelDate}\n` +
-          `• Jumlah Peserta: ${b.participants} Orang\n` +
-          `💰 *Total Biaya: ${formatIDR(b.totalPrice)}*\n` +
-          `• Status: ${b.status || 'Pending'}\n` +
-          `• Catatan Khusus: ${b.notes ? b.notes : 'Tidak ada catatan khusus.'}\n\n` +
-          `💬 *Halo Kak, pesanan Anda telah kami verifikasi.*`;
+        const realId = b.id || b.booking_id || b._id || id;
+        const phone = b.whatsapp || b.phone || '';
+        const formattedPhone = phone.replace(/^0/, '62').replace(/[^0-9]/g, '');
+        const nama = b.nama_pemesan || b.nama || b.customerName || 'Pelanggan';
+        const email = b.email || '-';
+        const destinasi = b.destinasi || b.paket_wisata || b.destinationName || '-';
+        const tgl = b.tgl_berangkat || b.travelDate || '-';
+        const peserta = b.jumlah_peserta || b.participants || 1;
+        const total = Number(b.total_biaya || b.totalPrice || 0);
+        const status = b.status || 'Pending';
+        const catatan = b.catatan || b.notes || 'Tidak ada catatan khusus.';
 
         let badgeClass = 'bg-warning text-dark';
-        if (b.status === 'Approved') badgeClass = 'bg-success';
-        if (b.status === 'Cancelled') badgeClass = 'bg-danger';
+        if (status === 'Approved') badgeClass = 'bg-success';
+        if (status === 'Cancelled') badgeClass = 'bg-danger';
 
         const createdAtFormatted = b.createdAt ? new Date(b.createdAt).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : 'Terbaru';
 
@@ -1128,10 +1161,10 @@
                   <div class="d-flex flex-wrap justify-content-between align-items-center bg-light p-3 rounded-3 mb-4 border">
                     <div>
                       <span class="text-muted small d-block">Status Pemesanan:</span>
-                      <span class="badge ${badgeClass} px-3 py-2 fs-6 mt-1">${b.status}</span>
+                      <span class="badge ${badgeClass} px-3 py-2 fs-6 mt-1">${status}</span>
                     </div>
                     <div class="btn-group mt-2 mt-sm-0">
-                      <button class="btn btn-sm btn-success font-weight-bold" onclick="approveBooking('${realId}'); try{ bootstrap.Modal.getInstance(document.getElementById('adminBookingDetailModal')).hide(); }catch(e){}">
+                      <button class="btn btn-sm btn-success font-weight-bold" onclick="handleApprove('${realId}'); try{ bootstrap.Modal.getInstance(document.getElementById('adminBookingDetailModal')).hide(); }catch(e){}">
                         <i class="fas fa-check me-1"></i> Setujui
                       </button>
                       <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold" onclick="updateBookingStatusItem('${realId}', 'Cancelled'); try{ bootstrap.Modal.getInstance(document.getElementById('adminBookingDetailModal')).hide(); }catch(e){}">
@@ -1144,18 +1177,18 @@
                     <div class="col-md-6">
                       <div class="p-3 bg-light rounded-3 border">
                         <h6 class="font-weight-bold text-success mb-2"><i class="fas fa-user me-2"></i> Data Pemesan</h6>
-                        <p class="mb-1"><strong>Nama:</strong> ${b.customerName}</p>
-                        <p class="mb-1"><strong>Email:</strong> ${b.email || '-'}</p>
-                        <p class="mb-0"><strong>No. WhatsApp:</strong> ${b.phone || '-'}</p>
+                        <p class="mb-1"><strong>Nama:</strong> ${nama}</p>
+                        <p class="mb-1"><strong>Email:</strong> ${email}</p>
+                        <p class="mb-0"><strong>No. WhatsApp:</strong> ${phone || '-'}</p>
                       </div>
                     </div>
 
                     <div class="col-md-6">
                       <div class="p-3 bg-light rounded-3 border">
                         <h6 class="font-weight-bold text-success mb-2"><i class="fas fa-compass me-2"></i> Detail Wisata</h6>
-                        <p class="mb-1"><strong>Paket Wisata:</strong> ${b.destinationName}</p>
-                        <p class="mb-1"><strong>Tgl Berangkat:</strong> ${b.travelDate}</p>
-                        <p class="mb-0"><strong>Jumlah Peserta:</strong> ${b.participants} Orang</p>
+                        <p class="mb-1"><strong>Paket Wisata:</strong> ${destinasi}</p>
+                        <p class="mb-1"><strong>Tgl Berangkat:</strong> ${tgl}</p>
+                        <p class="mb-0"><strong>Jumlah Peserta:</strong> ${peserta} Orang</p>
                       </div>
                     </div>
 
@@ -1163,10 +1196,10 @@
                       <div class="p-3 bg-light rounded-3 border d-flex justify-content-between align-items-center">
                         <div>
                           <h6 class="font-weight-bold text-muted mb-1">Total Biaya Pemesanan</h6>
-                          <strong class="fs-4 text-success">${formatIDR(b.totalPrice)}</strong>
+                          <strong class="fs-4 text-success">${formatIDR(total)}</strong>
                         </div>
                         <div>
-                          <span class="badge ${badgeClass} px-3 py-2 fs-6">${b.status || 'Pending'}</span>
+                          <span class="badge ${badgeClass} px-3 py-2 fs-6">${status}</span>
                         </div>
                       </div>
                     </div>
@@ -1177,7 +1210,7 @@
                           <i class="fas fa-sticky-note me-2 text-warning"></i> Catatan Khusus
                         </h6>
                         <p class="mb-0 text-muted fst-italic">
-                          ${b.notes ? `"${b.notes}"` : 'Tidak ada catatan khusus.'}
+                          ${catatan}
                         </p>
                       </div>
                     </div>
@@ -1186,7 +1219,7 @@
 
                 <div class="modal-footer bg-light p-3 justify-content-between">
                   <button type="button" class="btn btn-secondary px-4 font-weight-bold rounded-pill" data-bs-dismiss="modal">Tutup</button>
-                  <button type="button" onclick="openWhatsAppUrl('${b.phone}', \`${waMsgText}\`)" class="btn btn-success px-4 py-2 font-weight-bold rounded-pill shadow-lg" style="background-color: #25D366; border: none;">
+                  <button type="button" onclick="openWhatsAppDetailChat('${realId}')" class="btn btn-success px-4 py-2 font-weight-bold rounded-pill shadow-lg" style="background-color: #25D366; border: none;">
                     <i class="fab fa-whatsapp fa-lg me-2"></i> Chat Langsung via WhatsApp
                   </button>
                 </div>
@@ -1235,37 +1268,51 @@
     }
 
     // Approve Booking Handler & WhatsApp URL Generator
-    function approveBooking(bookingData) {
+    function handleApprove(bookingData) {
       try {
         let b = (typeof bookingData === 'object' && bookingData !== null) ? bookingData : getBookingById(bookingData);
         if (!b) return;
 
-        const realId = b.id || b._id || bookingData;
+        const realId = b.id || b.booking_id || b._id || bookingData;
         b.status = 'Approved';
 
         saveBookingsData(currentBookingsList);
         updateAdminStats();
         renderAdminBookingsTable(currentBookingsList);
 
-        const phoneNumber = cleanPhoneNumber(b.phone);
-        const messageBody = `👋 *Halo Kak ${b.customerName}!*
+        const phone = b.whatsapp || b.phone || '';
+        const formattedPhone = phone.replace(/^0/, '62').replace(/[^0-9]/g, '');
+        const nama = b.nama_pemesan || b.nama || b.customerName || 'Pelanggan';
+        const email = b.email || '-';
+        const destinasi = b.destinasi || b.paket_wisata || b.destinationName || '-';
+        const tgl = b.tgl_berangkat || b.travelDate || '-';
+        const peserta = b.jumlah_peserta || b.participants || 1;
+        const total = Number(b.total_biaya || b.totalPrice || 0);
+        const catatan = b.catatan || b.notes || '-';
 
-Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan Anda:
+        const text = `👋 *Halo Kak ${nama}!*
+
+Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan tiket/trip Anda:
 
 📋 *DETAIL PEMESANAN*
 • ID Booking: ${realId}
-• Paket Wisata: ${b.destinationName}
-• Tgl Berangkat: ${b.travelDate}
-• Jumlah Peserta: ${b.participants} Orang
-💰 *Total Biaya: ${formatIDR(b.totalPrice)}*
+• Nama Pemesan: ${nama}
+• Email: ${email}
+• No. WhatsApp: ${formattedPhone}
+
+🏝️ *DETAIL DESTINASI TRIP*
+• Paket Wisata: ${destinasi}
+• Tgl Berangkat: ${tgl}
+• Jumlah Peserta: ${peserta} Orang
+💰 *Total Biaya: ${formatIDR(total)}*
 • Status: Approved
-• Catatan Khusus: ${b.notes ? b.notes : 'Tidak ada catatan khusus.'}
+• Catatan Khusus: ${catatan}
 
-💬 halo Kak, pesanan Anda telah kami verifikasi. Terima kasih! ✈️`;
+💬 *Halo Kak, pesanan Anda telah kami verifikasi.*
+Silakan lakukan pembayaran sesuai instruksi. Terima kasih! ✈️`;
 
-        // ENCODE PESAN DI SINI!
-        const encodedMessage = encodeURIComponent(messageBody);
-        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        const encodedMessage = encodeURIComponent(text);
+        const whatsappURL = `https://wa.me/${formattedPhone}?text=${encodedMessage}`;
 
         console.log("Link WhatsApp Setujui:", whatsappURL);
 
@@ -1292,14 +1339,17 @@ Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan Anda:
           });
         } catch (err) {}
       } catch (errApprove) {
-        console.error("Error approving booking:", errApprove);
+        console.error("Error in handleApprove:", errApprove);
       }
     }
 
     // Aliases for Setujui compatibility
-    function handleSetujuiAction(id) { approveBooking(id); }
-    function markBookingApproved(id) { approveBooking(id); }
-    window.approveBooking = approveBooking;
+    function approveBooking(bookingData) { handleApprove(bookingData); }
+    function handleSetujuiAction(id) { handleApprove(id); }
+    function markBookingApproved(id) { handleApprove(id); }
+
+    window.handleApprove = handleApprove;
+    window.approveBooking = handleApprove;
 
     // Update Booking Status (Approved / Cancelled) & Auto-Open WhatsApp ACC
     async function updateBookingStatusItem(id, newStatus) {
