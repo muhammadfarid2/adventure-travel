@@ -588,56 +588,34 @@
     let addImageBase64 = '';
     let editImageBase64 = '';
 
-    async function getUsersData() {
-      const rawData = localStorage.getItem('adventure_users');
-      
-      // HANYA buat data bawaan jika localStorage BENAR-BENAR belum pernah dibuat sebelumnya (null)
-      if (rawData === null) {
-        const initialUsers = [
-          { name: "Administrator Adventure", email: "admin@adventuretravel.id", phone: "089517846680", role: "ADMIN" },
-          { name: "Farid", email: "farid12@gmail.com", phone: "089602652710", role: "USER" },
-          { name: "Sely Nurfadila", email: "atuylionnnn@gmail.com", phone: "082127663876", role: "USER" }
-        ];
-        localStorage.setItem('adventure_users', JSON.stringify(initialUsers));
-        return initialUsers;
-      }
-
+    async function fetchUsers() {
       try {
         const res = await fetch(`${API_BASE_URL}/api/users`);
         if (res.ok) {
-          const apiUsers = await res.json();
-          if (Array.isArray(apiUsers)) {
-            localStorage.setItem('adventure_users', JSON.stringify(apiUsers));
-            return apiUsers;
-          }
+          currentUsersList = await res.json();
+          renderAdminUsersTable();
+          updateAdminStats();
+          return currentUsersList;
         }
       } catch (err) {
-        console.warn('[PostgreSQL API Notice] Using LocalStorage cache for users.', err.message);
+        console.error('Error fetching users from server:', err);
       }
-
-      try {
-        const parsed = JSON.parse(rawData);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        console.error("Gagal parse data users:", e);
-        return [];
-      }
+      return currentUsersList || [];
     }
-
-    function saveUsersData(list) {
-      currentUsersList = list;
-      localStorage.setItem('adventure_users', JSON.stringify(list));
-    }
+    const getUsersData = fetchUsers;
 
     function renderAdminUsersTable() {
       const tbody = document.getElementById('adminUsersTable');
       if (!tbody) return;
 
       tbody.innerHTML = '';
-      if (!currentUsersList) return;
+      if (!currentUsersList || currentUsersList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Tidak ada data pengguna.</td></tr>';
+        return;
+      }
 
       currentUsersList.forEach(u => {
-        const isMainAdmin = u.role === 'ADMIN' || u.email === 'admin@adventuretravel.id';
+        const isMainAdmin = u.role === 'ADMIN' || u.role === 'admin' || u.email === 'admin@adventuretravel.id';
         const roleBadge = isMainAdmin ? 
           '<span class="badge bg-danger px-3 py-2 fs-6">ADMIN</span>' : 
           '<span class="badge bg-primary px-3 py-2 fs-6">USER</span>';
@@ -660,18 +638,22 @@
     }
 
     async function deleteUserItem(email) {
-      const user = currentUsersList.find(u => u.email === email);
-      if (!user) return;
+      if (!confirm(`Apakah Anda yakin ingin menghapus user "${email}" secara permanen dari Database Server?`)) return;
 
-      if (confirm(`Apakah Anda yakin ingin menghapus user "${user.name || email}" secara permanen?`)) {
-        try {
-          await fetch(`${API_BASE_URL}/api/users/${encodeURIComponent(email)}`, { method: 'DELETE' });
-        } catch (err) { }
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/users/${encodeURIComponent(email)}`, {
+          method: 'DELETE'
+        });
 
-        currentUsersList = currentUsersList.filter(u => u.email !== email);
-        saveUsersData(currentUsersList);
-        if (typeof updateAdminStats === 'function') updateAdminStats();
-        renderAdminUsersTable();
+        if (res.ok) {
+          alert('User berhasil dihapus permanen!');
+          fetchUsers();
+        } else {
+          alert('Gagal menghapus user dari Database Server.');
+        }
+      } catch (err) {
+        console.error('Error deleting user:', err);
+        alert('Terjadi kesalahan koneksi ke backend.');
       }
     }
 
@@ -713,86 +695,52 @@
       if (editForm) editForm.addEventListener('submit', saveEditDestination);
     });
 
-    async function getBookingsData() {
+    async function fetchBookings() {
       try {
         const res = await fetch(`${API_BASE_URL}/api/bookings`);
         if (res.ok) {
           const apiBookings = await res.json();
-          if (Array.isArray(apiBookings) && apiBookings.length > 0) {
-            const normalized = apiBookings.map(b => ({
-              id: b.id || b._id,
-              _id: b._id || b.id,
-              customerName: b.customerName || b.nama_pemesan,
-              email: b.email,
-              phone: b.phone || b.whatsapp,
-              destinationName: b.destinationName || b.destinasi,
-              destinationId: b.destinationId,
-              travelDate: b.travelDate || b.tgl_berangkat,
-              participants: b.participants || b.jumlah_peserta || 1,
-              totalPrice: b.totalPrice || b.total_biaya || 0,
-              notes: b.notes || b.catatan || '',
-              status: b.status || 'Pending',
-              createdAt: b.createdAt
-            }));
-            localStorage.setItem('adventure_bookings', JSON.stringify(normalized));
-            return normalized;
-          }
+          currentBookingsList = apiBookings.map(b => ({
+            id: b.id || b._id,
+            _id: b._id || b.id,
+            customerName: b.customerName || b.nama_pemesan,
+            email: b.email,
+            phone: b.phone || b.whatsapp,
+            destinationName: b.destinationName || b.destinasi,
+            destinationId: b.destinationId,
+            travelDate: b.travelDate || b.tgl_berangkat,
+            participants: b.participants || b.jumlah_peserta || 1,
+            totalPrice: b.totalPrice || b.total_biaya || 0,
+            notes: b.notes || b.catatan || '',
+            status: b.status || 'Pending',
+            createdAt: b.createdAt
+          }));
+          renderAdminBookingsTable();
+          updateAdminStats();
+          return currentBookingsList;
         }
       } catch (err) {
-        console.warn('[PostgreSQL API Notice] Using LocalStorage cache for bookings.', err.message);
+        console.error('Error fetching bookings from server:', err);
       }
-      let stored = localStorage.getItem('adventure_bookings');
-      if (stored) {
-        try { return JSON.parse(stored); } catch (e) { }
-      }
-      const defaultBookings = [
-        { id: 'BK-3770B5', customerName: "Farid", phone: "089602652710", email: "farid12@gmail.com", destinationName: "Pulau Pari", travelDate: "2026-08-13", participants: 1, totalPrice: 550000, status: "Pending" },
-        { id: 'BK-F722F9', customerName: "Sely Nurfadila", phone: "082127663876", email: "atuylionnnn@gmail.com", destinationName: "Pulau Komodo", travelDate: "2026-08-16", participants: 1, totalPrice: 3850000, status: "Pending" },
-        { id: 'BK-287C6F', customerName: "Sely Nurfadila", phone: "082127663876", email: "atuylionnnn@gmail.com", destinationName: "Gunung Rinjani", travelDate: "2026-08-16", participants: 1, totalPrice: 2450000, status: "Pending" },
-        { id: 'BK-6C8FC8', customerName: "Sely Nurfadila", phone: "082127663876", email: "atuylionnnn@gmail.com", destinationName: "Gunung Bromo", travelDate: "2026-08-16", participants: 1, totalPrice: 850000, status: "Approved" },
-        { id: 'BK-96B184', customerName: "Budi Santoso", phone: "081298765432", email: "budi@gmail.com", destinationName: "Gunung Bromo", travelDate: "2026-08-15", participants: 2, totalPrice: 1700000, status: "Approved" }
-      ];
-      localStorage.setItem('adventure_bookings', JSON.stringify(defaultBookings));
-      return defaultBookings;
+      return currentBookingsList || [];
     }
+    const getBookingsData = fetchBookings;
 
-    function saveBookingsData(list) {
-      currentBookingsList = list;
-      localStorage.setItem('adventure_bookings', JSON.stringify(list));
-    }
-
-    async function getDestinationsData() {
+    async function fetchDestinations() {
       try {
         const res = await fetch(`${API_BASE_URL}/api/destinations`);
         if (res.ok) {
-          const apiDestinations = await res.json();
-          if (Array.isArray(apiDestinations) && apiDestinations.length > 0) {
-            localStorage.setItem('adventure_destinations', JSON.stringify(apiDestinations));
-            return apiDestinations;
-          }
+          currentDestinationsList = await res.json();
+          renderAdminDestTable();
+          updateAdminStats();
+          return currentDestinationsList;
         }
       } catch (err) {
-        console.warn('[PostgreSQL API Notice] Using LocalStorage cache for destinations.', err.message);
+        console.error('Error fetching destinations from server:', err);
       }
-      let stored = localStorage.getItem('adventure_destinations');
-      if (stored) {
-        try { return JSON.parse(stored); } catch (e) { }
-      }
-      const defaultDestinations = [
-        { id: 'dest_1', name: "Gunung Bromo", category: "Gunung", location: "Probolinggo, Jawa Timur", price: 850000, rating: 4.9, duration: "2 Hari 1 Malam", image: "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=800", description: "Pesona matahari terbit di Bromo." },
-        { id: 'dest_2', name: "Gunung Rinjani", category: "Gunung", location: "Lombok, NTB", price: 2450000, rating: 5.0, duration: "4 Hari 3 Malam", image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800", description: "Pendakian Segara Anak." },
-        { id: 'dest_3', name: "Gunung Prau", category: "Gunung", location: "Dieng, Jawa Tengah", price: 650000, rating: 4.8, duration: "2 Hari 1 Malam", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800", description: "Golden sunrise Dieng." },
-        { id: 'dest_6', name: "Pulau Komodo", category: "Pulau", location: "Labuan Bajo, NTT", price: 3850000, rating: 5.0, duration: "3 Hari 2 Malam", image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800", description: "Pink Beach & Komodo." },
-        { id: 'dest_7', name: "Pulau Pari", category: "Pulau", location: "Kepulauan Seribu, Jakarta", price: 550000, rating: 4.7, duration: "2 Hari 1 Malam", image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=800", description: "Pantai pasir putih." }
-      ];
-      localStorage.setItem('adventure_destinations', JSON.stringify(defaultDestinations));
-      return defaultDestinations;
+      return currentDestinationsList || [];
     }
-
-    function saveDestinationsData(list) {
-      currentDestinationsList = list;
-      localStorage.setItem('adventure_destinations', JSON.stringify(list));
-    }
+    const getDestinationsData = fetchDestinations;
 
     function setupImageFileInputs() {
       const addFileInput = document.getElementById('addDestImageFile');
@@ -830,14 +778,11 @@
         refreshBtn.innerHTML = '<i class="fas fa-sync-alt fa-spin me-1"></i> Memuat...';
       }
 
-      currentDestinationsList = await getDestinationsData();
-      currentBookingsList = await getBookingsData();
-      currentUsersList = await getUsersData();
-
-      updateAdminStats();
-      renderAdminDestTable();
-      renderAdminBookingsTable();
-      renderAdminUsersTable();
+      await Promise.all([
+        fetchDestinations(),
+        fetchBookings(),
+        fetchUsers()
+      ]);
 
       if (refreshBtn && isManualRefresh) {
         setTimeout(() => {
@@ -1125,31 +1070,39 @@ Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan sel
 
     async function updateBookingStatusItem(id, newStatus) {
       let b = getBookingById(id);
-      if (!b) return;
-      b.status = newStatus;
-      saveBookingsData(currentBookingsList);
-      updateAdminStats();
-      renderAdminBookingsTable();
+      if (b) {
+        b.status = newStatus;
+        renderAdminBookingsTable();
+      }
 
       try {
-        await fetch(`${API_BASE_URL}/api/bookings/${id}/status`, {
+        const res = await fetch(`${API_BASE_URL}/api/bookings/${id}/status`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ status: newStatus })
         });
-      } catch (err) { }
+        if (res.ok) {
+          fetchBookings();
+        }
+      } catch (err) {
+        console.error('Error updating booking status:', err);
+      }
     }
 
     async function deleteBookingItem(id) {
-      if (confirm('Hapus pemesanan ini?')) {
-        currentBookingsList = currentBookingsList.filter(b => b.id !== id && b._id !== id);
-        saveBookingsData(currentBookingsList);
-        updateAdminStats();
-        renderAdminBookingsTable();
+      if (!confirm('Hapus pemesanan ini secara permanen dari Database Server?')) return;
 
-        try {
-          await fetch(`${API_BASE_URL}/api/bookings/${id}`, { method: 'DELETE' });
-        } catch (err) { }
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/bookings/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          alert('Pemesanan berhasil dihapus!');
+          fetchBookings();
+        } else {
+          alert('Gagal menghapus pemesanan dari Database Server.');
+        }
+      } catch (err) {
+        console.error('Error deleting booking:', err);
+        alert('Terjadi kesalahan koneksi ke backend.');
       }
     }
 
