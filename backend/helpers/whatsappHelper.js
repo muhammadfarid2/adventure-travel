@@ -83,8 +83,9 @@ Halo Kak *${customerName}*, pemesanan trip Anda di *Adventure Travel Indonesia* 
 
 💳 *INSTRUKSI SELANJUTNYA:*
 Silakan lakukan pembayaran DP/Pelunasan ke rekening resmi kami:
-• *Bank BCA*: 123-456-7890 a/n PT Adventure Travel
-• *Bank Mandiri*: 098-765-4321 a/n PT Adventure Travel
+• *SeaBank:* 901151723579 a/n PT Adventure Travel
+• *Bank BCA:* 123-456-7890 a/n PT Adventure Travel
+• *Bank Mandiri:* 098-765-4321 a/n PT Adventure Travel
 
 Setelah melakukan transfer, mohon kirimkan foto bukti transfer ke chat ini ya Kak. Terima kasih! ✨`;
 }
