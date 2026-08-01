@@ -412,6 +412,14 @@
   <script src="js/script.js"></script>
 
   <script>
+    function formatIDR(amount) {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        maximumFractionDigits: 0
+      }).format(amount || 0);
+    }
+
     let currentDestinationsList = [];
     let currentBookingsList = [];
     let addImageBase64 = '';
@@ -778,6 +786,11 @@
     function renderAdminBookingsTable(bookings = currentBookingsList) {
       const tbody = document.getElementById('adminBookingsTable');
       if (!tbody) return;
+
+      if (!bookings || !Array.isArray(bookings) || bookings.length === 0) {
+        bookings = getBookingsData();
+        currentBookingsList = bookings;
+      }
 
       tbody.innerHTML = '';
       if (!bookings || bookings.length === 0) {
