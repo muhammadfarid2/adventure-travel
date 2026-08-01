@@ -595,7 +595,7 @@
         const res = await fetch(`${API_BASE_URL}/api/users`);
         if (res.ok) {
           const apiUsers = await res.json();
-          if (Array.isArray(apiUsers) && apiUsers.length > 0) {
+          if (Array.isArray(apiUsers)) {
             localStorage.setItem('adventure_users', JSON.stringify(apiUsers));
             return apiUsers;
           }
@@ -604,18 +604,16 @@
         console.warn('[PostgreSQL API Notice] Using LocalStorage cache for users.', err.message);
       }
       let stored = localStorage.getItem('adventure_users');
-      if (stored) {
+      if (stored !== null) {
         try {
           let parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed)) return parsed;
         } catch (e) { }
       }
       const defaultUsers = [
         { name: "Administrator Adventure", email: "admin@adventuretravel.id", phone: "089517846680", role: "ADMIN" },
         { name: "Farid", email: "farid12@gmail.com", phone: "089602652710", role: "USER" },
-        { name: "Sely Nurfadila", email: "atuylionnnn@gmail.com", phone: "082127663876", role: "USER" },
-        { name: "Budi Santoso", email: "budi@gmail.com", phone: "081298765432", role: "USER" },
-        { name: "Siti Rahma", email: "siti@gmail.com", phone: "081311223344", role: "USER" }
+        { name: "Sely Nurfadila", email: "atuylionnnn@gmail.com", phone: "082127663876", role: "USER" }
       ];
       localStorage.setItem('adventure_users', JSON.stringify(defaultUsers));
       return defaultUsers;
@@ -630,11 +628,9 @@
       const tbody = document.getElementById('adminUsersTable');
       if (!tbody) return;
 
-      if (!currentUsersList || currentUsersList.length === 0) {
-        currentUsersList = getUsersData();
-      }
-
       tbody.innerHTML = '';
+      if (!currentUsersList) return;
+
       currentUsersList.forEach(u => {
         const isMainAdmin = u.role === 'ADMIN' || u.email === 'admin@adventuretravel.id';
         const roleBadge = isMainAdmin ? 
@@ -662,7 +658,7 @@
       const user = currentUsersList.find(u => u.email === email);
       if (!user) return;
 
-      if (confirm(`Apakah Anda yakin ingin menghapus user "${user.name || email}"?`)) {
+      if (confirm(`Apakah Anda yakin ingin menghapus user "${user.name || email}" secara permanen?`)) {
         try {
           await fetch(`${API_BASE_URL}/api/users/${encodeURIComponent(email)}`, { method: 'DELETE' });
         } catch (err) { }
@@ -671,8 +667,28 @@
         saveUsersData(currentUsersList);
         updateAdminStats();
         renderAdminUsersTable();
-        alert(`User ${user.name || email} berhasil dihapus.`);
       }
+    }
+
+    function setupRememberTab() {
+      const savedTab = localStorage.getItem('activeAdminTab');
+      if (savedTab) {
+        const targetBtn = document.querySelector(`a[href="${savedTab}"]`);
+        if (targetBtn) {
+          const tabInstance = new bootstrap.Tab(targetBtn);
+          tabInstance.show();
+        }
+      }
+
+      const tabLinks = document.querySelectorAll('#adminTab a[data-bs-toggle="tab"]');
+      tabLinks.forEach(link => {
+        link.addEventListener('shown.bs.tab', (e) => {
+          const activeHref = e.target.getAttribute('href');
+          if (activeHref) {
+            localStorage.setItem('activeAdminTab', activeHref);
+          }
+        });
+      });
     }
 
     function getBookingById(id) {
@@ -682,6 +698,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       loadAdminDashboardData();
+      setupRememberTab();
       setupImageFileInputs();
 
       const addForm = document.getElementById('addDestinationForm');
