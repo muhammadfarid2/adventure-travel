@@ -320,27 +320,7 @@
                   </tr>
                 </thead>
                 <tbody id="adminUsersTable">
-                  <tr>
-                    <td><strong>Administrator Adventure</strong></td>
-                    <td>admin@adventuretravel.id</td>
-                    <td><i class="fab fa-whatsapp text-success me-1"></i> 089517846680</td>
-                    <td><span class="badge bg-danger px-3 py-2 fs-6">ADMIN</span></td>
-                    <td><span class="badge bg-light text-muted border px-3 py-2"><i class="fas fa-shield-alt me-1 text-warning"></i> Admin Utama</span></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Farid</strong></td>
-                    <td>farid12@gmail.com</td>
-                    <td><i class="fab fa-whatsapp text-success me-1"></i> 089602652710</td>
-                    <td><span class="badge bg-primary px-3 py-2 fs-6">USER</span></td>
-                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i class="fas fa-trash me-1"></i> Hapus</button></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Sely Nurfadila</strong></td>
-                    <td>atuylionnnn@gmail.com</td>
-                    <td><i class="fab fa-whatsapp text-success me-1"></i> 082127663876</td>
-                    <td><span class="badge bg-primary px-3 py-2 fs-6">USER</span></td>
-                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i class="fas fa-trash me-1"></i> Hapus</button></td>
-                  </tr>
+                  <!-- Rendered dynamically by JS -->
                 </tbody>
               </table>
             </div>
@@ -588,8 +568,82 @@
 
     let currentDestinationsList = [];
     let currentBookingsList = [];
+    let currentUsersList = [];
     let addImageBase64 = '';
     let editImageBase64 = '';
+
+    function getUsersData() {
+      let stored = localStorage.getItem('adventure_users');
+      if (stored) {
+        try {
+          let parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        } catch (e) { }
+      }
+      const defaultUsers = [
+        { name: "Administrator Adventure", email: "admin@adventuretravel.id", phone: "089517846680", role: "ADMIN" },
+        { name: "Farid", email: "farid12@gmail.com", phone: "089602652710", role: "USER" },
+        { name: "Sely Nurfadila", email: "atuylionnnn@gmail.com", phone: "082127663876", role: "USER" },
+        { name: "Budi Santoso", email: "budi@gmail.com", phone: "081298765432", role: "USER" },
+        { name: "Siti Rahma", email: "siti@gmail.com", phone: "081311223344", role: "USER" }
+      ];
+      localStorage.setItem('adventure_users', JSON.stringify(defaultUsers));
+      return defaultUsers;
+    }
+
+    function saveUsersData(list) {
+      currentUsersList = list;
+      localStorage.setItem('adventure_users', JSON.stringify(list));
+    }
+
+    function renderAdminUsersTable() {
+      const tbody = document.getElementById('adminUsersTable');
+      if (!tbody) return;
+
+      if (!currentUsersList || currentUsersList.length === 0) {
+        currentUsersList = getUsersData();
+      }
+
+      tbody.innerHTML = '';
+      currentUsersList.forEach(u => {
+        const isMainAdmin = u.role === 'ADMIN' || u.email === 'admin@adventuretravel.id';
+        const roleBadge = isMainAdmin ? 
+          '<span class="badge bg-danger px-3 py-2 fs-6">ADMIN</span>' : 
+          '<span class="badge bg-primary px-3 py-2 fs-6">USER</span>';
+
+        const actionBtn = isMainAdmin ? 
+          '<span class="badge bg-light text-muted border px-3 py-2"><i class="fas fa-shield-alt me-1 text-warning"></i> Admin Utama</span>' : 
+          `<button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="deleteUserItem('${u.email}')"><i class="fas fa-trash me-1"></i> Hapus</button>`;
+
+        const tr = `
+          <tr>
+            <td><strong>${u.name || u.nama || 'Pengguna'}</strong></td>
+            <td>${u.email}</td>
+            <td><i class="fab fa-whatsapp text-success me-1"></i> ${u.phone || u.whatsapp || '-'}</td>
+            <td>${roleBadge}</td>
+            <td>${actionBtn}</td>
+          </tr>
+        `;
+        tbody.insertAdjacentHTML('beforeend', tr);
+      });
+    }
+
+    async function deleteUserItem(email) {
+      const user = currentUsersList.find(u => u.email === email);
+      if (!user) return;
+
+      if (confirm(`Apakah Anda yakin ingin menghapus user "${user.name || email}"?`)) {
+        try {
+          await fetch(`/api/users/${encodeURIComponent(email)}`, { method: 'DELETE' });
+        } catch (err) { }
+
+        currentUsersList = currentUsersList.filter(u => u.email !== email);
+        saveUsersData(currentUsersList);
+        updateAdminStats();
+        renderAdminUsersTable();
+        alert(`User ${user.name || email} berhasil dihapus.`);
+      }
+    }
 
     function getBookingById(id) {
       if (!id) return null;
@@ -597,6 +651,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      currentUsersList = getUsersData();
       loadAdminDashboardData();
       setupImageFileInputs();
 
@@ -681,10 +736,12 @@
     function loadAdminDashboardData() {
       currentDestinationsList = getDestinationsData();
       currentBookingsList = getBookingsData();
+      currentUsersList = getUsersData();
 
       updateAdminStats();
       renderAdminDestTable();
       renderAdminBookingsTable();
+      renderAdminUsersTable();
     }
 
     function updateAdminStats() {
@@ -693,6 +750,9 @@
       
       const statBook = document.getElementById('statTotalBookings');
       if (statBook) statBook.textContent = currentBookingsList.length;
+
+      const statUser = document.getElementById('statTotalUsers');
+      if (statUser) statUser.textContent = currentUsersList.length;
       
       const totalRev = currentBookingsList
         .filter(b => b.status === 'Approved')
