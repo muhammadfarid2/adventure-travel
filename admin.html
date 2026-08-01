@@ -14,6 +14,23 @@
   <link rel="stylesheet" href="css/responsive.css">
 
   <style>
+    /* Fix Utama: Mencegah overlay modal transparan menghalangi klik */
+    .modal-backdrop {
+      z-index: 1040 !important;
+    }
+    
+    .modal {
+      z-index: 1050 !important;
+    }
+
+    /* Memastikan tombol dan elemen interaktif selalu berada di paling depan */
+    .btn, button, a, .nav-link, table, td, tr {
+      position: relative !important;
+      z-index: 10 !important;
+      pointer-events: auto !important;
+      cursor: pointer !important;
+    }
+
     .admin-wrapper {
       display: flex;
       min-height: 100vh;
@@ -31,8 +48,6 @@
     }
 
     @media (max-width: 991.98px) {
-
-      /* Modal & Overlay Reset Fix to prevent unclickable buttons */
       .modal:not(.show) {
         display: none !important;
         pointer-events: none !important;
@@ -47,22 +62,7 @@
         display: none !important;
         pointer-events: none !important;
       }
-
-      .btn,
-      button,
-      a {
-        position: relative;
-        z-index: 10;
-        pointer-events: auto !important;
-        cursor: pointer !important;
-      }
-
-      table,
-      tbody,
-      tr,
-      td {
-        position: relative;
-      }
+    }
   </style>
 </head>
 
@@ -70,7 +70,7 @@
 
   <div class="admin-wrapper">
     <!-- Sidebar -->
-    <div class="admin-sidebar">
+    <div class="admin-sidebar bg-dark p-3">
       <div class="d-flex align-items-center mb-4 px-2">
         <i class="fas fa-user-shield text-warning fa-2x me-2"></i>
         <div>
@@ -81,28 +81,28 @@
 
       <ul class="nav flex-column admin-nav" id="adminTab" role="tablist">
         <li class="nav-item">
-          <a class="nav-link active" id="tab-overview-btn" data-bs-toggle="tab" href="#tab-overview">
-            <i class="fas fa-chart-line"></i> Ringkasan Statistik
+          <a class="nav-link text-white active" id="tab-overview-btn" data-bs-toggle="tab" href="#tab-overview">
+            <i class="fas fa-chart-line me-2"></i> Ringkasan Statistik
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="tab-destinations-btn" data-bs-toggle="tab" href="#tab-destinations">
-            <i class="fas fa-map-marked-alt"></i> Kelola Destinasi
+          <a class="nav-link text-white" id="tab-destinations-btn" data-bs-toggle="tab" href="#tab-destinations">
+            <i class="fas fa-map-marked-alt me-2"></i> Kelola Destinasi
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="tab-bookings-btn" data-bs-toggle="tab" href="#tab-bookings">
-            <i class="fas fa-calendar-check"></i> Kelola Pemesanan
+          <a class="nav-link text-white" id="tab-bookings-btn" data-bs-toggle="tab" href="#tab-bookings">
+            <i class="fas fa-calendar-check me-2"></i> Kelola Pemesanan
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="tab-users-btn" data-bs-toggle="tab" href="#tab-users">
-            <i class="fas fa-users"></i> Kelola User
+          <a class="nav-link text-white" id="tab-users-btn" data-bs-toggle="tab" href="#tab-users">
+            <i class="fas fa-users me-2"></i> Kelola User
           </a>
         </li>
         <li class="nav-item mt-4">
           <a class="nav-link text-warning" href="index.html">
-            <i class="fas fa-globe"></i> Lihat Website Utama
+            <i class="fas fa-globe me-2"></i> Lihat Website Utama
           </a>
         </li>
       </ul>
@@ -133,42 +133,30 @@
         <div class="tab-pane fade show active" id="tab-overview">
           <div class="row g-4 mb-4">
             <div class="col-md-3">
-              <div class="admin-stat-card">
-                <div>
-                  <small class="text-muted font-weight-bold">TOTAL DESTINASI</small>
-                  <h2 class="font-weight-bold text-dark m-0" id="statTotalDest">20</h2>
-                </div>
-                <div class="admin-stat-icon"><i class="fas fa-mountain"></i></div>
+              <div class="card p-3 border-0 shadow-sm rounded-4">
+                <small class="text-muted font-weight-bold">TOTAL DESTINASI</small>
+                <h2 class="font-weight-bold text-dark m-0" id="statTotalDest">0</h2>
               </div>
             </div>
 
             <div class="col-md-3">
-              <div class="admin-stat-card">
-                <div>
-                  <small class="text-muted font-weight-bold">TOTAL PEMESANAN</small>
-                  <h2 class="font-weight-bold text-dark m-0" id="statTotalBookings">12</h2>
-                </div>
-                <div class="admin-stat-icon bg-warning-subtle text-warning"><i class="fas fa-calendar-check"></i></div>
+              <div class="card p-3 border-0 shadow-sm rounded-4">
+                <small class="text-muted font-weight-bold">TOTAL PEMESANAN</small>
+                <h2 class="font-weight-bold text-dark m-0" id="statTotalBookings">0</h2>
               </div>
             </div>
 
             <div class="col-md-3">
-              <div class="admin-stat-card">
-                <div>
-                  <small class="text-muted font-weight-bold">TOTAL USER</small>
-                  <h2 class="font-weight-bold text-dark m-0" id="statTotalUsers">6</h2>
-                </div>
-                <div class="admin-stat-icon bg-info-subtle text-info"><i class="fas fa-users"></i></div>
+              <div class="card p-3 border-0 shadow-sm rounded-4">
+                <small class="text-muted font-weight-bold">TOTAL USER</small>
+                <h2 class="font-weight-bold text-dark m-0" id="statTotalUsers">5</h2>
               </div>
             </div>
 
             <div class="col-md-3">
-              <div class="admin-stat-card">
-                <div>
-                  <small class="text-muted font-weight-bold">ESTIMASI REVENUE</small>
-                  <h3 class="font-weight-bold text-success m-0" id="statTotalRevenue">Rp 18.5M</h3>
-                </div>
-                <div class="admin-stat-icon bg-success-subtle text-success"><i class="fas fa-wallet"></i></div>
+              <div class="card p-3 border-0 shadow-sm rounded-4">
+                <small class="text-muted font-weight-bold">ESTIMASI REVENUE</small>
+                <h3 class="font-weight-bold text-success m-0" id="statTotalRevenue">Rp 0</h3>
               </div>
             </div>
           </div>
@@ -178,8 +166,7 @@
         <div class="tab-pane fade" id="tab-destinations">
           <div class="bg-white p-4 rounded-4 shadow-sm border border-light">
             <div class="d-flex justify-content-between align-items-center mb-4">
-              <h4 class="font-weight-bold m-0"><i class="fas fa-list text-success me-2"></i> Daftar Destinasi Wisata
-              </h4>
+              <h4 class="font-weight-bold m-0"><i class="fas fa-list text-success me-2"></i> Daftar Destinasi Wisata</h4>
               <button class="btn btn-success font-weight-bold" onclick="openAddDestinationModal()">
                 <i class="fas fa-plus me-1"></i> Tambah Destinasi
               </button>
@@ -200,91 +187,7 @@
                   </tr>
                 </thead>
                 <tbody id="adminDestTable">
-                  <tr>
-                    <td><img src="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=800"
-                        style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;">
-                    </td>
-                    <td><strong>Gunung Bromo</strong></td>
-                    <td><span class="badge bg-success">Gunung</span></td>
-                    <td>Probolinggo, Jawa Timur</td>
-                    <td class="text-success font-weight-bold">Rp 850.000</td>
-                    <td><i class="fas fa-star text-warning"></i> 4.9</td>
-                    <td>2 Hari 1 Malam</td>
-                    <td>
-                      <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1"
-                        onclick="openEditDestinationModal('dest_1')"><i class="fas fa-edit"></i> Edit</button>
-                      <button class="btn btn-sm btn-danger font-weight-bold"
-                        onclick="deleteDestinationItem('dest_1')"><i class="fas fa-trash"></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800"
-                        style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;">
-                    </td>
-                    <td><strong>Gunung Rinjani</strong></td>
-                    <td><span class="badge bg-success">Gunung</span></td>
-                    <td>Lombok, NTB</td>
-                    <td class="text-success font-weight-bold">Rp 2.450.000</td>
-                    <td><i class="fas fa-star text-warning"></i> 5.0</td>
-                    <td>4 Hari 3 Malam</td>
-                    <td>
-                      <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1"
-                        onclick="openEditDestinationModal('dest_2')"><i class="fas fa-edit"></i> Edit</button>
-                      <button class="btn btn-sm btn-danger font-weight-bold"
-                        onclick="deleteDestinationItem('dest_2')"><i class="fas fa-trash"></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800"
-                        style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;">
-                    </td>
-                    <td><strong>Gunung Prau</strong></td>
-                    <td><span class="badge bg-success">Gunung</span></td>
-                    <td>Dieng, Jawa Tengah</td>
-                    <td class="text-success font-weight-bold">Rp 650.000</td>
-                    <td><i class="fas fa-star text-warning"></i> 4.8</td>
-                    <td>2 Hari 1 Malam</td>
-                    <td>
-                      <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1"
-                        onclick="openEditDestinationModal('dest_3')"><i class="fas fa-edit"></i> Edit</button>
-                      <button class="btn btn-sm btn-danger font-weight-bold"
-                        onclick="deleteDestinationItem('dest_3')"><i class="fas fa-trash"></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800"
-                        style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;">
-                    </td>
-                    <td><strong>Pulau Komodo</strong></td>
-                    <td><span class="badge bg-success">Pulau</span></td>
-                    <td>Labuan Bajo, NTT</td>
-                    <td class="text-success font-weight-bold">Rp 3.850.000</td>
-                    <td><i class="fas fa-star text-warning"></i> 5.0</td>
-                    <td>3 Hari 2 Malam</td>
-                    <td>
-                      <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1"
-                        onclick="openEditDestinationModal('dest_6')"><i class="fas fa-edit"></i> Edit</button>
-                      <button class="btn btn-sm btn-danger font-weight-bold"
-                        onclick="deleteDestinationItem('dest_6')"><i class="fas fa-trash"></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=800"
-                        style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;">
-                    </td>
-                    <td><strong>Pulau Pari</strong></td>
-                    <td><span class="badge bg-success">Pulau</span></td>
-                    <td>Kepulauan Seribu, Jakarta</td>
-                    <td class="text-success font-weight-bold">Rp 550.000</td>
-                    <td><i class="fas fa-star text-warning"></i> 4.7</td>
-                    <td>2 Hari 1 Malam</td>
-                    <td>
-                      <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1"
-                        onclick="openEditDestinationModal('dest_7')"><i class="fas fa-edit"></i> Edit</button>
-                      <button class="btn btn-sm btn-danger font-weight-bold"
-                        onclick="deleteDestinationItem('dest_7')"><i class="fas fa-trash"></i></button>
-                    </td>
-                  </tr>
+                  <!-- Render JS -->
                 </tbody>
               </table>
             </div>
@@ -294,8 +197,7 @@
         <!-- 3. BOOKINGS TAB -->
         <div class="tab-pane fade" id="tab-bookings">
           <div class="bg-white p-4 rounded-4 shadow-sm border border-light">
-            <h4 class="font-weight-bold mb-4"><i class="fas fa-calendar-check text-success me-2"></i> Data Pemesanan
-              Trip</h4>
+            <h4 class="font-weight-bold mb-4"><i class="fas fa-calendar-check text-success me-2"></i> Data Pemesanan Trip</h4>
 
             <div class="table-responsive">
               <table class="table table-hover align-middle">
@@ -312,87 +214,7 @@
                   </tr>
                 </thead>
                 <tbody id="adminBookingsTable">
-                  <tr data-booking-id="3770b527-d0f0-4033-acd3-05d5becd5058">
-                    <td><span class="badge bg-dark font-monospace">BK-3770B5</span></td>
-                    <td>
-                      <strong>Farid</strong><br>
-                      <small class="text-muted"><i class="fab fa-whatsapp text-success me-1"></i>089602652710 |
-                        farid12@gmail.com</small>
-                    </td>
-                    <td><strong class="text-dark">Pulau Pari</strong></td>
-                    <td><i class="fas fa-calendar-alt text-primary me-1"></i> 2026-08-13</td>
-                    <td>1 Org</td>
-                    <td class="text-success font-weight-bold">Rp 550.000</td>
-                    <td><span class="badge bg-warning text-dark px-3 py-2 fs-6 booking-status-badge">Pending</span></td>
-                    <td>
-                      <button class="btn btn-sm btn-info text-white font-weight-bold me-1 mb-1"
-                        onclick="openBookingDetailModal('3770b527-d0f0-4033-acd3-05d5becd5058')"><i
-                          class="fas fa-eye me-1"></i> Detail</button>
-                      <button class="btn btn-sm btn-success font-weight-bold me-1 mb-1"
-                        onclick="handleSetujuiAction('3770b527-d0f0-4033-acd3-05d5becd5058')"><i
-                          class="fas fa-check me-1"></i> Setujui</button>
-                      <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1 mb-1"
-                        onclick="updateBookingStatusItem('3770b527-d0f0-4033-acd3-05d5becd5058', 'Cancelled')"><i
-                          class="fas fa-ban me-1"></i> Batal</button>
-                      <button class="btn btn-sm btn-outline-danger font-weight-bold mb-1"
-                        onclick="deleteBookingItem('3770b527-d0f0-4033-acd3-05d5becd5058')"><i
-                          class="fas fa-trash"></i></button>
-                    </td>
-                  </tr>
-                  <tr data-booking-id="6c8fc89d-2e2a-4192-8ade-fe61d5129f46">
-                    <td><span class="badge bg-dark font-monospace">BK-6C8FC8</span></td>
-                    <td>
-                      <strong>Sely Nurfadila</strong><br>
-                      <small class="text-muted"><i class="fab fa-whatsapp text-success me-1"></i>082127663876 |
-                        atuylionnnn@gmail.com</small>
-                    </td>
-                    <td><strong class="text-dark">Gunung Bromo</strong></td>
-                    <td><i class="fas fa-calendar-alt text-primary me-1"></i> 2026-08-16</td>
-                    <td>1 Org</td>
-                    <td class="text-success font-weight-bold">Rp 850.000</td>
-                    <td><span class="badge bg-success px-3 py-2 fs-6 booking-status-badge">Approved</span></td>
-                    <td>
-                      <button class="btn btn-sm btn-info text-white font-weight-bold me-1 mb-1"
-                        onclick="openBookingDetailModal('6c8fc89d-2e2a-4192-8ade-fe61d5129f46')"><i
-                          class="fas fa-eye me-1"></i> Detail</button>
-                      <button class="btn btn-sm btn-success font-weight-bold me-1 mb-1"
-                        onclick="handleSetujuiAction('6c8fc89d-2e2a-4192-8ade-fe61d5129f46')"><i
-                          class="fas fa-check me-1"></i> Setujui</button>
-                      <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1 mb-1"
-                        onclick="updateBookingStatusItem('6c8fc89d-2e2a-4192-8ade-fe61d5129f46', 'Cancelled')"><i
-                          class="fas fa-ban me-1"></i> Batal</button>
-                      <button class="btn btn-sm btn-outline-danger font-weight-bold mb-1"
-                        onclick="deleteBookingItem('6c8fc89d-2e2a-4192-8ade-fe61d5129f46')"><i
-                          class="fas fa-trash"></i></button>
-                    </td>
-                  </tr>
-                  <tr data-booking-id="f722f939-1c34-4b07-a814-b71a255e74ff">
-                    <td><span class="badge bg-dark font-monospace">BK-F722F9</span></td>
-                    <td>
-                      <strong>Sely Nurfadila</strong><br>
-                      <small class="text-muted"><i class="fab fa-whatsapp text-success me-1"></i>082127663876 |
-                        atuylionnnn@gmail.com</small>
-                    </td>
-                    <td><strong class="text-dark">Pulau Komodo</strong></td>
-                    <td><i class="fas fa-calendar-alt text-primary me-1"></i> 2026-08-16</td>
-                    <td>1 Org</td>
-                    <td class="text-success font-weight-bold">Rp 3.850.000</td>
-                    <td><span class="badge bg-warning text-dark px-3 py-2 fs-6 booking-status-badge">Pending</span></td>
-                    <td>
-                      <button class="btn btn-sm btn-info text-white font-weight-bold me-1 mb-1"
-                        onclick="openBookingDetailModal('f722f939-1c34-4b07-a814-b71a255e74ff')"><i
-                          class="fas fa-eye me-1"></i> Detail</button>
-                      <button class="btn btn-sm btn-success font-weight-bold me-1 mb-1"
-                        onclick="handleSetujuiAction('f722f939-1c34-4b07-a814-b71a255e74ff')"><i
-                          class="fas fa-check me-1"></i> Setujui</button>
-                      <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1 mb-1"
-                        onclick="updateBookingStatusItem('f722f939-1c34-4b07-a814-b71a255e74ff', 'Cancelled')"><i
-                          class="fas fa-ban me-1"></i> Batal</button>
-                      <button class="btn btn-sm btn-outline-danger font-weight-bold mb-1"
-                        onclick="deleteBookingItem('f722f939-1c34-4b07-a814-b71a255e74ff')"><i
-                          class="fas fa-trash"></i></button>
-                    </td>
-                  </tr>
+                  <!-- Render JS -->
                 </tbody>
               </table>
             </div>
@@ -421,40 +243,21 @@
                     <td>admin@adventuretravel.id</td>
                     <td><i class="fab fa-whatsapp text-success me-1"></i> 089517846680</td>
                     <td><span class="badge bg-danger px-3 py-2 fs-6">ADMIN</span></td>
-                    <td><span class="badge bg-light text-muted border px-3 py-2"><i
-                          class="fas fa-shield-alt me-1 text-warning"></i> Admin Utama</span></td>
+                    <td><span class="badge bg-light text-muted border px-3 py-2"><i class="fas fa-shield-alt me-1 text-warning"></i> Admin Utama</span></td>
                   </tr>
                   <tr>
                     <td><strong>Farid</strong></td>
                     <td>farid12@gmail.com</td>
                     <td><i class="fab fa-whatsapp text-success me-1"></i> 089602652710</td>
                     <td><span class="badge bg-primary px-3 py-2 fs-6">USER</span></td>
-                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i
-                          class="fas fa-trash me-1"></i> Hapus</button></td>
+                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i class="fas fa-trash me-1"></i> Hapus</button></td>
                   </tr>
                   <tr>
                     <td><strong>Sely Nurfadila</strong></td>
                     <td>atuylionnnn@gmail.com</td>
                     <td><i class="fab fa-whatsapp text-success me-1"></i> 082127663876</td>
                     <td><span class="badge bg-primary px-3 py-2 fs-6">USER</span></td>
-                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i
-                          class="fas fa-trash me-1"></i> Hapus</button></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Budi Santoso</strong></td>
-                    <td>budi@gmail.com</td>
-                    <td><i class="fab fa-whatsapp text-success me-1"></i> 081298765432</td>
-                    <td><span class="badge bg-primary px-3 py-2 fs-6">USER</span></td>
-                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i
-                          class="fas fa-trash me-1"></i> Hapus</button></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Siti Rahma</strong></td>
-                    <td>siti@gmail.com</td>
-                    <td><i class="fab fa-whatsapp text-success me-1"></i> 081311223344</td>
-                    <td><span class="badge bg-primary px-3 py-2 fs-6">USER</span></td>
-                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i
-                          class="fas fa-trash me-1"></i> Hapus</button></td>
+                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i class="fas fa-trash me-1"></i> Hapus</button></td>
                   </tr>
                 </tbody>
               </table>
@@ -473,12 +276,11 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content rounded-4 border-0">
         <div class="modal-header bg-success text-white p-4">
-          <h5 class="modal-title font-weight-bold"><i class="fas fa-plus-circle me-2"></i> Tambah Destinasi Wisata Baru
-          </h5>
+          <h5 class="modal-title font-weight-bold"><i class="fas fa-plus-circle me-2"></i> Tambah Destinasi Wisata Baru</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-4">
-          <form id="addDestinationForm" onsubmit="saveAddDestination(event)">
+          <form id="addDestinationForm">
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label font-weight-bold">Nama Destinasi *</label>
@@ -498,8 +300,7 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label font-weight-bold">Lokasi *</label>
-                <input type="text" id="addDestLocation" class="form-control" placeholder="Banyuwangi, Jawa Timur"
-                  required>
+                <input type="text" id="addDestLocation" class="form-control" placeholder="Banyuwangi, Jawa Timur" required>
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label font-weight-bold">Harga per Orang (Rp) *</label>
@@ -510,42 +311,34 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label font-weight-bold">Durasi Trip *</label>
-                <input type="text" id="addDestDuration" class="form-control" placeholder="2 Hari 1 Malam"
-                  value="2 Hari 1 Malam" required>
+                <input type="text" id="addDestDuration" class="form-control" placeholder="2 Hari 1 Malam" value="2 Hari 1 Malam" required>
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label font-weight-bold">Rating *</label>
-                <input type="number" step="0.1" min="1" max="5" id="addDestRating" class="form-control" value="4.9"
-                  required>
+                <input type="number" step="0.1" min="1" max="5" id="addDestRating" class="form-control" value="4.9" required>
               </div>
             </div>
 
             <div class="mb-3">
               <label class="form-label font-weight-bold">Deskripsi Wisata</label>
-              <textarea id="addDestDescription" class="form-control" rows="3"
-                placeholder="Penjelasan singkat keindahan destinasi..."></textarea>
+              <textarea id="addDestDescription" class="form-control" rows="3" placeholder="Penjelasan singkat..."></textarea>
             </div>
 
             <div class="mb-3">
-              <label class="form-label font-weight-bold"><i class="fas fa-laptop me-1 text-primary"></i> Upload Gambar
-                dari Laptop *</label>
+              <label class="form-label font-weight-bold"><i class="fas fa-laptop me-1 text-primary"></i> Upload Gambar dari Laptop</label>
               <input type="file" accept="image/*" id="addDestImageFile" class="form-control mb-2">
               <small class="text-muted d-block mb-2">Atau masukkan URL Gambar jika ada:</small>
               <input type="url" id="addDestImageUrl" class="form-control" placeholder="https://images.unsplash.com/...">
             </div>
 
             <div class="mb-3 text-center" id="addPreviewBox" style="display: none;">
-              <label class="form-label font-weight-bold small text-muted">Preview Gambar Tambah:</label>
-              <img id="addDestImagePreview"
-                style="max-height: 180px; width: 100%; object-fit: cover; border-radius: 12px; border: 2px solid #2E8B57;"
-                alt="Preview">
+              <label class="form-label font-weight-bold small text-muted">Preview Gambar:</label>
+              <img id="addDestImagePreview" style="max-height: 180px; width: 100%; object-fit: cover; border-radius: 12px; border: 2px solid #2E8B57;" alt="Preview">
             </div>
 
             <div class="modal-footer px-0 pb-0 pt-3 border-top-0">
-              <button type="button" class="btn btn-secondary px-4 font-weight-bold"
-                data-bs-dismiss="modal">Batal</button>
-              <button type="submit" class="btn btn-success px-4 font-weight-bold"><i class="fas fa-save me-1"></i>
-                Simpan Destinasi</button>
+              <button type="button" class="btn btn-secondary px-4 font-weight-bold" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-success px-4 font-weight-bold"><i class="fas fa-save me-1"></i> Simpan Destinasi</button>
             </div>
           </form>
         </div>
@@ -558,12 +351,11 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content rounded-4 border-0">
         <div class="modal-header bg-warning text-dark p-4">
-          <h5 class="modal-title font-weight-bold"><i class="fas fa-edit me-2"></i> Edit Destinasi & Upload Gambar Baru
-          </h5>
+          <h5 class="modal-title font-weight-bold"><i class="fas fa-edit me-2"></i> Edit Destinasi Wisata</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-4">
-          <form id="editDestinationForm" onsubmit="saveEditDestination(event)">
+          <form id="editDestinationForm">
             <input type="hidden" id="editDestId">
 
             <div class="row">
@@ -610,28 +402,22 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label font-weight-bold text-success"><i class="fas fa-upload me-1"></i> Upload Gambar
-                Baru dari Laptop (Pilih File)</label>
+              <label class="form-label font-weight-bold text-success"><i class="fas fa-upload me-1"></i> Upload Gambar Baru</label>
               <input type="file" accept="image/*" id="editDestImageFile" class="form-control mb-2">
               <small class="text-muted d-block mb-2">Atau perbarui via URL Gambar:</small>
-              <input type="url" id="editDestImageUrl" class="form-control"
-                placeholder="https://images.unsplash.com/...">
+              <input type="url" id="editDestImageUrl" class="form-control" placeholder="https://images.unsplash.com/...">
             </div>
 
             <div class="mb-3 text-center">
               <label class="form-label font-weight-bold small text-muted">Preview Gambar Saat Ini / Baru:</label>
               <div>
-                <img id="editDestImagePreview"
-                  style="max-height: 200px; width: 100%; object-fit: cover; border-radius: 12px; border: 2px solid #FFD54F;"
-                  alt="Preview Edit">
+                <img id="editDestImagePreview" style="max-height: 200px; width: 100%; object-fit: cover; border-radius: 12px; border: 2px solid #FFD54F;" alt="Preview Edit">
               </div>
             </div>
 
             <div class="modal-footer px-0 pb-0 pt-3 border-top-0">
-              <button type="button" class="btn btn-secondary px-4 font-weight-bold"
-                data-bs-dismiss="modal">Batal</button>
-              <button type="submit" class="btn btn-warning px-4 font-weight-bold text-dark"><i
-                  class="fas fa-check-circle me-1"></i> Simpan Perubahan</button>
+              <button type="button" class="btn btn-secondary px-4 font-weight-bold" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-warning px-4 font-weight-bold text-dark"><i class="fas fa-check-circle me-1"></i> Simpan Perubahan</button>
             </div>
           </form>
         </div>
@@ -639,42 +425,15 @@
     </div>
   </div>
 
-  <!-- Login Modal -->
-  <div class="modal fade" id="adminAuthModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0">
-        <div class="modal-header bg-dark text-white p-4">
-          <h5 class="modal-title font-weight-bold"><i class="fas fa-lock text-warning me-2"></i> Admin Login</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body p-4">
-          <form id="adminLoginForm" onsubmit="handleAdminModalLogin(event)">
-            <div class="mb-3">
-              <label class="form-label font-weight-bold">Email Admin</label>
-              <input type="email" id="adminEmail" class="form-control" placeholder="Email Admin" required>
-            </div>
-            <div class="mb-4">
-              <label class="form-label font-weight-bold">Password</label>
-              <input type="password" id="adminPassword" class="form-control" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="btn btn-warning w-100 font-weight-bold py-2">Login Admin</button>
-          </form>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Static Detail Modal for Direct JS Access -->
+  <!-- Detail Modal -->
   <div class="modal fade" id="detailModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content rounded-4 border-0 shadow-lg">
         <div class="modal-header bg-dark text-white p-4">
           <h5 class="modal-title font-weight-bold text-white mb-0">
             <i class="fas fa-file-invoice text-warning me-2"></i> Rincian Pemesanan Trip
           </h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-            onclick="document.getElementById('detailModal').style.display='none'"></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-4">
           <div class="p-3 bg-light rounded-3 mb-4 border d-flex justify-content-between align-items-center">
@@ -711,21 +470,24 @@
             </div>
             <div class="col-12">
               <div class="p-3 bg-light border rounded-3">
-                <h6 class="font-weight-bold text-dark mb-2"><i class="fas fa-sticky-note me-2 text-warning"></i> Catatan
-                  Khusus</h6>
+                <h6 class="font-weight-bold text-dark mb-2"><i class="fas fa-sticky-note me-2 text-warning"></i> Catatan Khusus</h6>
                 <p id="modalCatatan" class="mb-0 text-muted fst-italic">-</p>
               </div>
             </div>
           </div>
         </div>
         <div class="modal-footer bg-light p-3 justify-content-between">
-          <button type="button" class="btn btn-secondary px-4 font-weight-bold rounded-pill" data-bs-dismiss="modal"
-            onclick="document.getElementById('detailModal').style.display='none'">Tutup</button>
-          <button type="button" class="btn btn-success font-weight-bold rounded-pill px-4" id="btnModalWa"
-            style="background-color: #25D366; border: none;"><i class="fab fa-whatsapp me-2"></i>💬 Konfirmasi via
-            WhatsApp</button>
+          <button type="button" class="btn btn-secondary px-4 font-weight-bold rounded-pill" data-bs-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-success font-weight-bold rounded-pill px-4" id="btnModalWa" style="background-color: #25D366; border: none;">
+            <i class="fab fa-whatsapp me-2"></i> Konfirmasi via WhatsApp
+          </button>
         </div>
-<script>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
     console.log("Admin JS loaded successfully");
 
     function formatIDR(amount) {
@@ -738,34 +500,13 @@
 
     let currentDestinationsList = [];
     let currentBookingsList = [];
-    let bookings = [];
-    let allBookings = [];
     let addImageBase64 = '';
     let editImageBase64 = '';
 
     function getBookingById(id) {
       if (!id) return null;
-      if (Array.isArray(currentBookingsList) && currentBookingsList.length > 0) {
-        const found = currentBookingsList.find(b => b && (b.id == id || b._id == id || b.booking_id == id || b.id_booking == id || String(b.id) === String(id)));
-        if (found) return found;
-      }
-      if (typeof bookings !== 'undefined' && Array.isArray(bookings)) {
-        const found = bookings.find(b => b && (b.id == id || b._id == id || b.booking_id == id || b.id_booking == id || String(b.id) === String(id)));
-        if (found) return found;
-      }
-      if (typeof allBookings !== 'undefined' && Array.isArray(allBookings)) {
-        const found = allBookings.find(b => b && (b.id == id || b._id == id || b.booking_id == id || b.id_booking == id || String(b.id) === String(id)));
-        if (found) return found;
-      }
-      const stored = getBookingsData();
-      if (Array.isArray(stored)) {
-        const found = stored.find(b => b && (b.id == id || b._id == id || b.booking_id == id || b.id_booking == id || String(b.id) === String(id)));
-        if (found) return found;
-      }
-      return null;
+      return currentBookingsList.find(b => b && (b.id == id || b._id == id || String(b.id) === String(id))) || null;
     }
-
-    window.getBookingById = getBookingById;
 
     document.addEventListener('DOMContentLoaded', () => {
       loadAdminDashboardData();
@@ -776,39 +517,17 @@
 
       const editForm = document.getElementById('editDestinationForm');
       if (editForm) editForm.addEventListener('submit', saveEditDestination);
-
-      const authForm = document.getElementById('adminLoginForm');
-      if (authForm) authForm.addEventListener('submit', handleAdminModalLogin);
-
-      document.querySelectorAll('a[data-bs-toggle="tab"]').forEach(tabEl => {
-        tabEl.addEventListener('shown.bs.tab', (e) => {
-          const target = e.target.getAttribute('href');
-          if (target === '#tab-bookings') {
-            renderAdminBookingsTable(currentBookingsList);
-          } else if (target === '#tab-overview') {
-            updateAdminStats();
-          } else if (target === '#tab-destinations') {
-            renderAdminDestTable(currentDestinationsList);
-          } else if (target === '#tab-users') {
-            renderAdminUsersTable();
-          }
-        });
-      });
     });
 
     function getBookingsData() {
       let stored = localStorage.getItem('adventure_bookings');
       if (stored) {
-        try {
-          let parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-        } catch (e) { }
+        try { return JSON.parse(stored); } catch (e) { }
       }
       const defaultBookings = [
-        { id: 'BK-1001', _id: 'BK-1001', customerName: "Budi Santoso", email: "budi@gmail.com", phone: "081298765432", destinationName: "Gunung Bromo", travelDate: "2026-08-15", participants: 2, totalPrice: 1700000, status: "Approved" },
-        { id: 'BK-1002', _id: 'BK-1002', customerName: "Siti Rahma", email: "siti@gmail.com", phone: "081311223344", destinationName: "Pulau Komodo", travelDate: "2026-08-20", participants: 1, totalPrice: 3850000, status: "Pending" },
-        { id: 'BK-1003', _id: 'BK-1003', customerName: "Andi Wijaya", email: "andi@gmail.com", phone: "081455667788", destinationName: "Curug Cibaliung", travelDate: "2026-08-10", participants: 4, totalPrice: 1400000, status: "Approved" },
-        { id: 'BK-1004', _id: 'BK-1004', customerName: "Dewi Lestari", email: "dewi@gmail.com", phone: "081599887766", destinationName: "Gunung Prau", travelDate: "2026-08-25", participants: 3, totalPrice: 1950000, status: "Pending" }
+        { id: '3770b527-d0f0-4033-acd3-05d5becd5058', customerName: "Farid", email: "farid12@gmail.com", phone: "089602652710", destinationName: "Pulau Pari", travelDate: "2026-08-13", participants: 1, totalPrice: 550000, status: "Pending" },
+        { id: '6c8fc89d-2e2a-4192-8ade-fe61d5129f46', customerName: "Sely Nurfadila", email: "atuylionnnn@gmail.com", phone: "082127663876", destinationName: "Gunung Bromo", travelDate: "2026-08-16", participants: 1, totalPrice: 850000, status: "Approved" },
+        { id: 'f722f939-1c34-4b07-a814-b71a255e74ff', customerName: "Sely Nurfadila", email: "atuylionnnn@gmail.com", phone: "082127663876", destinationName: "Pulau Komodo", travelDate: "2026-08-16", participants: 1, totalPrice: 3850000, status: "Pending" }
       ];
       localStorage.setItem('adventure_bookings', JSON.stringify(defaultBookings));
       return defaultBookings;
@@ -822,17 +541,14 @@
     function getDestinationsData() {
       let stored = localStorage.getItem('adventure_destinations');
       if (stored) {
-        try {
-          let parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-        } catch (e) { }
+        try { return JSON.parse(stored); } catch (e) { }
       }
       const defaultDestinations = [
-        { id: 'dest_1', _id: 'dest_1', name: "Gunung Bromo", category: "Gunung", location: "Probolinggo, Jawa Timur", price: 850000, rating: 4.9, duration: "2 Hari 1 Malam", image: "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=800", description: "Pesona matahari terbit di lautan pasir Bromo." },
-        { id: 'dest_2', _id: 'dest_2', name: "Gunung Rinjani", category: "Gunung", location: "Lombok, NTB", price: 2450000, rating: 5.0, duration: "4 Hari 3 Malam", image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800", description: "Pendakian menantang menuju puncak Segara Anak." },
-        { id: 'dest_3', _id: 'dest_3', name: "Gunung Prau", category: "Gunung", location: "Dieng, Jawa Tengah", price: 650000, rating: 4.8, duration: "2 Hari 1 Malam", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800", description: "Golden sunrise terbaik se-Asia Tenggara." },
-        { id: 'dest_6', _id: 'dest_6', name: "Pulau Komodo", category: "Pulau", location: "Labuan Bajo, NTT", price: 3850000, rating: 5.0, duration: "3 Hari 2 Malam", image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800", description: "Petualangan bertemu naga purba Komodo dan Pink Beach." },
-        { id: 'dest_7', _id: 'dest_7', name: "Pulau Pari", category: "Pulau", location: "Kepulauan Seribu, Jakarta", price: 550000, rating: 4.7, duration: "2 Hari 1 Malam", image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=800", description: "Wisata pantai pasir putih dan sepeda santai di dekat Jakarta." }
+        { id: 'dest_1', name: "Gunung Bromo", category: "Gunung", location: "Probolinggo, Jawa Timur", price: 850000, rating: 4.9, duration: "2 Hari 1 Malam", image: "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=800", description: "Pesona matahari terbit di Bromo." },
+        { id: 'dest_2', name: "Gunung Rinjani", category: "Gunung", location: "Lombok, NTB", price: 2450000, rating: 5.0, duration: "4 Hari 3 Malam", image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800", description: "Pendakian Segara Anak." },
+        { id: 'dest_3', name: "Gunung Prau", category: "Gunung", location: "Dieng, Jawa Tengah", price: 650000, rating: 4.8, duration: "2 Hari 1 Malam", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800", description: "Golden sunrise Dieng." },
+        { id: 'dest_6', name: "Pulau Komodo", category: "Pulau", location: "Labuan Bajo, NTT", price: 3850000, rating: 5.0, duration: "3 Hari 2 Malam", image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800", description: "Pink Beach & Komodo." },
+        { id: 'dest_7', name: "Pulau Pari", category: "Pulau", location: "Kepulauan Seribu, Jakarta", price: 550000, rating: 4.7, duration: "2 Hari 1 Malam", image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=800", description: "Pantai pasir putih." }
       ];
       localStorage.setItem('adventure_destinations', JSON.stringify(defaultDestinations));
       return defaultDestinations;
@@ -845,131 +561,73 @@
 
     function setupImageFileInputs() {
       const addFileInput = document.getElementById('addDestImageFile');
-      const addPreviewImg = document.getElementById('addDestImagePreview');
-      const addPreviewBox = document.getElementById('addPreviewBox');
-
       addFileInput?.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
           const reader = new FileReader();
-          reader.onload = function (event) {
+          reader.onload = (event) => {
             addImageBase64 = event.target.result;
-            addPreviewImg.src = addImageBase64;
-            addPreviewBox.style.display = 'block';
+            document.getElementById('addDestImagePreview').src = addImageBase64;
+            document.getElementById('addPreviewBox').style.display = 'block';
           };
           reader.readAsDataURL(file);
         }
       });
 
       const editFileInput = document.getElementById('editDestImageFile');
-      const editPreviewImg = document.getElementById('editDestImagePreview');
-
       editFileInput?.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
           const reader = new FileReader();
-          reader.onload = function (event) {
+          reader.onload = (event) => {
             editImageBase64 = event.target.result;
-            editPreviewImg.src = editImageBase64;
+            document.getElementById('editDestImagePreview').src = editImageBase64;
           };
           reader.readAsDataURL(file);
         }
       });
     }
 
-    async function loadAdminDashboardData() {
-      const statusText = document.getElementById('systemStatusText');
-      try {
-        let res = await fetch('/api/destinations');
-        if (!res.ok) res = await fetch('https://adventure-travel-production-ba8d.up.railway.app/api/destinations');
-        if (res.ok) {
-          const apiDests = await res.json();
-          if (Array.isArray(apiDests) && apiDests.length > 0) currentDestinationsList = apiDests;
-          if (statusText) {
-            statusText.textContent = "REST API Express + PostgreSQL Terhubung & Aktif!";
-            statusText.className = "text-success font-weight-bold";
-          }
-        } else { currentDestinationsList = getDestinationsData(); }
-      } catch (err) { currentDestinationsList = getDestinationsData(); }
+    function loadAdminDashboardData() {
+      currentDestinationsList = getDestinationsData();
+      currentBookingsList = getBookingsData();
 
-      try {
-        let resB = await fetch('/api/bookings');
-        if (!resB.ok) resB = await fetch('https://adventure-travel-production-ba8d.up.railway.app/api/bookings');
-        if (resB.ok) {
-          const apiBookings = await resB.json();
-          if (Array.isArray(apiBookings) && apiBookings.length > 0) currentBookingsList = apiBookings;
-        }
-      } catch (err) { }
-
-      if (!currentBookingsList || currentBookingsList.length === 0) {
-        currentBookingsList = getBookingsData();
-      }
-
-      saveBookingsData(currentBookingsList);
       updateAdminStats();
-      renderAdminDestTable(currentDestinationsList);
-      renderAdminBookingsTable(currentBookingsList);
-      renderAdminUsersTable();
+      renderAdminDestTable();
+      renderAdminBookingsTable();
     }
 
     function updateAdminStats() {
-      const statTotalDest = document.getElementById('statTotalDest');
-      if (statTotalDest) statTotalDest.textContent = currentDestinationsList.length;
-
-      const statTotalBookings = document.getElementById('statTotalBookings');
-      if (statTotalBookings) statTotalBookings.textContent = currentBookingsList.length;
-
-      const statTotalRevenue = document.getElementById('statTotalRevenue');
-      if (statTotalRevenue) {
-        const totalRev = currentBookingsList
-          .filter(b => b.status === 'Approved')
-          .reduce((sum, b) => sum + (Number(b.totalPrice || b.total_biaya) || 0), 0);
-        statTotalRevenue.textContent = formatIDR(totalRev);
-      }
+      document.getElementById('statTotalDest').textContent = currentDestinationsList.length;
+      document.getElementById('statTotalBookings').textContent = currentBookingsList.length;
+      const totalRev = currentBookingsList
+        .filter(b => b.status === 'Approved')
+        .reduce((sum, b) => sum + (Number(b.totalPrice || b.total_biaya) || 0), 0);
+      document.getElementById('statTotalRevenue').textContent = formatIDR(totalRev);
     }
 
-    function renderAdminDestTable(destinations = currentDestinationsList) {
+    function renderAdminDestTable() {
       const tbody = document.getElementById('adminDestTable');
       if (!tbody) return;
-
-      if (!destinations || !Array.isArray(destinations) || destinations.length === 0) {
-        destinations = getDestinationsData();
-        currentDestinationsList = destinations;
-      }
-
       tbody.innerHTML = '';
-      if (!destinations || destinations.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">Belum ada destinasi wisata.</td></tr>';
-        return;
-      }
 
-      destinations.forEach(item => {
-        if (!item) return;
-        try {
-          const id = item.id || item._id;
-          const tr = `
-            <tr>
-              <td><img src="${item.image || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800'}" style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;"></td>
-              <td><strong>${item.name || '-'}</strong></td>
-              <td><span class="badge bg-success">${item.category || 'Wisata'}</span></td>
-              <td>${item.location || '-'}</td>
-              <td class="text-success font-weight-bold">${formatIDR(item.price || 0)}</td>
-              <td><i class="fas fa-star text-warning"></i> ${item.rating || 5.0}</td>
-              <td>${item.duration || '-'}</td>
-              <td>
-                <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1" onclick="openEditDestinationModal('${id}')" title="Edit">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-sm btn-danger font-weight-bold" onclick="deleteDestinationItem('${id}')" title="Hapus">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </td>
-            </tr>
-          `;
-          tbody.insertAdjacentHTML('beforeend', tr);
-        } catch (errRow) {
-          console.error('Error rendering dest row', errRow, item);
-        }
+      currentDestinationsList.forEach(item => {
+        const tr = `
+          <tr>
+            <td><img src="${item.image}" style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px;"></td>
+            <td><strong>${item.name}</strong></td>
+            <td><span class="badge bg-success">${item.category}</span></td>
+            <td>${item.location}</td>
+            <td class="text-success font-weight-bold">${formatIDR(item.price)}</td>
+            <td><i class="fas fa-star text-warning"></i> ${item.rating}</td>
+            <td>${item.duration}</td>
+            <td>
+              <button class="btn btn-sm btn-warning me-1" onclick="openEditDestinationModal('${item.id}')"><i class="fas fa-edit"></i> Edit</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteDestinationItem('${item.id}')"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        `;
+        tbody.insertAdjacentHTML('beforeend', tr);
       });
     }
 
@@ -977,68 +635,34 @@
       document.getElementById('addDestinationForm').reset();
       document.getElementById('addPreviewBox').style.display = 'none';
       addImageBase64 = '';
-      const modal = new bootstrap.Modal(document.getElementById('addDestinationModal'));
-      modal.show();
+      new bootstrap.Modal(document.getElementById('addDestinationModal')).show();
     }
 
-    async function saveAddDestination(e) {
+    function saveAddDestination(e) {
       if (e) e.preventDefault();
-
-      const name = document.getElementById('addDestName').value;
-      const category = document.getElementById('addDestCategory').value;
-      const location = document.getElementById('addDestLocation').value;
-      const price = parseFloat(document.getElementById('addDestPrice').value);
-      const duration = document.getElementById('addDestDuration').value;
-      const rating = parseFloat(document.getElementById('addDestRating').value);
-      const description = document.getElementById('addDestDescription').value;
-      const imageUrlInput = document.getElementById('addDestImageUrl').value;
-      const fileInput = document.getElementById('addDestImageFile');
-
-      let finalImage = addImageBase64 || imageUrlInput || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800';
-
-      const newId = 'dest_' + Date.now();
-      const newDest = { id: newId, _id: newId, name, category, location, price, duration, rating, description, image: finalImage };
-
-      try {
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('category', category);
-        formData.append('location', location);
-        formData.append('price', price);
-        formData.append('duration', duration);
-        formData.append('rating', rating);
-        formData.append('description', description);
-        if (fileInput && fileInput.files[0]) {
-          formData.append('image', fileInput.files[0]);
-        } else {
-          formData.append('image', finalImage);
-        }
-
-        const res = await fetch('/api/destinations', { method: 'POST', body: formData });
-        if (res.ok) {
-          const resData = await res.json();
-          if (resData.destination) newDest.image = resData.destination.image;
-        }
-      } catch (err) { console.log('Sync offline', err); }
+      const newDest = {
+        id: 'dest_' + Date.now(),
+        name: document.getElementById('addDestName').value,
+        category: document.getElementById('addDestCategory').value,
+        location: document.getElementById('addDestLocation').value,
+        price: parseFloat(document.getElementById('addDestPrice').value),
+        duration: document.getElementById('addDestDuration').value,
+        rating: parseFloat(document.getElementById('addDestRating').value),
+        description: document.getElementById('addDestDescription').value,
+        image: addImageBase64 || document.getElementById('addDestImageUrl').value || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800'
+      };
 
       currentDestinationsList.unshift(newDest);
       saveDestinationsData(currentDestinationsList);
 
-      const modalEl = document.getElementById('addDestinationModal');
-      const bsModal = bootstrap.Modal.getInstance(modalEl);
-      if (bsModal) bsModal.hide();
-
+      bootstrap.Modal.getInstance(document.getElementById('addDestinationModal')).hide();
       updateAdminStats();
-      renderAdminDestTable(currentDestinationsList);
-      alert(`Destinasi "${name}" berhasil ditambahkan!`);
+      renderAdminDestTable();
     }
 
     function openEditDestinationModal(id) {
-      const item = currentDestinationsList.find(d => d.id === id || d._id === id);
-      if (!item) {
-        alert('Destinasi tidak ditemukan.');
-        return;
-      }
+      const item = currentDestinationsList.find(d => d.id === id);
+      if (!item) return;
 
       document.getElementById('editDestId').value = id;
       document.getElementById('editDestName').value = item.name;
@@ -1048,245 +672,129 @@
       document.getElementById('editDestDuration').value = item.duration;
       document.getElementById('editDestRating').value = item.rating;
       document.getElementById('editDestDescription').value = item.description || '';
-      document.getElementById('editDestImageUrl').value = (item.image && item.image.startsWith('data:')) ? '' : item.image;
-      document.getElementById('editDestImagePreview').src = item.image || '';
-      document.getElementById('editDestImageFile').value = '';
-      editImageBase64 = '';
+      document.getElementById('editDestImagePreview').src = item.image;
 
-      const modal = new bootstrap.Modal(document.getElementById('editDestinationModal'));
-      modal.show();
+      new bootstrap.Modal(document.getElementById('editDestinationModal')).show();
     }
 
-    async function saveEditDestination(e) {
+    function saveEditDestination(e) {
       if (e) e.preventDefault();
-
       const id = document.getElementById('editDestId').value;
-      const name = document.getElementById('editDestName').value;
-      const category = document.getElementById('editDestCategory').value;
-      const location = document.getElementById('editDestLocation').value;
-      const price = parseFloat(document.getElementById('editDestPrice').value);
-      const duration = document.getElementById('editDestDuration').value;
-      const rating = parseFloat(document.getElementById('editDestRating').value);
-      const description = document.getElementById('editDestDescription').value;
-      const imageUrlInput = document.getElementById('editDestImageUrl').value;
-      const fileInput = document.getElementById('editDestImageFile');
-
-      const index = currentDestinationsList.findIndex(d => d.id === id || d._id === id);
+      const index = currentDestinationsList.findIndex(d => d.id === id);
       if (index === -1) return;
 
-      let finalImage = editImageBase64 || imageUrlInput || currentDestinationsList[index].image;
+      currentDestinationsList[index] = {
+        ...currentDestinationsList[index],
+        name: document.getElementById('editDestName').value,
+        category: document.getElementById('editDestCategory').value,
+        location: document.getElementById('editDestLocation').value,
+        price: parseFloat(document.getElementById('editDestPrice').value),
+        duration: document.getElementById('editDestDuration').value,
+        rating: parseFloat(document.getElementById('editDestRating').value),
+        description: document.getElementById('editDestDescription').value,
+        image: editImageBase64 || document.getElementById('editDestImageUrl').value || currentDestinationsList[index].image
+      };
 
-      try {
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('category', category);
-        formData.append('location', location);
-        formData.append('price', price);
-        formData.append('duration', duration);
-        formData.append('rating', rating);
-        formData.append('description', description);
-        if (fileInput && fileInput.files[0]) {
-          formData.append('image', fileInput.files[0]);
-        } else {
-          formData.append('image', finalImage);
-        }
-
-        const res = await fetch(`/api/destinations/${id}`, { method: 'PUT', body: formData });
-        if (res.ok) {
-          const resData = await res.json();
-          if (resData.destination) finalImage = resData.destination.image;
-        }
-      } catch (err) { console.log('Sync offline', err); }
-
-      currentDestinationsList[index] = { ...currentDestinationsList[index], name, category, location, price, duration, rating, description, image: finalImage };
       saveDestinationsData(currentDestinationsList);
-
-      const modalEl = document.getElementById('editDestinationModal');
-      const bsModal = bootstrap.Modal.getInstance(modalEl);
-      if (bsModal) bsModal.hide();
-
-      renderAdminDestTable(currentDestinationsList);
-      alert(`Destinasi "${name}" berhasil diperbarui!`);
+      bootstrap.Modal.getInstance(document.getElementById('editDestinationModal')).hide();
+      renderAdminDestTable();
     }
 
-    async function deleteDestinationItem(id) {
-      const item = currentDestinationsList.find(d => d.id === id || d._id === id);
-      if (!item) return;
-
-      if (confirm(`Apakah Anda yakin ingin menghapus "${item.name}"?`)) {
-        try { await fetch(`/api/destinations/${id}`, { method: 'DELETE' }); } catch (e) { }
-        currentDestinationsList = currentDestinationsList.filter(d => d.id !== id && d._id !== id);
+    function deleteDestinationItem(id) {
+      if (confirm('Hapus destinasi ini?')) {
+        currentDestinationsList = currentDestinationsList.filter(d => d.id !== id);
         saveDestinationsData(currentDestinationsList);
         updateAdminStats();
-        renderAdminDestTable(currentDestinationsList);
+        renderAdminDestTable();
       }
     }
 
-    function renderAdminBookingsTable(bookings = currentBookingsList) {
+    function renderAdminBookingsTable() {
       const tbody = document.getElementById('adminBookingsTable');
       if (!tbody) return;
-
-      if (!bookings || !Array.isArray(bookings) || bookings.length === 0) {
-        bookings = getBookingsData();
-        currentBookingsList = bookings;
-      }
-
       tbody.innerHTML = '';
-      if (!bookings || bookings.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">Belum ada pemesanan.</td></tr>';
-        return;
-      }
 
-      bookings.forEach(b => {
-        if (!b) return;
-        try {
-          const id = b.id || b._id || ('BK-' + Math.floor(1000 + Math.random() * 9000));
-          const shortId = String(id).startsWith('BK-') ? id : ('BK-' + String(id).substring(0, 6).toUpperCase());
-          let badgeClass = (b.status === 'Approved') ? 'bg-success' : (b.status === 'Cancelled' ? 'bg-danger' : 'bg-warning text-dark');
+      currentBookingsList.forEach(b => {
+        const id = b.id || b._id;
+        const shortId = String(id).startsWith('BK-') ? id : ('BK-' + String(id).substring(0, 6).toUpperCase());
+        let badgeClass = (b.status === 'Approved') ? 'bg-success' : (b.status === 'Cancelled' ? 'bg-danger' : 'bg-warning text-dark');
 
-          const custName = b.customerName || b.nama_pemesan || b.nama || 'Pelanggan';
-          const phone = b.phone || b.whatsapp || '-';
-          const destName = b.destinationName || b.destinasi || b.paket_wisata || '-';
-          const travelDate = b.travelDate || b.tgl_berangkat || '-';
-          const participants = b.participants || b.jumlah_peserta || 1;
-          const totalPrice = Number(b.totalPrice || b.total_biaya || 0);
-          const status = b.status || 'Pending';
-
-          const tr = `
-            <tr data-booking-id="${id}">
-              <td><span class="badge bg-dark font-monospace">${shortId}</span></td>
-              <td><strong>${custName}</strong><br><small class="text-muted">${phone}</small></td>
-              <td><strong class="text-dark">${destName}</strong></td>
-              <td>${travelDate}</td>
-              <td>${participants} Org</td>
-              <td class="text-success font-weight-bold">${formatIDR(totalPrice)}</td>
-              <td><span class="badge ${badgeClass} px-3 py-2 fs-6">${status}</span></td>
-              <td>
-                <button class="btn btn-sm btn-info text-white" onclick="handleShowDetail('${id}')">Detail</button>
-                <button class="btn btn-sm btn-success" onclick="handleApproveBooking('${id}')">Setujui</button>
-                <button class="btn btn-sm btn-outline-danger" onclick="deleteBookingItem('${id}')">Hapus</button>
-              </td>
-            </tr>
-          `;
-          tbody.insertAdjacentHTML('beforeend', tr);
-        } catch (errRow) { console.error(errRow); }
+        const tr = `
+          <tr>
+            <td><span class="badge bg-dark font-monospace">${shortId}</span></td>
+            <td><strong>${b.customerName || b.nama_pemesan || 'Pelanggan'}</strong><br><small class="text-muted">${b.phone || '-'}</small></td>
+            <td><strong>${b.destinationName || b.destinasi || '-'}</strong></td>
+            <td>${b.travelDate || b.tgl_berangkat || '-'}</td>
+            <td>${b.participants || 1} Org</td>
+            <td class="text-success font-weight-bold">${formatIDR(b.totalPrice || b.total_biaya || 0)}</td>
+            <td><span class="badge ${badgeClass} px-3 py-2 fs-6">${b.status || 'Pending'}</span></td>
+            <td>
+              <button class="btn btn-sm btn-info text-white me-1 mb-1" onclick="handleShowDetail('${id}')"><i class="fas fa-eye me-1"></i> Detail</button>
+              <button class="btn btn-sm btn-success me-1 mb-1" onclick="handleApproveBooking('${id}')"><i class="fas fa-check me-1"></i> Setujui</button>
+              <button class="btn btn-sm btn-outline-warning text-dark me-1 mb-1" onclick="updateBookingStatusItem('${id}', 'Cancelled')"><i class="fas fa-ban me-1"></i> Batal</button>
+              <button class="btn btn-sm btn-outline-danger mb-1" onclick="deleteBookingItem('${id}')"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        `;
+        tbody.insertAdjacentHTML('beforeend', tr);
       });
     }
 
-    function getWaApproveMessage(booking) {
-      const name = booking.nama_pemesan || booking.nama || booking.customerName || '';
-      const bookingId = booking.id || booking.booking_id || booking._id || '';
-      const email = booking.email || '';
-      const phone = booking.whatsapp || booking.phone || '';
-      const destination = booking.destinasi || booking.paket_wisata || booking.destinationName || '';
-      const date = booking.tgl_berangkat || booking.travelDate || '';
-      const qty = booking.jumlah_peserta || booking.participants || 1;
-      const total = Number(booking.total_biaya || booking.totalPrice || 0).toLocaleString('id-ID');
+    function handleApproveBooking(id) {
+      let booking = getBookingById(id);
+      if (!booking) return;
 
-      return `Halo Kak ${name}, pesanan ${bookingId} Anda untuk trip ${destination} telah DISETUJUI. Silakan lakukan pembayaran ke rekening SeaBank: 901151723579 a/n PT Adventure Travel. Terima kasih!`;
+      booking.status = 'Approved';
+      saveBookingsData(currentBookingsList);
+      updateAdminStats();
+      renderAdminBookingsTable();
+
+      let phone = booking.phone || booking.whatsapp || '082127663876';
+      const formattedPhone = String(phone).replace(/^0/, '62').replace(/[^0-9]/g, '');
+      const rawMsg = `Halo Kak ${booking.customerName || booking.nama_pemesan}, pesanan ${booking.id} untuk trip ${booking.destinationName || booking.destinasi} telah DISETUJUI. Silakan transfer ke SeaBank: 901151723579 a/n PT Adventure Travel. Terima kasih!`;
+      
+      window.open("https://api.whatsapp.com/send?phone=" + formattedPhone + "&text=" + encodeURIComponent(rawMsg), '_blank');
     }
 
-    function handleApproveBooking(bookingData) {
-      try {
-        let booking = (typeof bookingData === 'object' && bookingData !== null) ? bookingData : getBookingById(bookingData);
-        if (!booking) return;
+    function handleShowDetail(id) {
+      let b = getBookingById(id);
+      if (!b) return;
 
-        const realId = booking.id || booking.booking_id || booking._id;
-        booking.status = 'Approved';
-        saveBookingsData(currentBookingsList);
-        updateAdminStats();
-        renderAdminBookingsTable(currentBookingsList);
+      document.getElementById('modalBookingId').innerText = b.id || b._id;
+      document.getElementById('modalNama').innerText = b.customerName || b.nama_pemesan || '-';
+      document.getElementById('modalDestinasi').innerText = b.destinationName || b.destinasi || '-';
+      document.getElementById('modalTanggal').innerText = b.travelDate || b.tgl_berangkat || '-';
+      document.getElementById('modalTotal').innerText = formatIDR(b.totalPrice || b.total_biaya || 0);
+      document.getElementById('modalStatus').innerText = b.status || 'Pending';
+      document.getElementById('modalCatatan').innerText = b.catatan || b.notes || '-';
 
-        let phone = booking.whatsapp || booking.phone || booking.telepon || '082127663876';
-        const formattedPhone = String(phone).replace(/^0/, '62').replace(/[^0-9]/g, '');
-        const waUrl = "https://api.whatsapp.com/send?phone=" + formattedPhone + "&text=" + encodeURIComponent(getWaApproveMessage(booking));
-
-        window.open(waUrl, '_blank');
-        try {
-          fetch(`/api/bookings/${realId}/status`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: 'Approved' }) });
-        } catch (err) { }
-      } catch (errApprove) { console.error(errApprove); }
+      document.getElementById('btnModalWa').onclick = () => handleApproveBooking(b.id);
+      new bootstrap.Modal(document.getElementById('detailModal')).show();
     }
 
-    function handleShowDetail(bookingData) {
-      try {
-        let b = (typeof bookingData === 'object' && bookingData !== null) ? bookingData : getBookingById(bookingData);
-        if (!b) return;
-
-        document.getElementById('modalBookingId').innerText = b.id || b._id;
-        document.getElementById('modalNama').innerText = b.nama_pemesan || b.nama || b.customerName || '-';
-        document.getElementById('modalDestinasi').innerText = b.destinasi || b.destinationName || '-';
-        document.getElementById('modalTanggal').innerText = b.tgl_berangkat || b.travelDate || '-';
-        document.getElementById('modalTotal').innerText = formatIDR(b.total_biaya || b.totalPrice || 0);
-        document.getElementById('modalStatus').innerText = b.status || 'Pending';
-        document.getElementById('modalCatatan').innerText = b.catatan || b.notes || '-';
-
-        document.getElementById('btnModalWa').onclick = () => handleApproveBooking(b);
-        new bootstrap.Modal(document.getElementById('detailModal')).show();
-      } catch (err) { console.error(err); }
-    }
-
-    window.handleShowDetail = handleShowDetail;
-    window.handleApproveBooking = handleApproveBooking;
-    window.approveBooking = handleApproveBooking;
-
-    async function updateBookingStatusItem(id, newStatus) {
-      if (newStatus === 'Approved') {
-        handleApproveBooking(id);
-        return;
-      }
-      const b = getBookingById(id);
+    function updateBookingStatusItem(id, newStatus) {
+      let b = getBookingById(id);
       if (!b) return;
       b.status = newStatus;
       saveBookingsData(currentBookingsList);
-      renderAdminBookingsTable(currentBookingsList);
-      try {
-        await fetch(`/api/bookings/${b.id || b._id}/status`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: newStatus }) });
-      } catch (err) { }
+      updateAdminStats();
+      renderAdminBookingsTable();
     }
 
-    async function deleteBookingItem(id) {
-      const item = currentBookingsList.find(b => b.id === id || b._id === id);
-      if (!item || !confirm(`Hapus pemesanan ${item.customerName}?`)) return;
-      try {
-        await fetch(`/api/bookings/${id}`, { method: 'DELETE' });
-      } catch (err) { }
-      currentBookingsList = currentBookingsList.filter(b => b.id !== id && b._id !== id);
-      saveBookingsData(currentBookingsList);
-      renderAdminBookingsTable(currentBookingsList);
-    }
-
-    async function renderAdminUsersTable() {
-      const tbody = document.getElementById('adminUsersTable');
-      if (!tbody) return;
-      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">User management loaded.</td></tr>';
-    }
-
-    function showLoginModal() { new bootstrap.Modal(document.getElementById('adminAuthModal')).show(); }
-
-    async function handleAdminModalLogin(e) {
-      if (e) e.preventDefault();
-      const email = document.getElementById('adminEmail').value.trim();
-      const password = document.getElementById('adminPassword').value;
-
-      try {
-        const res = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
-        const data = await res.json();
-        if (res.ok) {
-          localStorage.setItem('adventure_user', JSON.stringify(data.user));
-          window.location.reload();
-        } else {
-          alert(data.message || 'Login gagal.');
-        }
-      } catch (err) {
-        if (email === 'admin@adventuretravel.id' && password === 'admin123') {
-          localStorage.setItem('adventure_user', JSON.stringify({ role: 'admin' }));
-          window.location.reload();
-        } else {
-          alert('Login gagal.');
-        }
+    function deleteBookingItem(id) {
+      if (confirm('Hapus pemesanan ini?')) {
+        currentBookingsList = currentBookingsList.filter(b => b.id !== id && b._id !== id);
+        saveBookingsData(currentBookingsList);
+        updateAdminStats();
+        renderAdminBookingsTable();
       }
     }
+
+    // Global Alias
+    window.openBookingDetailModal = handleShowDetail;
+    window.handleShowDetail = handleShowDetail;
+    window.handleSetujuiAction = handleApproveBooking;
+    window.handleApproveBooking = handleApproveBooking;
   </script>
 </body>
 
