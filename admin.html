@@ -860,7 +860,7 @@
         `• Catatan Khusus: ${b.notes || '-'}\n\n` +
         `${emojiCheck} Halo Kak, pesanan Anda telah kami verifikasi. Silakan balas pesan ini untuk informasi pembayaran & instruksi keberangkatan selanjutnya. Terima kasih! ${emojiSparkles}`;
 
-      const waUrl = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(waMsgText)}`;
+      const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(waMsgText)}`;
 
 
 
@@ -1057,10 +1057,12 @@
           `Silakan lakukan pembayaran DP/Pelunasan ke rekening resmi kami:\n` +
           `• *Bank BCA*: 123-456-7890 a/n PT Adventure Travel\n` +
           `• *Bank Mandiri*: 098-765-4321 a/n PT Adventure Travel\n\n` +
-          `Setelah melakukan transfer, mohon kirimkan foto bukti transfer ke chat ini ya Kak. Terima kasih! ${emojiSparkles}`;
-
         const encodedAccMessage = encodeURIComponent(accMessage);
-        window.open(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodedAccMessage}`, '_blank');
+        const waUrl = `https://wa.me/${cleanPhone}?text=${encodedAccMessage}`;
+        const newWin = window.open(waUrl, '_blank');
+        if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
+          window.location.href = waUrl;
+        }
         alert(`Status pemesanan ${id} (${b.customerName}) berhasil DISETUJU (Approved)! Link WhatsApp Bot ACC otomatis dibuka.`);
       } else {
         alert(`Status pemesanan ${id} (${b.customerName}) berhasil diubah menjadi "${newStatus}".`);

@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `• Catatan Khusus: ${data.notes || '-'}\n\n` +
       `Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan selanjutnya ya, Min. Terima kasih! ${emojiSparkles}`;
 
-    const waLink = `https://api.whatsapp.com/send?phone=6289517846680&text=${encodeURIComponent(waText)}`;
+    const waLink = `https://wa.me/6289517846680?text=${encodeURIComponent(waText)}`;
 
 
 
