@@ -428,6 +428,18 @@
     document.addEventListener('DOMContentLoaded', () => {
       loadAdminDashboardData();
       setupImageFileInputs();
+
+      // Re-render bookings table whenever tab is activated
+      document.querySelectorAll('a[data-bs-toggle="tab"]').forEach(tabEl => {
+        tabEl.addEventListener('shown.bs.tab', (e) => {
+          const target = e.target.getAttribute('href');
+          if (target === '#tab-bookings') {
+            renderAdminBookingsTable(currentBookingsList);
+          } else if (target === '#tab-overview') {
+            updateAdminStats();
+          }
+        });
+      });
     });
 
     // Helper functions for Bookings LocalStorage Persistence
@@ -497,34 +509,33 @@
         const res = await fetch('/api/destinations');
         if (res.ok) {
           currentDestinationsList = await res.json();
-          statusText.textContent = "REST API Express + MongoDB Terhubung & Aktif!";
-          statusText.className = "text-success font-weight-bold";
+          if (statusText) {
+            statusText.textContent = "REST API Express + PostgreSQL Terhubung & Aktif!";
+            statusText.className = "text-success font-weight-bold";
+          }
         } else {
           currentDestinationsList = getDestinationsData();
-          statusText.textContent = "Mode Standalone & LocalStorage Persistence Active";
         }
       } catch (err) {
         currentDestinationsList = getDestinationsData();
-        statusText.textContent = "Offline Preview Mode Active";
       }
 
-      // 2. Fetch Bookings
+      // 2. Fetch Bookings from API
       try {
         const token = localStorage.getItem('adventure_token');
-        const resB = await fetch('/api/bookings', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        const resB = await fetch('/api/bookings', { headers });
         if (resB.ok) {
           const apiBookings = await resB.json();
-          if (Array.isArray(apiBookings) && apiBookings.length > 0) {
+          if (Array.isArray(apiBookings)) {
             currentBookingsList = apiBookings;
-          } else {
-            currentBookingsList = getBookingsData();
           }
-        } else {
-          currentBookingsList = getBookingsData();
         }
       } catch(err) {
+        console.warn('API error fetching bookings', err);
+      }
+
+      if (!currentBookingsList || currentBookingsList.length === 0) {
         currentBookingsList = getBookingsData();
       }
 
@@ -800,13 +811,14 @@
 
       bookings.forEach(b => {
         const id = b.id || b._id;
+        const shortId = String(id).startsWith('BK-') ? id : ('BK-' + String(id).substring(0, 6).toUpperCase());
         let badgeClass = 'bg-warning text-dark';
         if (b.status === 'Approved') badgeClass = 'bg-success';
         if (b.status === 'Cancelled') badgeClass = 'bg-danger';
 
         const tr = `
           <tr>
-            <td><span class="badge bg-dark font-monospace">${id}</span></td>
+            <td><span class="badge bg-dark font-monospace">${shortId}</span></td>
             <td>
               <strong>${b.customerName}</strong><br>
               <small class="text-muted"><i class="fab fa-whatsapp text-success me-1"></i>${b.phone} | ${b.email}</small>
