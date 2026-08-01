@@ -164,7 +164,71 @@
                   </tr>
                 </thead>
                 <tbody id="adminDestTable">
-                  <!-- Rendered dynamically -->
+                  <tr>
+                    <td><img src="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=800" style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;"></td>
+                    <td><strong>Gunung Bromo</strong></td>
+                    <td><span class="badge bg-success">Gunung</span></td>
+                    <td>Probolinggo, Jawa Timur</td>
+                    <td class="text-success font-weight-bold">Rp 850.000</td>
+                    <td><i class="fas fa-star text-warning"></i> 4.9</td>
+                    <td>2 Hari 1 Malam</td>
+                    <td>
+                      <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1" onclick="openEditDestinationModal('dest_1')"><i class="fas fa-edit"></i> Edit</button>
+                      <button class="btn btn-sm btn-danger font-weight-bold" onclick="deleteDestinationItem('dest_1')"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800" style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;"></td>
+                    <td><strong>Gunung Rinjani</strong></td>
+                    <td><span class="badge bg-success">Gunung</span></td>
+                    <td>Lombok, NTB</td>
+                    <td class="text-success font-weight-bold">Rp 2.450.000</td>
+                    <td><i class="fas fa-star text-warning"></i> 5.0</td>
+                    <td>4 Hari 3 Malam</td>
+                    <td>
+                      <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1" onclick="openEditDestinationModal('dest_2')"><i class="fas fa-edit"></i> Edit</button>
+                      <button class="btn btn-sm btn-danger font-weight-bold" onclick="deleteDestinationItem('dest_2')"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800" style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;"></td>
+                    <td><strong>Gunung Prau</strong></td>
+                    <td><span class="badge bg-success">Gunung</span></td>
+                    <td>Dieng, Jawa Tengah</td>
+                    <td class="text-success font-weight-bold">Rp 650.000</td>
+                    <td><i class="fas fa-star text-warning"></i> 4.8</td>
+                    <td>2 Hari 1 Malam</td>
+                    <td>
+                      <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1" onclick="openEditDestinationModal('dest_3')"><i class="fas fa-edit"></i> Edit</button>
+                      <button class="btn btn-sm btn-danger font-weight-bold" onclick="deleteDestinationItem('dest_3')"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800" style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;"></td>
+                    <td><strong>Pulau Komodo</strong></td>
+                    <td><span class="badge bg-success">Pulau</span></td>
+                    <td>Labuan Bajo, NTT</td>
+                    <td class="text-success font-weight-bold">Rp 3.850.000</td>
+                    <td><i class="fas fa-star text-warning"></i> 5.0</td>
+                    <td>3 Hari 2 Malam</td>
+                    <td>
+                      <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1" onclick="openEditDestinationModal('dest_6')"><i class="fas fa-edit"></i> Edit</button>
+                      <button class="btn btn-sm btn-danger font-weight-bold" onclick="deleteDestinationItem('dest_6')"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=800" style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;"></td>
+                    <td><strong>Pulau Pari</strong></td>
+                    <td><span class="badge bg-success">Pulau</span></td>
+                    <td>Kepulauan Seribu, Jakarta</td>
+                    <td class="text-success font-weight-bold">Rp 550.000</td>
+                    <td><i class="fas fa-star text-warning"></i> 4.7</td>
+                    <td>2 Hari 1 Malam</td>
+                    <td>
+                      <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1" onclick="openEditDestinationModal('dest_7')"><i class="fas fa-edit"></i> Edit</button>
+                      <button class="btn btn-sm btn-danger font-weight-bold" onclick="deleteDestinationItem('dest_7')"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -268,7 +332,41 @@
                   </tr>
                 </thead>
                 <tbody id="adminUsersTable">
-                  <!-- Rendered dynamically -->
+                  <tr>
+                    <td><strong>Administrator Adventure</strong></td>
+                    <td>admin@adventuretravel.id</td>
+                    <td><i class="fab fa-whatsapp text-success me-1"></i> 089517846680</td>
+                    <td><span class="badge bg-danger px-3 py-2 fs-6">ADMIN</span></td>
+                    <td><span class="badge bg-light text-muted border px-3 py-2"><i class="fas fa-shield-alt me-1 text-warning"></i> Admin Utama</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Farid</strong></td>
+                    <td>farid12@gmail.com</td>
+                    <td><i class="fab fa-whatsapp text-success me-1"></i> 089602652710</td>
+                    <td><span class="badge bg-primary px-3 py-2 fs-6">USER</span></td>
+                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i class="fas fa-trash me-1"></i> Hapus</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Sely Nurfadila</strong></td>
+                    <td>atuylionnnn@gmail.com</td>
+                    <td><i class="fab fa-whatsapp text-success me-1"></i> 082127663876</td>
+                    <td><span class="badge bg-primary px-3 py-2 fs-6">USER</span></td>
+                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i class="fas fa-trash me-1"></i> Hapus</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Budi Santoso</strong></td>
+                    <td>budi@gmail.com</td>
+                    <td><i class="fab fa-whatsapp text-success me-1"></i> 081298765432</td>
+                    <td><span class="badge bg-primary px-3 py-2 fs-6">USER</span></td>
+                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i class="fas fa-trash me-1"></i> Hapus</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Siti Rahma</strong></td>
+                    <td>siti@gmail.com</td>
+                    <td><i class="fab fa-whatsapp text-success me-1"></i> 081311223344</td>
+                    <td><span class="badge bg-primary px-3 py-2 fs-6">USER</span></td>
+                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i class="fas fa-trash me-1"></i> Hapus</button></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -559,9 +657,15 @@
 
       // 1. Fetch Destinations
       try {
-        const res = await fetch('/api/destinations');
+        let res = await fetch('/api/destinations');
+        if (!res.ok) {
+          res = await fetch('https://adventure-travel-production-ba8d.up.railway.app/api/destinations');
+        }
         if (res.ok) {
-          currentDestinationsList = await res.json();
+          const apiDests = await res.json();
+          if (Array.isArray(apiDests) && apiDests.length > 0) {
+            currentDestinationsList = apiDests;
+          }
           if (statusText) {
             statusText.textContent = "REST API Express + PostgreSQL Terhubung & Aktif!";
             statusText.className = "text-success font-weight-bold";
@@ -570,6 +674,20 @@
           currentDestinationsList = getDestinationsData();
         }
       } catch (err) {
+        try {
+          const resDirect = await fetch('https://adventure-travel-production-ba8d.up.railway.app/api/destinations');
+          if (resDirect.ok) {
+            const apiDests = await resDirect.json();
+            if (Array.isArray(apiDests) && apiDests.length > 0) {
+              currentDestinationsList = apiDests;
+            }
+          }
+        } catch(e) {
+          currentDestinationsList = getDestinationsData();
+        }
+      }
+
+      if (!currentDestinationsList || currentDestinationsList.length === 0) {
         currentDestinationsList = getDestinationsData();
       }
 
@@ -628,38 +746,48 @@
     }
 
     // Destinations Table Render & Functions
-    function renderAdminDestTable(dests) {
+    function renderAdminDestTable(dests = currentDestinationsList) {
       const tbody = document.getElementById('adminDestTable');
       if (!tbody) return;
 
+      if (!dests || !Array.isArray(dests) || dests.length === 0) {
+        dests = getDestinationsData();
+        currentDestinationsList = dests;
+      }
+
       tbody.innerHTML = '';
-      if (dests.length === 0) {
+      if (!dests || dests.length === 0) {
         tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">Belum ada destinasi wisata. Klik "Tambah Destinasi" untuk menambah baru.</td></tr>';
         return;
       }
 
       dests.forEach(item => {
-        const id = item.id || item._id;
-        const tr = `
-          <tr>
-            <td><img src="${item.image}" style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;"></td>
-            <td><strong>${item.name}</strong></td>
-            <td><span class="badge bg-success">${item.category}</span></td>
-            <td>${item.location}</td>
-            <td class="text-success font-weight-bold">${formatIDR(item.price)}</td>
-            <td><i class="fas fa-star text-warning"></i> ${item.rating}</td>
-            <td>${item.duration}</td>
-            <td>
-              <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1" onclick="openEditDestinationModal('${id}')" title="Edit Destinasi & Gambar">
-                <i class="fas fa-edit"></i> Edit
-              </button>
-              <button class="btn btn-sm btn-danger font-weight-bold" onclick="deleteDestinationItem('${id}')" title="Hapus Destinasi">
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        `;
-        tbody.insertAdjacentHTML('beforeend', tr);
+        if (!item) return;
+        try {
+          const id = item.id || item._id;
+          const tr = `
+            <tr>
+              <td><img src="${item.image || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800'}" style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;"></td>
+              <td><strong>${item.name || '-'}</strong></td>
+              <td><span class="badge bg-success">${item.category || 'Wisata'}</span></td>
+              <td>${item.location || '-'}</td>
+              <td class="text-success font-weight-bold">${formatIDR(item.price || 0)}</td>
+              <td><i class="fas fa-star text-warning"></i> ${item.rating || 5.0}</td>
+              <td>${item.duration || '-'}</td>
+              <td>
+                <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1" onclick="openEditDestinationModal('${id}')" title="Edit Destinasi & Gambar">
+                  <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn btn-sm btn-danger font-weight-bold" onclick="deleteDestinationItem('${id}')" title="Hapus Destinasi">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+          tbody.insertAdjacentHTML('beforeend', tr);
+        } catch(errRow) {
+          console.error('Error rendering dest row', errRow, item);
+        }
       });
     }
 
@@ -1205,18 +1333,37 @@
 
       let usersList = [];
       try {
-        const res = await fetch('/api/users');
+        let res = await fetch('/api/users');
+        if (!res.ok) {
+          res = await fetch('https://adventure-travel-production-ba8d.up.railway.app/api/users');
+        }
         if (res.ok) {
-          usersList = await res.json();
+          const apiUsers = await res.json();
+          if (Array.isArray(apiUsers) && apiUsers.length > 0) {
+            usersList = apiUsers;
+          }
         }
       } catch (err) {
-        console.log('Backend users sync offline, loading registered users from LocalStorage.');
+        try {
+          const resDirect = await fetch('https://adventure-travel-production-ba8d.up.railway.app/api/users');
+          if (resDirect.ok) {
+            const apiUsers = await resDirect.json();
+            if (Array.isArray(apiUsers) && apiUsers.length > 0) {
+              usersList = apiUsers;
+            }
+          }
+        } catch(e) {}
       }
 
       if (!usersList || usersList.length === 0) {
         let registeredLocal = JSON.parse(localStorage.getItem('adventure_registered_users') || '[]');
         const adminDefault = { id: 'admin1', name: "Administrator Adventure", email: "admin@adventuretravel.id", phone: "089517846680", role: "admin" };
-        usersList = [adminDefault, ...registeredLocal.filter(u => u.email !== 'admin@adventuretravel.id')];
+        const demoUsers = [
+          { id: 'u2', name: "Farid", email: "farid12@gmail.com", phone: "089602652710", role: "user" },
+          { id: 'u3', name: "Sely Nurfadila", email: "atuylionnnn@gmail.com", phone: "082127663876", role: "user" },
+          { id: 'u4', name: "Budi Santoso", email: "budi@gmail.com", phone: "081298765432", role: "user" }
+        ];
+        usersList = [adminDefault, ...demoUsers, ...registeredLocal.filter(u => u.email !== 'admin@adventuretravel.id')];
       }
 
       tbody.innerHTML = '';
@@ -1226,22 +1373,27 @@
       }
 
       usersList.forEach(u => {
-        const id = u.id || u._id;
-        const isAdmin = (u.email && u.email.toLowerCase() === 'admin@adventuretravel.id') || u.role === 'admin';
-        const actionBtn = isAdmin
-          ? `<span class="badge bg-light text-muted border px-3 py-2"><i class="fas fa-shield-alt me-1 text-warning"></i> Admin Utama</span>`
-          : `<button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="deleteUserItem('${id}', '${u.name}')" title="Hapus User"><i class="fas fa-trash me-1"></i> Hapus</button>`;
+        if (!u) return;
+        try {
+          const id = u.id || u._id;
+          const isAdmin = (u.email && u.email.toLowerCase() === 'admin@adventuretravel.id') || u.role === 'admin';
+          const actionBtn = isAdmin
+            ? `<span class="badge bg-light text-muted border px-3 py-2"><i class="fas fa-shield-alt me-1 text-warning"></i> Admin Utama</span>`
+            : `<button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="deleteUserItem('${id}', '${u.name}')" title="Hapus User"><i class="fas fa-trash me-1"></i> Hapus</button>`;
 
-        const tr = `
-          <tr>
-            <td><strong>${u.name}</strong></td>
-            <td>${u.email}</td>
-            <td><i class="fab fa-whatsapp text-success me-1"></i> ${u.phone || '-'}</td>
-            <td><span class="badge ${isAdmin ? 'bg-danger' : 'bg-primary'} px-3 py-2 fs-6">${u.role || 'user'}</span></td>
-            <td>${actionBtn}</td>
-          </tr>
-        `;
-        tbody.insertAdjacentHTML('beforeend', tr);
+          const tr = `
+            <tr>
+              <td><strong>${u.name || 'User'}</strong></td>
+              <td>${u.email || '-'}</td>
+              <td><i class="fab fa-whatsapp text-success me-1"></i> ${u.phone || '-'}</td>
+              <td><span class="badge ${isAdmin ? 'bg-danger' : 'bg-primary'} px-3 py-2 fs-6">${u.role || 'user'}</span></td>
+              <td>${actionBtn}</td>
+            </tr>
+          `;
+          tbody.insertAdjacentHTML('beforeend', tr);
+        } catch(errRow) {
+          console.error('Error rendering user row', errRow, u);
+        }
       });
     }
 
