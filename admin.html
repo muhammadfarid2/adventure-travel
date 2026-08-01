@@ -629,8 +629,9 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer bg-light p-3">
+        <div class="modal-footer bg-light p-3 justify-content-between">
           <button type="button" class="btn btn-secondary px-4 font-weight-bold rounded-pill" data-bs-dismiss="modal" onclick="document.getElementById('detailModal').style.display='none'">Tutup</button>
+          <button type="button" class="btn btn-success font-weight-bold rounded-pill px-4" id="btnModalWa" style="background-color: #25D366; border: none;"><i class="fab fa-whatsapp me-2"></i>💬 Konfirmasi via WhatsApp</button>
         </div>
       </div>
     </div>
@@ -1202,33 +1203,28 @@
         updateAdminStats();
         renderAdminBookingsTable(currentBookingsList);
 
-        let phone = booking.whatsapp || booking.phone || '082127663876';
+        let phone = booking.whatsapp || booking.phone || booking.telepon || '082127663876';
         // Format nomor WA ke 62xxx
         phone = String(phone).replace(/^0/, '62').replace(/[^0-9]/g, '');
 
-        const message = `👋 *Halo Kak ${booking.nama_pemesan || booking.nama || booking.customerName || 'Pelanggan'}!*
+        let text = "👋 *Halo Kak " + (booking.nama_pemesan || booking.nama || booking.customerName || '') + "*\n\n" +
+                   "Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan tiket/trip Anda:\n\n" +
+                   "📋 *DETAIL PEMESANAN*\n" +
+                   "• ID Booking: " + (booking.id || booking.booking_id || booking._id || '') + "\n" +
+                   "• Nama Pemesan: " + (booking.nama_pemesan || booking.nama || booking.customerName || '') + "\n" +
+                   "• Email: " + (booking.email || '') + "\n" +
+                   "• No. WhatsApp: " + (booking.whatsapp || booking.phone || '') + "\n\n" +
+                   "🏝️ *DETAIL DESTINASI TRIP*\n" +
+                   "• Paket Wisata: " + (booking.destinasi || booking.paket_wisata || booking.destinationName || '') + "\n" +
+                   "• Tgl Berangkat: " + (booking.tgl_berangkat || booking.travelDate || '') + "\n" +
+                   "• Jumlah Peserta: " + (booking.jumlah_peserta || booking.participants || 1) + " Orang\n" +
+                   "💰 *Total Biaya: Rp " + Number(booking.total_biaya || booking.totalPrice || 0).toLocaleString('id-ID') + "*\n" +
+                   "• Status: " + (booking.status || 'Approved') + "\n" +
+                   "• Catatan Khusus: " + (booking.catatan || booking.notes || '-') + "\n\n" +
+                   "💬 *Halo Kak, pesanan Anda telah kami verifikasi.*\n" +
+                   "Silakan lakukan pembayaran sesuai dengan instruksi yang diberikan. Terima kasih! ✈️";
 
-Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan tiket/trip Anda:
-
-📋 *DETAIL PEMESANAN*
-• ID Booking: ${realId}
-• Nama Pemesan: ${booking.nama_pemesan || booking.nama || booking.customerName || 'Pelanggan'}
-• Email: ${booking.email || '-'}
-• No. WhatsApp: ${booking.whatsapp || booking.phone || '-'}
-
-🏝️ *DETAIL DESTINASI TRIP*
-• Paket Wisata: ${booking.destinasi || booking.paket_wisata || booking.destinationName || '-'}
-• Tgl Berangkat: ${booking.tgl_berangkat || booking.travelDate || '-'}
-• Jumlah Peserta: ${booking.jumlah_peserta || booking.participants || 1} Orang
-💰 *Total Biaya: Rp ${Number(booking.total_biaya || booking.totalPrice || 0).toLocaleString('id-ID')}*
-• Status: Approved
-• Catatan Khusus: ${booking.catatan || booking.notes || '-'}
-
-💬 *Halo Kak, pesanan Anda telah kami verifikasi.*
-Silakan lakukan pembayaran sesuai dengan instruksi yang diberikan. Terima kasih! ✈️`;
-
-        // Encode pesan di sini agar emoji & format aman di Android/iOS/Laptop
-        const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        const waUrl = "https://wa.me/" + phone + "?text=" + encodeURIComponent(text);
 
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         if (isMobile) {
@@ -1257,7 +1253,7 @@ Silakan lakukan pembayaran sesuai dengan instruksi yang diberikan. Terima kasih!
       }
     }
 
-    // 2. FUNGSI TOMBOL DETAIL (Gunakan Data In-Memory / Array)
+    // 2. FUNGSI TOMBOL DETAIL (Gunakan Data In-Memory / Array & Bind Modal WhatsApp Button)
     function handleShowDetail(bookingData) {
       try {
         let booking = (typeof bookingData === 'object' && bookingData !== null) ? bookingData : getBookingById(bookingData);
@@ -1295,6 +1291,14 @@ Silakan lakukan pembayaran sesuai dengan instruksi yang diberikan. Terima kasih!
 
         const elCatatan = document.getElementById('modalCatatan');
         if (elCatatan) elCatatan.innerText = catatan;
+
+        // Bind WhatsApp button in modal footer
+        const btnWa = document.getElementById('btnModalWa');
+        if (btnWa) {
+          btnWa.onclick = function() {
+            handleApproveBooking(booking);
+          };
+        }
 
         // Show modal
         const modalElement = document.getElementById('detailModal');
