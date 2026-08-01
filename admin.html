@@ -196,6 +196,9 @@
           <h2 class="font-weight-bold text-dark mb-0">Dashboard Admin</h2>
           <p class="text-muted mb-0">Kelola destinasi wisata, upload gambar dari laptop, pemesanan & user.</p>
         </div>
+        <button id="btnRefreshData" class="btn btn-outline-success font-weight-bold shadow-sm" onclick="loadAdminDashboardData(true)">
+          <i class="fas fa-sync-alt me-1"></i> Refresh Data
+        </button>
       </div>
 
       <!-- Alert API Status -->
@@ -572,7 +575,19 @@
     let addImageBase64 = '';
     let editImageBase64 = '';
 
-    function getUsersData() {
+    async function getUsersData() {
+      try {
+        const res = await fetch('/api/users');
+        if (res.ok) {
+          const apiUsers = await res.json();
+          if (Array.isArray(apiUsers) && apiUsers.length > 0) {
+            localStorage.setItem('adventure_users', JSON.stringify(apiUsers));
+            return apiUsers;
+          }
+        }
+      } catch (err) {
+        console.warn('[PostgreSQL API Notice] Using LocalStorage cache for users.', err.message);
+      }
       let stored = localStorage.getItem('adventure_users');
       if (stored) {
         try {
@@ -651,7 +666,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      currentUsersList = getUsersData();
       loadAdminDashboardData();
       setupImageFileInputs();
 
@@ -662,7 +676,34 @@
       if (editForm) editForm.addEventListener('submit', saveEditDestination);
     });
 
-    function getBookingsData() {
+    async function getBookingsData() {
+      try {
+        const res = await fetch('/api/bookings');
+        if (res.ok) {
+          const apiBookings = await res.json();
+          if (Array.isArray(apiBookings) && apiBookings.length > 0) {
+            const normalized = apiBookings.map(b => ({
+              id: b.id || b._id,
+              _id: b._id || b.id,
+              customerName: b.customerName || b.nama_pemesan,
+              email: b.email,
+              phone: b.phone || b.whatsapp,
+              destinationName: b.destinationName || b.destinasi,
+              destinationId: b.destinationId,
+              travelDate: b.travelDate || b.tgl_berangkat,
+              participants: b.participants || b.jumlah_peserta || 1,
+              totalPrice: b.totalPrice || b.total_biaya || 0,
+              notes: b.notes || b.catatan || '',
+              status: b.status || 'Pending',
+              createdAt: b.createdAt
+            }));
+            localStorage.setItem('adventure_bookings', JSON.stringify(normalized));
+            return normalized;
+          }
+        }
+      } catch (err) {
+        console.warn('[PostgreSQL API Notice] Using LocalStorage cache for bookings.', err.message);
+      }
       let stored = localStorage.getItem('adventure_bookings');
       if (stored) {
         try { return JSON.parse(stored); } catch (e) { }
@@ -683,7 +724,19 @@
       localStorage.setItem('adventure_bookings', JSON.stringify(list));
     }
 
-    function getDestinationsData() {
+    async function getDestinationsData() {
+      try {
+        const res = await fetch('/api/destinations');
+        if (res.ok) {
+          const apiDestinations = await res.json();
+          if (Array.isArray(apiDestinations) && apiDestinations.length > 0) {
+            localStorage.setItem('adventure_destinations', JSON.stringify(apiDestinations));
+            return apiDestinations;
+          }
+        }
+      } catch (err) {
+        console.warn('[PostgreSQL API Notice] Using LocalStorage cache for destinations.', err.message);
+      }
       let stored = localStorage.getItem('adventure_destinations');
       if (stored) {
         try { return JSON.parse(stored); } catch (e) { }
@@ -733,15 +786,28 @@
       });
     }
 
-    function loadAdminDashboardData() {
-      currentDestinationsList = getDestinationsData();
-      currentBookingsList = getBookingsData();
-      currentUsersList = getUsersData();
+    async function loadAdminDashboardData(isManualRefresh = false) {
+      const refreshBtn = document.getElementById('btnRefreshData');
+      if (refreshBtn && isManualRefresh) {
+        refreshBtn.disabled = true;
+        refreshBtn.innerHTML = '<i class="fas fa-sync-alt fa-spin me-1"></i> Memuat...';
+      }
+
+      currentDestinationsList = await getDestinationsData();
+      currentBookingsList = await getBookingsData();
+      currentUsersList = await getUsersData();
 
       updateAdminStats();
       renderAdminDestTable();
       renderAdminBookingsTable();
       renderAdminUsersTable();
+
+      if (refreshBtn && isManualRefresh) {
+        setTimeout(() => {
+          refreshBtn.disabled = false;
+          refreshBtn.innerHTML = '<i class="fas fa-sync-alt me-1"></i> Refresh Data';
+        }, 400);
+      }
     }
 
     function updateAdminStats() {
@@ -941,7 +1007,7 @@ Silakan transfer ke SeaBank:
 ✅ Halo Kak, pesanan Anda telah kami verifikasi. Silakan balas pesan ini untuk informasi pembayaran & instruksi keberangkatan selanjutnya. Terima kasih! ✨`;
     }
 
-    function handleApproveBooking(id) {
+    async function handleApproveBooking(id) {
       let booking = getBookingById(id);
       if (!booking) return;
 
@@ -950,6 +1016,14 @@ Silakan transfer ke SeaBank:
       
       if (typeof updateAdminStats === 'function') updateAdminStats();
       if (typeof renderAdminBookingsTable === 'function') renderAdminBookingsTable();
+
+      try {
+        await fetch(`/api/bookings/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'Approved' })
+        });
+      } catch (err) { }
 
       let phone = String(booking.phone || booking.whatsapp || '082127663876').replace(/^0/, '62').replace(/[^0-9]/g, '');
       const rawMsg = getApprovedWaMessage(booking);
@@ -1012,21 +1086,33 @@ Mohon bantuan untuk proses verifikasi dan petunjuk pembayaran/pemberangkatan sel
       new bootstrap.Modal(document.getElementById('detailModal')).show();
     }
 
-    function updateBookingStatusItem(id, newStatus) {
+    async function updateBookingStatusItem(id, newStatus) {
       let b = getBookingById(id);
       if (!b) return;
       b.status = newStatus;
       saveBookingsData(currentBookingsList);
       updateAdminStats();
       renderAdminBookingsTable();
+
+      try {
+        await fetch(`/api/bookings/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+      } catch (err) { }
     }
 
-    function deleteBookingItem(id) {
+    async function deleteBookingItem(id) {
       if (confirm('Hapus pemesanan ini?')) {
         currentBookingsList = currentBookingsList.filter(b => b.id !== id && b._id !== id);
         saveBookingsData(currentBookingsList);
         updateAdminStats();
         renderAdminBookingsTable();
+
+        try {
+          await fetch(`/api/bookings/${id}`, { method: 'DELETE' });
+        } catch (err) { }
       }
     }
 
