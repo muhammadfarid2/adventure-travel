@@ -652,8 +652,43 @@
 
     let currentDestinationsList = [];
     let currentBookingsList = [];
+    let bookings = [];
+    let allBookings = [];
     let addImageBase64 = '';
     let editImageBase64 = '';
+
+    // Global getBookingById Helper (Guarantees getBookingById is ALWAYS defined)
+    function getBookingById(id) {
+      if (!id) return null;
+
+      // 1. Search in currentBookingsList
+      if (Array.isArray(currentBookingsList) && currentBookingsList.length > 0) {
+        const found = currentBookingsList.find(b => b && (b.id == id || b._id == id || b.booking_id == id || b.id_booking == id || String(b.id) === String(id)));
+        if (found) return found;
+      }
+
+      // 2. Search in bookings / allBookings
+      if (typeof bookings !== 'undefined' && Array.isArray(bookings)) {
+        const found = bookings.find(b => b && (b.id == id || b._id == id || b.booking_id == id || b.id_booking == id || String(b.id) === String(id)));
+        if (found) return found;
+      }
+
+      if (typeof allBookings !== 'undefined' && Array.isArray(allBookings)) {
+        const found = allBookings.find(b => b && (b.id == id || b._id == id || b.booking_id == id || b.id_booking == id || String(b.id) === String(id)));
+        if (found) return found;
+      }
+
+      // 3. Fallback search in LocalStorage
+      const stored = getBookingsData();
+      if (Array.isArray(stored)) {
+        const found = stored.find(b => b && (b.id == id || b._id == id || b.booking_id == id || b.id_booking == id || String(b.id) === String(id)));
+        if (found) return found;
+      }
+
+      return null;
+    }
+
+    window.getBookingById = getBookingById;
 
     document.addEventListener('DOMContentLoaded', () => {
       loadAdminDashboardData();
