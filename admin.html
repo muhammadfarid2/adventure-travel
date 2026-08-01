@@ -7,45 +7,24 @@
   <title>Admin Dashboard | Adventure Travel Indonesia</title>
 
   <link rel="icon" href="https://img.icons8.com/color/48/mountain.png" type="image/png">
-  
-  <!-- Google Fonts: Plus Jakarta Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/responsive.css">
-
   <style>
     :root {
-      --font-primary: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      --bg-main: #f8fafc;
-      --bg-sidebar: #1e293b;
-      --sidebar-hover: rgba(255, 255, 255, 0.07);
-      --sidebar-active-bg: rgba(59, 130, 246, 0.15);
-      --sidebar-active-text: #60a5fa;
-      --card-border: #e2e8f0;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
+      --sidebar-bg: #024026;
+      --sidebar-active: #05683F;
     }
 
     body {
-      font-family: var(--font-primary);
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      overflow-x: hidden;
+      background-color: #F4F6F9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* Modal fixes */
     .modal-backdrop {
       z-index: 1040 !important;
-      backdrop-filter: blur(4px);
-      background-color: rgba(15, 23, 42, 0.5) !important;
     }
-
+    
     .modal {
       z-index: 1050 !important;
     }
@@ -57,489 +36,104 @@
       cursor: pointer !important;
     }
 
-    /* Admin Layout Structure */
     .admin-wrapper {
       display: flex;
       min-height: 100vh;
     }
 
-    /* Sleek Modern Sidebar */
     .admin-sidebar {
-      width: 270px;
+      width: 260px;
       flex-shrink: 0;
-      background-color: var(--bg-sidebar);
-      color: #94a3b8;
-      display: flex;
-      flex-direction: column;
-      padding: 1.5rem 1rem;
-      border-right: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.04);
-      z-index: 100;
+      background-color: var(--sidebar-bg);
+      padding: 20px 15px;
     }
 
-    .brand-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.5rem 0.75rem 1.75rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 1.5rem;
-    }
-
-    .brand-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .admin-sidebar .nav-link {
       color: #ffffff;
-      font-size: 1.25rem;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-    }
-
-    .brand-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin: 0;
-      line-height: 1.2;
-      letter-spacing: -0.01em;
-    }
-
-    .brand-subtitle {
-      font-size: 0.75rem;
-      color: #38bdf8;
+      padding: 12px 18px;
+      border-radius: 10px;
+      margin-bottom: 8px;
       font-weight: 600;
-      letter-spacing: 0.03em;
-    }
-
-    .admin-nav {
-      gap: 0.35rem;
-    }
-
-    .admin-nav .nav-link {
-      color: #94a3b8 !important;
-      border-radius: 10px !important;
-      padding: 0.75rem 1rem !important;
-      font-weight: 500;
-      font-size: 0.9rem;
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .admin-nav .nav-link i {
-      font-size: 1.05rem;
-      width: 20px;
-      text-align: center;
-      transition: transform 0.2s ease;
-    }
-
-    .admin-nav .nav-link:hover {
-      color: #f8fafc !important;
-      background-color: var(--sidebar-hover) !important;
-      transform: translateX(3px);
-    }
-
-    .admin-nav .nav-link.active {
-      color: #ffffff !important;
-      background: linear-gradient(90deg, rgba(59, 130, 246, 0.25) 0%, rgba(59, 130, 246, 0.08) 100%) !important;
-      border-left: 3.5px solid #3b82f6 !important;
-      font-weight: 600;
-    }
-
-    .admin-nav .nav-link.active i {
-      color: #60a5fa !important;
-      transform: scale(1.1);
-    }
-
-    .external-link-btn {
-      margin-top: auto;
-      background: rgba(245, 158, 11, 0.1);
-      border: 1px solid rgba(245, 158, 11, 0.2);
-      color: #fbbf24 !important;
-      border-radius: 12px !important;
-      padding: 0.75rem 1rem !important;
-      font-weight: 600;
-      font-size: 0.875rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+      gap: 10px;
       transition: all 0.2s ease;
     }
 
-    .external-link-btn:hover {
-      background: rgba(245, 158, 11, 0.2) !important;
-      color: #fef08a !important;
+    .admin-sidebar .nav-link:hover,
+    .admin-sidebar .nav-link.active {
+      background-color: var(--sidebar-active);
+      color: #ffffff;
     }
 
-    /* Main Area & Topbar */
+    .admin-sidebar .nav-link.text-gold {
+      color: #FFC107 !important;
+    }
+
     .admin-main {
       flex-grow: 1;
-      background-color: var(--bg-main);
-      padding: 1.75rem 2.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      min-width: 0;
+      padding: 30px;
     }
 
-    .admin-topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.5rem;
+    .table-container {
       background: #ffffff;
-      padding: 0.85rem 1.5rem;
+      padding: 25px;
       border-radius: 16px;
-      border: 1px solid var(--card-border);
-      box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
 
-    .topbar-search {
-      position: relative;
-      width: 320px;
-    }
-
-    .topbar-search input {
-      background: #f1f5f9;
-      border: 1px solid transparent;
-      border-radius: 10px;
-      padding: 0.5rem 1rem 0.5rem 2.4rem;
-      font-size: 0.875rem;
-      color: #1e293b;
-      width: 100%;
-      transition: all 0.2s ease;
-    }
-
-    .topbar-search input:focus {
-      background: #ffffff;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-      outline: none;
-    }
-
-    .topbar-search i {
-      position: absolute;
-      left: 0.85rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #94a3b8;
-      font-size: 0.875rem;
-    }
-
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-    }
-
-    /* Redesigned Backend Status Pill */
-    .status-pill-badge {
-      display: inline-flex;
-      align-items: center;
-      background: #ecfdf5;
-      border: 1px solid #a7f3d0;
-      border-radius: 50px;
-      padding: 6px 14px;
-      font-size: 0.8125rem;
-      color: #065f46;
-      box-shadow: 0 1px 3px rgba(16, 185, 129, 0.08);
-      white-space: nowrap;
-    }
-
-    .status-pulse-dot {
-      width: 8px;
-      height: 8px;
-      background-color: #10b981;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 8px;
-      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-      animation: pulseDot 1.8s infinite;
-    }
-
-    @keyframes pulseDot {
-      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-    }
-
-    .status-pill-title {
-      font-weight: 600;
-      margin-right: 4px;
-      color: #047857;
-    }
-
-    .user-profile-btn {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.25rem 0.5rem;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    .user-profile-btn:hover {
-      background: #f1f5f9;
-    }
-
-    .avatar-circle {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
-      color: #ffffff;
+    .table thead th {
+      background-color: #212529 !important;
+      color: #ffffff !important;
+      padding: 14px 12px;
       font-weight: 700;
-      font-size: 0.875rem;
+      border: none;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      max-width: 175px;
+    }
+
+    .action-grid .btn {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 5px 8px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
-    }
-
-    .user-details {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.2;
-    }
-
-    .user-name {
-      font-size: 0.875rem;
-      font-weight: 700;
-      color: #0f172a;
-    }
-
-    .user-role {
-      font-size: 0.75rem;
-      color: #64748b;
-    }
-
-    /* Content Cards & SaaS Elements */
-    .saas-card {
-      background: #ffffff;
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
-      padding: 1.5rem;
-      transition: box-shadow 0.2s ease;
-    }
-
-    /* Stat Metric Cards */
-    .stat-card {
-      background: #ffffff;
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 1.35rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.03);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
-    }
-
-    .stat-label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 0.35rem;
-    }
-
-    .stat-value {
-      font-size: 1.75rem;
-      font-weight: 800;
-      color: #0f172a;
-      line-height: 1.1;
-      margin: 0;
-    }
-
-    .stat-icon-wrapper {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.35rem;
-      flex-shrink: 0;
-    }
-
-    .icon-blue { background: #eff6ff; color: #2563eb; }
-    .icon-amber { background: #fffbeb; color: #d97706; }
-    .icon-indigo { background: #e0e7ff; color: #4f46e5; }
-    .icon-emerald { background: #ecfdf5; color: #059669; }
-
-    /* Modern Table Design */
-    .table-responsive {
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .saas-table {
-      width: 100%;
-      margin: 0;
-      border-collapse: separate;
-      border-spacing: 0;
-    }
-
-    .saas-table thead th {
-      background-color: #f8fafc;
-      color: #475569;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding: 1rem 1.15rem;
-      border-bottom: 1px solid #e2e8f0;
+      gap: 4px;
       white-space: nowrap;
     }
 
-    .saas-table tbody tr {
-      transition: background-color 0.15s ease;
-    }
-
-    .saas-table tbody tr:hover {
-      background-color: #f8fafc !important;
-    }
-
-    .saas-table tbody td {
-      padding: 0.95rem 1.15rem;
-      vertical-align: middle;
-      color: #334155;
+    .badge-status-approved {
+      background-color: #198754 !important;
+      color: #ffffff !important;
+      font-weight: 700;
+      padding: 8px 16px;
       font-size: 0.875rem;
-      border-bottom: 1px solid #f1f5f9;
+      border-radius: 6px;
     }
 
-    /* Modern Soft Pastel Badges */
-    .badge-soft-success {
-      background-color: #dcfce7 !important;
-      color: #15803d !important;
-      border: 1px solid #bbf7d0;
-      font-weight: 600;
-      padding: 0.35rem 0.75rem;
-      border-radius: 50px;
-      font-size: 0.78rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
+    .badge-status-pending {
+      background-color: #ffc107 !important;
+      color: #000000 !important;
+      font-weight: 700;
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      border-radius: 6px;
     }
 
-    .badge-soft-warning {
-      background-color: #fef3c7 !important;
-      color: #b45309 !important;
-      border: 1px solid #fde68a;
-      font-weight: 600;
-      padding: 0.35rem 0.75rem;
-      border-radius: 50px;
-      font-size: 0.78rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .badge-soft-danger {
-      background-color: #ffe4e6 !important;
-      color: #be123c !important;
-      border: 1px solid #fecdd3;
-      font-weight: 600;
-      padding: 0.35rem 0.75rem;
-      border-radius: 50px;
-      font-size: 0.78rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .badge-soft-info {
-      background-color: #e0f2fe !important;
-      color: #0369a1 !important;
-      border: 1px solid #bae6fd;
-      font-weight: 600;
-      padding: 0.35rem 0.75rem;
-      border-radius: 50px;
-      font-size: 0.78rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .badge-soft-dark {
-      background-color: #f1f5f9 !important;
-      color: #334155 !important;
-      border: 1px solid #e2e8f0;
-      font-weight: 600;
-      padding: 0.3rem 0.65rem;
-      border-radius: 8px;
-      font-family: monospace;
-      font-size: 0.78rem;
-    }
-
-    /* Compact Action Buttons */
-    .btn-action {
-      padding: 0.35rem 0.65rem;
-      font-size: 0.78rem;
-      border-radius: 8px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      border: 1px solid transparent;
-      transition: all 0.2s ease;
-    }
-
-    .btn-action-info {
-      background: #e0f2fe;
-      color: #0369a1;
-      border-color: #bae6fd;
-    }
-
-    .btn-action-info:hover {
-      background: #bae6fd;
-      color: #0284c7;
-    }
-
-    .btn-action-success {
-      background: #dcfce7;
-      color: #15803d;
-      border-color: #bbf7d0;
-    }
-
-    .btn-action-success:hover {
-      background: #bbf7d0;
-      color: #166534;
-    }
-
-    .btn-action-warning {
-      background: #fef3c7;
-      color: #b45309;
-      border-color: #fde68a;
-    }
-
-    .btn-action-warning:hover {
-      background: #fde68a;
-      color: #92400e;
-    }
-
-    .btn-action-danger {
-      background: #ffe4e6;
-      color: #be123c;
-      border-color: #fecdd3;
-    }
-
-    .btn-action-danger:hover {
-      background: #fecdd3;
-      color: #9f1239;
+    .badge-status-cancelled {
+      background-color: #dc3545 !important;
+      color: #ffffff !important;
+      font-weight: 700;
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      border-radius: 6px;
     }
 
     @media (max-width: 991.98px) {
@@ -549,13 +143,6 @@
       .admin-sidebar {
         width: 100%;
       }
-      .topbar-search {
-        width: 100%;
-      }
-      .admin-topbar {
-        flex-direction: column;
-        align-items: stretch;
-      }
     }
   </style>
 </head>
@@ -563,131 +150,93 @@
 <body>
 
   <div class="admin-wrapper">
-    <!-- Sleek & Modern Sidebar -->
+    <!-- Sidebar Green Theme -->
     <div class="admin-sidebar">
-      <div class="brand-logo">
-        <div class="brand-icon">
-          <i class="fas fa-compass"></i>
-        </div>
+      <div class="d-flex align-items-center mb-4 px-2">
+        <i class="fas fa-user-shield text-warning fa-2x me-2"></i>
         <div>
-          <h5 class="brand-title">Adventure</h5>
-          <span class="brand-subtitle">ADMIN SAAS PANEL</span>
+          <h5 class="font-weight-bold text-white mb-0">Admin Panel</h5>
+          <small class="text-warning">Adventure Travel</small>
         </div>
       </div>
 
       <ul class="nav flex-column admin-nav" id="adminTab" role="tablist">
         <li class="nav-item">
-          <a class="nav-link active" id="tab-overview-btn" data-bs-toggle="tab" href="#tab-overview">
-            <i class="fas fa-chart-pie"></i> Ringkasan Statistik
+          <a class="nav-link text-white" id="tab-overview-btn" data-bs-toggle="tab" href="#tab-overview">
+            <i class="fas fa-chart-line text-warning me-1"></i> Ringkasan Statistik
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="tab-destinations-btn" data-bs-toggle="tab" href="#tab-destinations">
-            <i class="fas fa-map-marked-alt"></i> Kelola Destinasi
+          <a class="nav-link text-white" id="tab-destinations-btn" data-bs-toggle="tab" href="#tab-destinations">
+            <i class="fas fa-map-marked-alt text-warning me-1"></i> Kelola Destinasi
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="tab-bookings-btn" data-bs-toggle="tab" href="#tab-bookings">
-            <i class="fas fa-calendar-check"></i> Kelola Pemesanan
+          <a class="nav-link text-white active" id="tab-bookings-btn" data-bs-toggle="tab" href="#tab-bookings">
+            <i class="fas fa-calendar-check text-warning me-1"></i> Kelola Pemesanan
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="tab-users-btn" data-bs-toggle="tab" href="#tab-users">
-            <i class="fas fa-users-cog"></i> Kelola User
+          <a class="nav-link text-white" id="tab-users-btn" data-bs-toggle="tab" href="#tab-users">
+            <i class="fas fa-users text-warning me-1"></i> Kelola User
+          </a>
+        </li>
+        <li class="nav-item mt-4">
+          <a class="nav-link text-gold" href="index.html">
+            <i class="fas fa-globe me-1"></i> Lihat Website Utama
           </a>
         </li>
       </ul>
-
-      <a class="external-link-btn" href="index.html">
-        <i class="fas fa-globe"></i> Lihat Website Utama
-      </a>
     </div>
 
     <!-- Main Content Area -->
     <div class="admin-main">
-      <!-- Topbar Header Area -->
-      <div class="admin-topbar">
-        <div class="topbar-search">
-          <i class="fas fa-search"></i>
-          <input type="text" placeholder="Cari data destinasi, booking, atau user...">
-        </div>
-
-        <div class="topbar-actions">
-          <!-- Redesigned Backend Status Pill -->
-          <div id="apiStatusAlert" class="status-pill-badge" role="alert">
-            <span class="status-pulse-dot"></span>
-            <span class="status-pill-title">Backend:</span>
-            <span id="systemStatusText" class="fw-bold">Online (PostgreSQL Active)</span>
-          </div>
-
-          <!-- Admin Avatar & Profile -->
-          <div class="user-profile-btn">
-            <div class="avatar-circle">AT</div>
-            <div class="user-details">
-              <span class="user-name">Admin Travel</span>
-              <span class="user-role">Super Administrator</span>
-            </div>
-          </div>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="font-weight-bold text-dark mb-0">Dashboard Admin</h2>
+          <p class="text-muted mb-0">Kelola destinasi wisata, upload gambar dari laptop, pemesanan & user.</p>
         </div>
       </div>
 
-      <!-- Page Header Title -->
-      <div>
-        <h3 class="fw-extrabold text-dark mb-1" style="font-weight: 800; letter-spacing: -0.02em;">Dashboard Admin</h3>
-        <p class="text-muted mb-0" style="font-size: 0.9rem;">Kelola destinasi wisata, upload gambar dari laptop, pemesanan & user dalam satu panel modern.</p>
+      <!-- Alert API Status -->
+      <div id="apiStatusAlert" class="alert alert-success d-flex align-items-center shadow-sm mb-4" role="alert">
+        <i class="fas fa-database fa-2x me-3 text-success"></i>
+        <div>
+          <strong>Status Sistem Backend:</strong> <span id="systemStatusText" class="font-weight-bold text-success">Online (PostgreSQL Active)</span>
+        </div>
       </div>
 
       <!-- Tab Content -->
       <div class="tab-content" id="adminTabContent">
 
         <!-- 1. OVERVIEW TAB -->
-        <div class="tab-pane fade show active" id="tab-overview">
-          <div class="row g-4">
+        <div class="tab-pane fade" id="tab-overview">
+          <div class="row g-4 mb-4">
             <div class="col-md-3">
-              <div class="stat-card">
-                <div>
-                  <div class="stat-label">TOTAL DESTINASI</div>
-                  <h2 class="stat-value" id="statTotalDest">0</h2>
-                </div>
-                <div class="stat-icon-wrapper icon-blue">
-                  <i class="fas fa-map-pin"></i>
-                </div>
+              <div class="card p-3 border-0 shadow-sm rounded-4">
+                <small class="text-muted font-weight-bold">TOTAL DESTINASI</small>
+                <h2 class="font-weight-bold text-dark m-0" id="statTotalDest">0</h2>
               </div>
             </div>
 
             <div class="col-md-3">
-              <div class="stat-card">
-                <div>
-                  <div class="stat-label">TOTAL PEMESANAN</div>
-                  <h2 class="stat-value" id="statTotalBookings">0</h2>
-                </div>
-                <div class="stat-icon-wrapper icon-amber">
-                  <i class="fas fa-shopping-bag"></i>
-                </div>
+              <div class="card p-3 border-0 shadow-sm rounded-4">
+                <small class="text-muted font-weight-bold">TOTAL PEMESANAN</small>
+                <h2 class="font-weight-bold text-dark m-0" id="statTotalBookings">0</h2>
               </div>
             </div>
 
             <div class="col-md-3">
-              <div class="stat-card">
-                <div>
-                  <div class="stat-label">TOTAL USER</div>
-                  <h2 class="stat-value" id="statTotalUsers">5</h2>
-                </div>
-                <div class="stat-icon-wrapper icon-indigo">
-                  <i class="fas fa-users"></i>
-                </div>
+              <div class="card p-3 border-0 shadow-sm rounded-4">
+                <small class="text-muted font-weight-bold">TOTAL USER</small>
+                <h2 class="font-weight-bold text-dark m-0" id="statTotalUsers">5</h2>
               </div>
             </div>
 
             <div class="col-md-3">
-              <div class="stat-card">
-                <div>
-                  <div class="stat-label">ESTIMASI REVENUE</div>
-                  <h3 class="stat-value text-success" style="font-size: 1.45rem;" id="statTotalRevenue">Rp 0</h3>
-                </div>
-                <div class="stat-icon-wrapper icon-emerald">
-                  <i class="fas fa-wallet"></i>
-                </div>
+              <div class="card p-3 border-0 shadow-sm rounded-4">
+                <small class="text-muted font-weight-bold">ESTIMASI REVENUE</small>
+                <h3 class="font-weight-bold text-success m-0" id="statTotalRevenue">Rp 0</h3>
               </div>
             </div>
           </div>
@@ -695,19 +244,16 @@
 
         <!-- 2. DESTINATIONS TAB -->
         <div class="tab-pane fade" id="tab-destinations">
-          <div class="saas-card">
+          <div class="table-container">
             <div class="d-flex justify-content-between align-items-center mb-4">
-              <div>
-                <h5 class="fw-bold m-0"><i class="fas fa-list text-primary me-2"></i> Daftar Destinasi Wisata</h5>
-                <small class="text-muted">Kelola seluruh pilihan paket wisata petualangan</small>
-              </div>
-              <button class="btn btn-primary fw-bold rounded-3 px-3 py-2" onclick="openAddDestinationModal()" style="font-size: 0.875rem;">
-                <i class="fas fa-plus me-1.5"></i> Tambah Destinasi
+              <h4 class="font-weight-bold m-0"><i class="fas fa-list text-success me-2"></i> Daftar Destinasi Wisata</h4>
+              <button class="btn btn-success font-weight-bold" onclick="openAddDestinationModal()">
+                <i class="fas fa-plus me-1"></i> Tambah Destinasi
               </button>
             </div>
 
             <div class="table-responsive">
-              <table class="table saas-table align-middle">
+              <table class="table table-hover align-middle">
                 <thead>
                   <tr>
                     <th>Gambar</th>
@@ -717,7 +263,7 @@
                     <th>Harga</th>
                     <th>Rating</th>
                     <th>Durasi</th>
-                    <th style="min-width: 130px;">Aksi</th>
+                    <th style="min-width: 150px;">Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="adminDestTable">
@@ -728,16 +274,15 @@
           </div>
         </div>
 
-        <!-- 3. BOOKINGS TAB -->
-        <div class="tab-pane fade" id="tab-bookings">
-          <div class="saas-card">
-            <div class="mb-4">
-              <h5 class="fw-bold mb-1"><i class="fas fa-calendar-check text-primary me-2"></i> Data Pemesanan Trip</h5>
-              <small class="text-muted">Pantau status transaksi & verifikasi pemesanan pengguna</small>
-            </div>
+        <!-- 3. BOOKINGS TAB (Default Active) -->
+        <div class="tab-pane fade show active" id="tab-bookings">
+          <div class="table-container">
+            <h3 class="font-weight-bold mb-4 d-flex align-items-center text-dark">
+              <i class="fas fa-calendar-check text-success me-3"></i> Data Pemesanan Trip
+            </h3>
 
             <div class="table-responsive">
-              <table class="table saas-table align-middle">
+              <table class="table table-hover align-middle">
                 <thead>
                   <tr>
                     <th>ID Booking</th>
@@ -747,7 +292,7 @@
                     <th>Peserta</th>
                     <th>Total Biaya</th>
                     <th>Status</th>
-                    <th style="min-width: 220px;">Aksi</th>
+                    <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody id="adminBookingsTable">
@@ -760,14 +305,11 @@
 
         <!-- 4. USERS TAB -->
         <div class="tab-pane fade" id="tab-users">
-          <div class="saas-card">
-            <div class="mb-4">
-              <h5 class="fw-bold mb-1"><i class="fas fa-users text-primary me-2"></i> Pengguna Terdaftar</h5>
-              <small class="text-muted">Daftar akun administrator & pelanggan terverifikasi</small>
-            </div>
+          <div class="table-container">
+            <h4 class="font-weight-bold mb-4"><i class="fas fa-users text-success me-2"></i> Pengguna Terdaftar</h4>
 
             <div class="table-responsive">
-              <table class="table saas-table align-middle">
+              <table class="table table-hover align-middle">
                 <thead>
                   <tr>
                     <th>Nama Lengkap</th>
@@ -782,22 +324,22 @@
                     <td><strong>Administrator Adventure</strong></td>
                     <td>admin@adventuretravel.id</td>
                     <td><i class="fab fa-whatsapp text-success me-1"></i> 089517846680</td>
-                    <td><span class="badge badge-soft-danger">ADMIN</span></td>
-                    <td><span class="badge badge-soft-dark"><i class="fas fa-shield-alt me-1 text-warning"></i> Admin Utama</span></td>
+                    <td><span class="badge bg-danger px-3 py-2 fs-6">ADMIN</span></td>
+                    <td><span class="badge bg-light text-muted border px-3 py-2"><i class="fas fa-shield-alt me-1 text-warning"></i> Admin Utama</span></td>
                   </tr>
                   <tr>
                     <td><strong>Farid</strong></td>
                     <td>farid12@gmail.com</td>
                     <td><i class="fab fa-whatsapp text-success me-1"></i> 089602652710</td>
-                    <td><span class="badge badge-soft-info">USER</span></td>
-                    <td><button class="btn btn-action btn-action-danger" onclick="alert('User aktif')"><i class="fas fa-trash"></i> Hapus</button></td>
+                    <td><span class="badge bg-primary px-3 py-2 fs-6">USER</span></td>
+                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i class="fas fa-trash me-1"></i> Hapus</button></td>
                   </tr>
                   <tr>
                     <td><strong>Sely Nurfadila</strong></td>
                     <td>atuylionnnn@gmail.com</td>
                     <td><i class="fab fa-whatsapp text-success me-1"></i> 082127663876</td>
-                    <td><span class="badge badge-soft-info">USER</span></td>
-                    <td><button class="btn btn-action btn-action-danger" onclick="alert('User aktif')"><i class="fas fa-trash"></i> Hapus</button></td>
+                    <td><span class="badge bg-primary px-3 py-2 fs-6">USER</span></td>
+                    <td><button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="alert('User aktif')"><i class="fas fa-trash me-1"></i> Hapus</button></td>
                   </tr>
                 </tbody>
               </table>
@@ -814,21 +356,21 @@
   <!-- Modal Tambah Destinasi -->
   <div class="modal fade" id="addDestinationModal" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0 shadow-lg">
-        <div class="modal-header bg-primary text-white p-4">
-          <h5 class="modal-title fw-bold"><i class="fas fa-plus-circle me-2"></i> Tambah Destinasi Wisata Baru</h5>
+      <div class="modal-content rounded-4 border-0">
+        <div class="modal-header bg-success text-white p-4">
+          <h5 class="modal-title font-weight-bold"><i class="fas fa-plus-circle me-2"></i> Tambah Destinasi Wisata Baru</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-4">
           <form id="addDestinationForm">
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Nama Destinasi *</label>
-                <input type="text" id="addDestName" class="form-control rounded-3" placeholder="Contoh: Gunung Ijen" required>
+                <label class="form-label font-weight-bold">Nama Destinasi *</label>
+                <input type="text" id="addDestName" class="form-control" placeholder="Contoh: Gunung Ijen" required>
               </div>
               <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Kategori *</label>
-                <select id="addDestCategory" class="form-select rounded-3" required>
+                <label class="form-label font-weight-bold">Kategori *</label>
+                <select id="addDestCategory" class="form-select" required>
                   <option value="Gunung">Gunung</option>
                   <option value="Curug">Curug</option>
                   <option value="Pulau">Pulau</option>
@@ -839,46 +381,46 @@
 
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Lokasi *</label>
-                <input type="text" id="addDestLocation" class="form-control rounded-3" placeholder="Banyuwangi, Jawa Timur" required>
+                <label class="form-label font-weight-bold">Lokasi *</label>
+                <input type="text" id="addDestLocation" class="form-control" placeholder="Banyuwangi, Jawa Timur" required>
               </div>
               <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Harga per Orang (Rp) *</label>
-                <input type="number" id="addDestPrice" class="form-control rounded-3" placeholder="750000" required>
+                <label class="form-label font-weight-bold">Harga per Orang (Rp) *</label>
+                <input type="number" id="addDestPrice" class="form-control" placeholder="750000" required>
               </div>
             </div>
 
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Durasi Trip *</label>
-                <input type="text" id="addDestDuration" class="form-control rounded-3" placeholder="2 Hari 1 Malam" value="2 Hari 1 Malam" required>
+                <label class="form-label font-weight-bold">Durasi Trip *</label>
+                <input type="text" id="addDestDuration" class="form-control" placeholder="2 Hari 1 Malam" value="2 Hari 1 Malam" required>
               </div>
               <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Rating *</label>
-                <input type="number" step="0.1" min="1" max="5" id="addDestRating" class="form-control rounded-3" value="4.9" required>
+                <label class="form-label font-weight-bold">Rating *</label>
+                <input type="number" step="0.1" min="1" max="5" id="addDestRating" class="form-control" value="4.9" required>
               </div>
             </div>
 
             <div class="mb-3">
-              <label class="form-label fw-bold">Deskripsi Wisata</label>
-              <textarea id="addDestDescription" class="form-control rounded-3" rows="3" placeholder="Penjelasan singkat..."></textarea>
+              <label class="form-label font-weight-bold">Deskripsi Wisata</label>
+              <textarea id="addDestDescription" class="form-control" rows="3" placeholder="Penjelasan singkat..."></textarea>
             </div>
 
             <div class="mb-3">
-              <label class="form-label fw-bold"><i class="fas fa-laptop me-1 text-primary"></i> Upload Gambar dari Laptop</label>
-              <input type="file" accept="image/*" id="addDestImageFile" class="form-control rounded-3 mb-2">
+              <label class="form-label font-weight-bold"><i class="fas fa-laptop me-1 text-primary"></i> Upload Gambar dari Laptop</label>
+              <input type="file" accept="image/*" id="addDestImageFile" class="form-control mb-2">
               <small class="text-muted d-block mb-2">Atau masukkan URL Gambar jika ada:</small>
-              <input type="url" id="addDestImageUrl" class="form-control rounded-3" placeholder="https://images.unsplash.com/...">
+              <input type="url" id="addDestImageUrl" class="form-control" placeholder="https://images.unsplash.com/...">
             </div>
 
             <div class="mb-3 text-center" id="addPreviewBox" style="display: none;">
-              <label class="form-label fw-bold small text-muted">Preview Gambar:</label>
-              <img id="addDestImagePreview" style="max-height: 180px; width: 100%; object-fit: cover; border-radius: 12px; border: 2px solid #3b82f6;" alt="Preview">
+              <label class="form-label font-weight-bold small text-muted">Preview Gambar:</label>
+              <img id="addDestImagePreview" style="max-height: 180px; width: 100%; object-fit: cover; border-radius: 12px; border: 2px solid #2E8B57;" alt="Preview">
             </div>
 
             <div class="modal-footer px-0 pb-0 pt-3 border-top-0">
-              <button type="button" class="btn btn-light px-4 fw-bold rounded-3" data-bs-dismiss="modal">Batal</button>
-              <button type="submit" class="btn btn-primary px-4 fw-bold rounded-3"><i class="fas fa-save me-1"></i> Simpan Destinasi</button>
+              <button type="button" class="btn btn-secondary px-4 font-weight-bold" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-success px-4 font-weight-bold"><i class="fas fa-save me-1"></i> Simpan Destinasi</button>
             </div>
           </form>
         </div>
@@ -889,9 +431,9 @@
   <!-- Modal Edit Destinasi -->
   <div class="modal fade" id="editDestinationModal" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content rounded-4 border-0 shadow-lg">
+      <div class="modal-content rounded-4 border-0">
         <div class="modal-header bg-warning text-dark p-4">
-          <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i> Edit Destinasi Wisata</h5>
+          <h5 class="modal-title font-weight-bold"><i class="fas fa-edit me-2"></i> Edit Destinasi Wisata</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-4">
@@ -900,12 +442,12 @@
 
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Nama Destinasi *</label>
-                <input type="text" id="editDestName" class="form-control rounded-3" required>
+                <label class="form-label font-weight-bold">Nama Destinasi *</label>
+                <input type="text" id="editDestName" class="form-control" required>
               </div>
               <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Kategori *</label>
-                <select id="editDestCategory" class="form-select rounded-3" required>
+                <label class="form-label font-weight-bold">Kategori *</label>
+                <select id="editDestCategory" class="form-select" required>
                   <option value="Gunung">Gunung</option>
                   <option value="Curug">Curug</option>
                   <option value="Pulau">Pulau</option>
@@ -916,48 +458,48 @@
 
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Lokasi *</label>
-                <input type="text" id="editDestLocation" class="form-control rounded-3" required>
+                <label class="form-label font-weight-bold">Lokasi *</label>
+                <input type="text" id="editDestLocation" class="form-control" required>
               </div>
               <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Harga per Orang (Rp) *</label>
-                <input type="number" id="editDestPrice" class="form-control rounded-3" required>
+                <label class="form-label font-weight-bold">Harga per Orang (Rp) *</label>
+                <input type="number" id="editDestPrice" class="form-control" required>
               </div>
             </div>
 
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Durasi Trip *</label>
-                <input type="text" id="editDestDuration" class="form-control rounded-3" required>
+                <label class="form-label font-weight-bold">Durasi Trip *</label>
+                <input type="text" id="editDestDuration" class="form-control" required>
               </div>
               <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">Rating *</label>
-                <input type="number" step="0.1" min="1" max="5" id="editDestRating" class="form-control rounded-3" required>
+                <label class="form-label font-weight-bold">Rating *</label>
+                <input type="number" step="0.1" min="1" max="5" id="editDestRating" class="form-control" required>
               </div>
             </div>
 
             <div class="mb-3">
-              <label class="form-label fw-bold">Deskripsi Wisata</label>
-              <textarea id="editDestDescription" class="form-control rounded-3" rows="3"></textarea>
+              <label class="form-label font-weight-bold">Deskripsi Wisata</label>
+              <textarea id="editDestDescription" class="form-control" rows="3"></textarea>
             </div>
 
             <div class="mb-3">
-              <label class="form-label fw-bold text-success"><i class="fas fa-upload me-1"></i> Upload Gambar Baru</label>
-              <input type="file" accept="image/*" id="editDestImageFile" class="form-control rounded-3 mb-2">
+              <label class="form-label font-weight-bold text-success"><i class="fas fa-upload me-1"></i> Upload Gambar Baru</label>
+              <input type="file" accept="image/*" id="editDestImageFile" class="form-control mb-2">
               <small class="text-muted d-block mb-2">Atau perbarui via URL Gambar:</small>
-              <input type="url" id="editDestImageUrl" class="form-control rounded-3" placeholder="https://images.unsplash.com/...">
+              <input type="url" id="editDestImageUrl" class="form-control" placeholder="https://images.unsplash.com/...">
             </div>
 
             <div class="mb-3 text-center">
-              <label class="form-label fw-bold small text-muted">Preview Gambar Saat Ini / Baru:</label>
+              <label class="form-label font-weight-bold small text-muted">Preview Gambar Saat Ini / Baru:</label>
               <div>
-                <img id="editDestImagePreview" style="max-height: 200px; width: 100%; object-fit: cover; border-radius: 12px; border: 2px solid #f59e0b;" alt="Preview Edit">
+                <img id="editDestImagePreview" style="max-height: 200px; width: 100%; object-fit: cover; border-radius: 12px; border: 2px solid #FFD54F;" alt="Preview Edit">
               </div>
             </div>
 
             <div class="modal-footer px-0 pb-0 pt-3 border-top-0">
-              <button type="button" class="btn btn-light px-4 fw-bold rounded-3" data-bs-dismiss="modal">Batal</button>
-              <button type="submit" class="btn btn-warning px-4 fw-bold text-dark rounded-3"><i class="fas fa-check-circle me-1"></i> Simpan Perubahan</button>
+              <button type="button" class="btn btn-secondary px-4 font-weight-bold" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-warning px-4 font-weight-bold text-dark"><i class="fas fa-check-circle me-1"></i> Simpan Perubahan</button>
             </div>
           </form>
         </div>
@@ -968,58 +510,24 @@
   <!-- Detail Modal -->
   <div class="modal fade" id="detailModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content rounded-4 border-0 shadow-lg">
-        <div class="modal-header bg-slate text-white p-4" style="background-color: #1e293b;">
-          <h5 class="modal-title fw-bold text-white mb-0">
-            <i class="fas fa-file-invoice text-warning me-2"></i> Rincian Pemesanan Trip
-          </h5>
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header bg-dark text-white p-3">
+          <h5 class="modal-title font-weight-bold"><i class="fas fa-file-invoice text-warning me-2"></i> Rincian Pemesanan Trip</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body p-4">
-          <div class="p-3 bg-light rounded-3 mb-4 border d-flex justify-content-between align-items-center">
-            <div>
-              <span class="text-muted small d-block">ID Booking:</span>
-              <strong id="modalBookingId" class="font-monospace fs-5 text-dark">-</strong>
-            </div>
-            <div>
-              <span class="text-muted small d-block">Status:</span>
-              <span id="modalStatus" class="badge badge-soft-warning">Pending</span>
-            </div>
-          </div>
-          <div class="row g-3">
-            <div class="col-md-6">
-              <div class="p-3 bg-light rounded-3 border">
-                <h6 class="fw-bold text-primary mb-2"><i class="fas fa-user me-2"></i> Data Pemesan</h6>
-                <p class="mb-1"><strong>Nama:</strong> <span id="modalNama">-</span></p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="p-3 bg-light rounded-3 border">
-                <h6 class="fw-bold text-primary mb-2"><i class="fas fa-compass me-2"></i> Detail Wisata</h6>
-                <p class="mb-1"><strong>Paket Wisata:</strong> <span id="modalDestinasi">-</span></p>
-                <p class="mb-0"><strong>Tgl Berangkat:</strong> <span id="modalTanggal">-</span></p>
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="p-3 bg-light rounded-3 border d-flex justify-content-between align-items-center">
-                <div>
-                  <h6 class="fw-bold text-muted mb-1">Total Biaya Pemesanan</h6>
-                  <strong id="modalTotal" class="fs-4 text-success">Rp 0</strong>
-                </div>
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="p-3 bg-light border rounded-3">
-                <h6 class="fw-bold text-dark mb-2"><i class="fas fa-sticky-note me-2 text-warning"></i> Catatan Khusus</h6>
-                <p id="modalCatatan" class="mb-0 text-muted fst-italic">-</p>
-              </div>
-            </div>
-          </div>
+          <p><strong>ID Booking:</strong> <span id="modalBookingId"></span></p>
+          <p><strong>Nama Pemesan:</strong> <span id="modalNama"></span></p>
+          <p><strong>Destinasi:</strong> <span id="modalDestinasi"></span></p>
+          <p><strong>Tanggal Berangkat:</strong> <span id="modalTanggal"></span></p>
+          <p><strong>Total Biaya:</strong> <span id="modalTotal" class="text-success font-weight-bold"></span></p>
+          <p><strong>Status:</strong> <span id="modalStatus" class="badge bg-warning text-dark"></span></p>
+          <p><strong>Catatan:</strong> <span id="modalCatatan"></span></p>
         </div>
-        <div class="modal-footer bg-light p-3 justify-content-between">
-          <button type="button" class="btn btn-secondary px-4 fw-bold rounded-pill" data-bs-dismiss="modal">Tutup</button>
-          <button type="button" class="btn btn-success fw-bold rounded-pill px-4" id="btnModalWa" style="background-color: #25D366; border: none;">
-            <i class="fab fa-whatsapp me-2"></i> Konfirmasi via WhatsApp
+        <div class="modal-footer bg-light">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-success" id="btnModalWa" style="background-color: #25D366; border:none;">
+            <i class="fab fa-whatsapp me-1"></i> Konfirmasi via WhatsApp
           </button>
         </div>
       </div>
@@ -1031,11 +539,7 @@
     console.log("Admin JS loaded successfully");
 
     function formatIDR(amount) {
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        maximumFractionDigits: 0
-      }).format(amount || 0);
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(amount || 0);
     }
 
     let currentDestinationsList = [];
@@ -1065,9 +569,11 @@
         try { return JSON.parse(stored); } catch (e) { }
       }
       const defaultBookings = [
-        { id: '3770b527-d0f0-4033-acd3-05d5becd5058', customerName: "Farid", email: "farid12@gmail.com", phone: "089602652710", destinationName: "Pulau Pari", travelDate: "2026-08-13", participants: 1, totalPrice: 550000, status: "Pending" },
-        { id: '6c8fc89d-2e2a-4192-8ade-fe61d5129f46', customerName: "Sely Nurfadila", email: "atuylionnnn@gmail.com", phone: "082127663876", destinationName: "Gunung Bromo", travelDate: "2026-08-16", participants: 1, totalPrice: 850000, status: "Approved" },
-        { id: 'f722f939-1c34-4b07-a814-b71a255e74ff', customerName: "Sely Nurfadila", email: "atuylionnnn@gmail.com", phone: "082127663876", destinationName: "Pulau Komodo", travelDate: "2026-08-16", participants: 1, totalPrice: 3850000, status: "Pending" }
+        { id: 'BK-3770B5', customerName: "Farid", phone: "089602652710", email: "farid12@gmail.com", destinationName: "Pulau Pari", travelDate: "2026-08-13", participants: 1, totalPrice: 550000, status: "Pending" },
+        { id: 'BK-F722F9', customerName: "Sely Nurfadila", phone: "082127663876", email: "atuylionnnn@gmail.com", destinationName: "Pulau Komodo", travelDate: "2026-08-16", participants: 1, totalPrice: 3850000, status: "Pending" },
+        { id: 'BK-287C6F', customerName: "Sely Nurfadila", phone: "082127663876", email: "atuylionnnn@gmail.com", destinationName: "Gunung Rinjani", travelDate: "2026-08-16", participants: 1, totalPrice: 2450000, status: "Pending" },
+        { id: 'BK-6C8FC8', customerName: "Sely Nurfadila", phone: "082127663876", email: "atuylionnnn@gmail.com", destinationName: "Gunung Bromo", travelDate: "2026-08-16", participants: 1, totalPrice: 850000, status: "Approved" },
+        { id: 'BK-96B184', customerName: "Budi Santoso", phone: "081298765432", email: "budi@gmail.com", destinationName: "Gunung Bromo", travelDate: "2026-08-15", participants: 2, totalPrice: 1700000, status: "Approved" }
       ];
       localStorage.setItem('adventure_bookings', JSON.stringify(defaultBookings));
       return defaultBookings;
@@ -1138,12 +644,18 @@
     }
 
     function updateAdminStats() {
-      document.getElementById('statTotalDest').textContent = currentDestinationsList.length;
-      document.getElementById('statTotalBookings').textContent = currentBookingsList.length;
+      const statDest = document.getElementById('statTotalDest');
+      if (statDest) statDest.textContent = currentDestinationsList.length;
+      
+      const statBook = document.getElementById('statTotalBookings');
+      if (statBook) statBook.textContent = currentBookingsList.length;
+      
       const totalRev = currentBookingsList
         .filter(b => b.status === 'Approved')
         .reduce((sum, b) => sum + (Number(b.totalPrice || b.total_biaya) || 0), 0);
-      document.getElementById('statTotalRevenue').textContent = formatIDR(totalRev);
+      
+      const statRev = document.getElementById('statTotalRevenue');
+      if (statRev) statRev.textContent = formatIDR(totalRev);
     }
 
     function renderAdminDestTable() {
@@ -1154,16 +666,16 @@
       currentDestinationsList.forEach(item => {
         const tr = `
           <tr>
-            <td><img src="${item.image}" style="width: 52px; height: 52px; object-fit: cover; border-radius: 10px; border: 1px solid #e2e8f0;"></td>
+            <td><img src="${item.image}" style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px;"></td>
             <td><strong>${item.name}</strong></td>
-            <td><span class="badge badge-soft-info">${item.category}</span></td>
+            <td><span class="badge bg-success">${item.category}</span></td>
             <td>${item.location}</td>
-            <td class="text-success fw-bold">${formatIDR(item.price)}</td>
+            <td class="text-success font-weight-bold">${formatIDR(item.price)}</td>
             <td><i class="fas fa-star text-warning"></i> ${item.rating}</td>
             <td>${item.duration}</td>
             <td>
-              <button class="btn btn-action btn-action-warning me-1" onclick="openEditDestinationModal('${item.id}')"><i class="fas fa-edit"></i> Edit</button>
-              <button class="btn btn-action btn-action-danger" onclick="deleteDestinationItem('${item.id}')"><i class="fas fa-trash"></i></button>
+              <button class="btn btn-sm btn-warning me-1 mb-1" onclick="openEditDestinationModal('${item.id}')"><i class="fas fa-edit"></i> Edit</button>
+              <button class="btn btn-sm btn-danger mb-1" onclick="deleteDestinationItem('${item.id}')"><i class="fas fa-trash"></i></button>
             </td>
           </tr>
         `;
@@ -1257,23 +769,30 @@
       currentBookingsList.forEach(b => {
         const id = b.id || b._id;
         const shortId = String(id).startsWith('BK-') ? id : ('BK-' + String(id).substring(0, 6).toUpperCase());
-        let badgeClass = (b.status === 'Approved') ? 'badge-soft-success' : (b.status === 'Cancelled' ? 'badge-soft-danger' : 'badge-soft-warning');
-        let badgeIcon = (b.status === 'Approved') ? 'fa-check-circle' : (b.status === 'Cancelled' ? 'fa-times-circle' : 'fa-clock');
+        let badgeClass = (b.status === 'Approved') ? 'bg-success' : (b.status === 'Cancelled' ? 'bg-danger' : 'bg-warning text-dark');
+
+        const phoneNum = b.phone || b.whatsapp || '089602652710';
+        const userEmail = b.email || '';
 
         const tr = `
           <tr>
-            <td><span class="badge badge-soft-dark">${shortId}</span></td>
-            <td><strong>${b.customerName || b.nama_pemesan || 'Pelanggan'}</strong><br><small class="text-muted">${b.phone || '-'}</small></td>
-            <td><strong>${b.destinationName || b.destinasi || '-'}</strong></td>
-            <td>${b.travelDate || b.tgl_berangkat || '-'}</td>
-            <td>${b.participants || 1} Org</td>
-            <td class="text-success fw-bold">${formatIDR(b.totalPrice || b.total_biaya || 0)}</td>
-            <td><span class="badge ${badgeClass}"><i class="fas ${badgeIcon}"></i> ${b.status || 'Pending'}</span></td>
+            <td><span class="badge bg-dark font-monospace">${shortId}</span></td>
             <td>
-              <button class="btn btn-action btn-action-info me-1 mb-1" onclick="handleShowDetail('${id}')"><i class="fas fa-eye"></i> Detail</button>
-              <button class="btn btn-action btn-action-success me-1 mb-1" onclick="handleApproveBooking('${id}')"><i class="fas fa-check"></i> Setujui</button>
-              <button class="btn btn-action btn-action-warning me-1 mb-1" onclick="updateBookingStatusItem('${id}', 'Cancelled')"><i class="fas fa-ban"></i> Batal</button>
-              <button class="btn btn-action btn-action-danger mb-1" onclick="deleteBookingItem('${id}')"><i class="fas fa-trash"></i></button>
+              <strong>${b.customerName || b.nama_pemesan || 'Pelanggan'}</strong><br>
+              <small class="text-muted"><i class="fab fa-whatsapp text-success me-1"></i>${phoneNum}${userEmail ? ' | ' + userEmail : ''}</small>
+            </td>
+            <td><strong>${b.destinationName || b.destinasi || '-'}</strong></td>
+            <td><i class="fas fa-calendar-alt text-primary me-1"></i> ${b.travelDate || b.tgl_berangkat || '-'}</td>
+            <td>${b.participants || 1} Org</td>
+            <td class="text-success font-weight-bold">${formatIDR(b.totalPrice || b.total_biaya || 0)}</td>
+            <td><span class="badge ${badgeClass} px-3 py-2 fs-6">${b.status || 'Pending'}</span></td>
+            <td>
+              <div class="action-grid">
+                <button class="btn btn-info text-white" onclick="handleShowDetail('${id}')"><i class="fas fa-eye"></i> Detail</button>
+                <button class="btn btn-success" onclick="handleApproveBooking('${id}')"><i class="fas fa-check"></i> Setujui</button>
+                <button class="btn btn-outline-warning text-dark" onclick="updateBookingStatusItem('${id}', 'Cancelled')"><i class="fas fa-ban"></i> Batal</button>
+                <button class="btn btn-outline-danger" onclick="deleteBookingItem('${id}')"><i class="fas fa-trash"></i></button>
+              </div>
             </td>
           </tr>
         `;
