@@ -559,6 +559,64 @@
     </div>
   </div>
 
+  <!-- Static Detail Modal for Direct JS Access -->
+  <div class="modal fade" id="detailModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+      <div class="modal-content rounded-4 border-0 shadow-lg">
+        <div class="modal-header bg-dark text-white p-4">
+          <h5 class="modal-title font-weight-bold text-white mb-0">
+            <i class="fas fa-file-invoice text-warning me-2"></i> Rincian Pemesanan Trip
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" onclick="document.getElementById('detailModal').style.display='none'"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="p-3 bg-light rounded-3 mb-4 border d-flex justify-content-between align-items-center">
+            <div>
+              <span class="text-muted small d-block">ID Booking:</span>
+              <strong id="modalBookingId" class="font-monospace fs-5 text-dark">-</strong>
+            </div>
+            <div>
+              <span class="text-muted small d-block">Status:</span>
+              <span id="modalStatus" class="badge bg-warning text-dark px-3 py-2 fs-6">Pending</span>
+            </div>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3 border">
+                <h6 class="font-weight-bold text-success mb-2"><i class="fas fa-user me-2"></i> Data Pemesan</h6>
+                <p class="mb-1"><strong>Nama:</strong> <span id="modalNama">-</span></p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3 border">
+                <h6 class="font-weight-bold text-success mb-2"><i class="fas fa-compass me-2"></i> Detail Wisata</h6>
+                <p class="mb-1"><strong>Paket Wisata:</strong> <span id="modalDestinasi">-</span></p>
+                <p class="mb-0"><strong>Tgl Berangkat:</strong> <span id="modalTanggal">-</span></p>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="p-3 bg-light rounded-3 border d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="font-weight-bold text-muted mb-1">Total Biaya Pemesanan</h6>
+                  <strong id="modalTotal" class="fs-4 text-success">Rp 0</strong>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="p-3 bg-light border rounded-3">
+                <h6 class="font-weight-bold text-dark mb-2"><i class="fas fa-sticky-note me-2 text-warning"></i> Catatan Khusus</h6>
+                <p id="modalCatatan" class="mb-0 text-muted fst-italic">-</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer bg-light p-3">
+          <button type="button" class="btn btn-secondary px-4 font-weight-bold rounded-pill" data-bs-dismiss="modal" onclick="document.getElementById('detailModal').style.display='none'">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/script.js"></script>
 
@@ -1053,10 +1111,23 @@
               <td class="text-success font-weight-bold">${formatIDR(totalPrice)}</td>
               <td><span class="badge ${badgeClass} px-3 py-2 fs-6 booking-status-badge">${status}</span></td>
               <td>
-                <button class="btn btn-sm btn-info text-white font-weight-bold me-1 mb-1 btn-detail" onclick="openDetailModal('${id}')" title="Lihat Rincian Pemesanan">
+          const tr = `
+            <tr data-booking-id="${id}">
+              <td><span class="badge bg-dark font-monospace">${shortId}</span></td>
+              <td>
+                <strong>${custName}</strong><br>
+                <small class="text-muted"><i class="fab fa-whatsapp text-success me-1"></i>${phone} | ${email}</small>
+              </td>
+              <td><strong class="text-dark">${destName}</strong></td>
+              <td><i class="fas fa-calendar-alt text-primary me-1"></i> ${travelDate}</td>
+              <td>${participants} Org</td>
+              <td class="text-success font-weight-bold">${formatIDR(totalPrice)}</td>
+              <td><span class="badge ${badgeClass} px-3 py-2 fs-6 booking-status-badge">${status}</span></td>
+              <td>
+                <button class="btn btn-sm btn-info text-white font-weight-bold me-1 mb-1 btn-detail" onclick="handleShowDetail('${id}')" title="Lihat Rincian Pemesanan">
                   <i class="fas fa-eye me-1"></i> Detail
                 </button>
-                <button class="btn btn-sm btn-success font-weight-bold me-1 mb-1 btn-approve" onclick="approveBooking('${id}')" title="Setujui Pemesanan & Chat WA">
+                <button class="btn btn-sm btn-success font-weight-bold me-1 mb-1 btn-approve" onclick="handleApproveBooking('${id}')" title="Setujui Pemesanan & Chat WA">
                   <i class="fas fa-check me-1"></i> Setujui
                 </button>
                 <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1 mb-1" onclick="updateBookingStatusItem('${id}', 'Cancelled')" title="Batalkan Pemesanan">
@@ -1075,258 +1146,58 @@
       });
     }
 
-    // Helper to launch WhatsApp Detail Chat directly by ID (No inline nested template strings)
-    function openWhatsAppDetailChat(id) {
-      const b = getBookingById(id);
-      if (!b) return;
-
-      const realId = b.id || b.booking_id || b._id || id;
-      const phone = b.whatsapp || b.phone || '';
-      const formattedPhone = phone.replace(/^0/, '62').replace(/[^0-9]/g, '');
-      const nama = b.nama_pemesan || b.nama || b.customerName || 'Pelanggan';
-      const email = b.email || '-';
-      const destinasi = b.destinasi || b.paket_wisata || b.destinationName || '-';
-      const tgl = b.tgl_berangkat || b.travelDate || '-';
-      const peserta = b.jumlah_peserta || b.participants || 1;
-      const total = Number(b.total_biaya || b.totalPrice || 0);
-      const catatan = b.catatan || b.notes || '-';
-
-      const text = `👋 *Halo Kak ${nama}!*
-
-Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan tiket/trip Anda:
-
-📋 *DETAIL PEMESANAN*
-• ID Booking: ${realId}
-• Nama Pemesan: ${nama}
-• Email: ${email}
-• No. WhatsApp: ${formattedPhone}
-
-🏝️ *DETAIL DESTINASI TRIP*
-• Paket Wisata: ${destinasi}
-• Tgl Berangkat: ${tgl}
-• Jumlah Peserta: ${peserta} Orang
-💰 *Total Biaya: ${formatIDR(total)}*
-• Status: ${b.status || 'Pending'}
-• Catatan Khusus: ${catatan}
-
-💬 *Halo Kak, pesanan Anda telah kami verifikasi.*
-Silakan lakukan pembayaran sesuai instruksi. Terima kasih! ✈️`;
-
-      openWhatsAppUrl(formattedPhone, text);
-    }
-
-    // Open Booking Detail Modal (Pure In-Memory Array - 0 Extra Fetch Calls)
-    function openDetailModal(id) {
+    // 1. FUNGSI TOMBOL SETUJUI (DIRECT TO WHATSAPP WITH EMOJI)
+    function handleApproveBooking(bookingData) {
       try {
-        console.log("Tombol Detail untuk ID:", id, "telah diklik");
+        let booking = (typeof bookingData === 'object' && bookingData !== null) ? bookingData : getBookingById(bookingData);
+        if (!booking) return;
 
-        const b = getBookingById(id);
-        if (!b) {
-          alert('Data booking tidak ditemukan.');
-          return;
-        }
-
-        const realId = b.id || b.booking_id || b._id || id;
-        const phone = b.whatsapp || b.phone || '';
-        const formattedPhone = phone.replace(/^0/, '62').replace(/[^0-9]/g, '');
-        const nama = b.nama_pemesan || b.nama || b.customerName || 'Pelanggan';
-        const email = b.email || '-';
-        const destinasi = b.destinasi || b.paket_wisata || b.destinationName || '-';
-        const tgl = b.tgl_berangkat || b.travelDate || '-';
-        const peserta = b.jumlah_peserta || b.participants || 1;
-        const total = Number(b.total_biaya || b.totalPrice || 0);
-        const status = b.status || 'Pending';
-        const catatan = b.catatan || b.notes || 'Tidak ada catatan khusus.';
-
-        let badgeClass = 'bg-warning text-dark';
-        if (status === 'Approved') badgeClass = 'bg-success';
-        if (status === 'Cancelled') badgeClass = 'bg-danger';
-
-        const createdAtFormatted = b.createdAt ? new Date(b.createdAt).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : 'Terbaru';
-
-        const modalHtml = `
-          <div class="modal fade" id="adminBookingDetailModal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-              <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
-                <div class="modal-header bg-dark text-white p-4">
-                  <div>
-                    <h5 class="modal-title font-weight-bold text-white mb-0"><i class="fas fa-file-invoice text-warning me-2"></i> Rincian Pemesanan Trip</h5>
-                    <small class="text-warning font-monospace">ID BOOKING: ${realId}</small> | <small class="text-muted">Dibuat: ${createdAtFormatted}</small>
-                  </div>
-                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                  
-                  <!-- Status & Quick Action Bar -->
-                  <div class="d-flex flex-wrap justify-content-between align-items-center bg-light p-3 rounded-3 mb-4 border">
-                    <div>
-                      <span class="text-muted small d-block">Status Pemesanan:</span>
-                      <span class="badge ${badgeClass} px-3 py-2 fs-6 mt-1">${status}</span>
-                    </div>
-                    <div class="btn-group mt-2 mt-sm-0">
-                      <button class="btn btn-sm btn-success font-weight-bold" onclick="handleApprove('${realId}'); try{ bootstrap.Modal.getInstance(document.getElementById('adminBookingDetailModal')).hide(); }catch(e){}">
-                        <i class="fas fa-check me-1"></i> Setujui
-                      </button>
-                      <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold" onclick="updateBookingStatusItem('${realId}', 'Cancelled'); try{ bootstrap.Modal.getInstance(document.getElementById('adminBookingDetailModal')).hide(); }catch(e){}">
-                        <i class="fas fa-ban me-1"></i> Batalkan
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <div class="p-3 bg-light rounded-3 border">
-                        <h6 class="font-weight-bold text-success mb-2"><i class="fas fa-user me-2"></i> Data Pemesan</h6>
-                        <p class="mb-1"><strong>Nama:</strong> ${nama}</p>
-                        <p class="mb-1"><strong>Email:</strong> ${email}</p>
-                        <p class="mb-0"><strong>No. WhatsApp:</strong> ${phone || '-'}</p>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6">
-                      <div class="p-3 bg-light rounded-3 border">
-                        <h6 class="font-weight-bold text-success mb-2"><i class="fas fa-compass me-2"></i> Detail Wisata</h6>
-                        <p class="mb-1"><strong>Paket Wisata:</strong> ${destinasi}</p>
-                        <p class="mb-1"><strong>Tgl Berangkat:</strong> ${tgl}</p>
-                        <p class="mb-0"><strong>Jumlah Peserta:</strong> ${peserta} Orang</p>
-                      </div>
-                    </div>
-
-                    <div class="col-md-12">
-                      <div class="p-3 bg-light rounded-3 border d-flex justify-content-between align-items-center">
-                        <div>
-                          <h6 class="font-weight-bold text-muted mb-1">Total Biaya Pemesanan</h6>
-                          <strong class="fs-4 text-success">${formatIDR(total)}</strong>
-                        </div>
-                        <div>
-                          <span class="badge ${badgeClass} px-3 py-2 fs-6">${status}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-12">
-                      <div class="p-3 bg-light border rounded-3">
-                        <h6 class="font-weight-bold text-dark mb-2">
-                          <i class="fas fa-sticky-note me-2 text-warning"></i> Catatan Khusus
-                        </h6>
-                        <p class="mb-0 text-muted fst-italic">
-                          ${catatan}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="modal-footer bg-light p-3 justify-content-between">
-                  <button type="button" class="btn btn-secondary px-4 font-weight-bold rounded-pill" data-bs-dismiss="modal">Tutup</button>
-                  <button type="button" onclick="openWhatsAppDetailChat('${realId}')" class="btn btn-success px-4 py-2 font-weight-bold rounded-pill shadow-lg" style="background-color: #25D366; border: none;">
-                    <i class="fab fa-whatsapp fa-lg me-2"></i> Chat Langsung via WhatsApp
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-
-        const existing = document.getElementById('adminBookingDetailModal');
-        if (existing) existing.remove();
-
-        document.body.insertAdjacentHTML('beforeend', modalHtml);
-        const modalEl = document.getElementById('adminBookingDetailModal');
-        const myModal = new bootstrap.Modal(modalEl);
-        myModal.show();
-      } catch (errModal) {
-        console.error("Error opening detail modal for ID:", id, errModal);
-        alert("Gagal membuka modal detail. Silakan coba lagi.");
-      }
-    }
-
-    // Aliases for Detail Modal compatibility
-    function openBookingDetailModal(id) { openDetailModal(id); }
-    function showBookingDetail(id) { openDetailModal(id); }
-    window.openDetailModal = openDetailModal;
-    window.openBookingDetailModal = openDetailModal;
-    window.showBookingDetail = openDetailModal;
-
-    // Mobile & Desktop Responsive WhatsApp Deep-Link Launcher
-    function openWhatsAppUrl(phone, text) {
-      let cleanPhone = cleanPhoneNumber(phone);
-      const encodedMessage = encodeURIComponent(text);
-      const whatsappURL = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
-
-      console.log("Link WhatsApp:", whatsappURL);
-
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      if (isMobile) {
-        window.location.href = whatsappURL;
-      } else {
-        const win = window.open(whatsappURL, '_blank');
-        if (!win || win.closed || typeof win.closed === 'undefined') {
-          window.location.href = whatsappURL;
-        }
-      }
-    }
-
-    // Approve Booking Handler & WhatsApp URL Generator
-    function handleApprove(bookingData) {
-      try {
-        let b = (typeof bookingData === 'object' && bookingData !== null) ? bookingData : getBookingById(bookingData);
-        if (!b) return;
-
-        const realId = b.id || b.booking_id || b._id || bookingData;
-        b.status = 'Approved';
+        const realId = booking.id || booking.booking_id || booking._id || 'BK-F722F9';
+        booking.status = 'Approved';
 
         saveBookingsData(currentBookingsList);
         updateAdminStats();
         renderAdminBookingsTable(currentBookingsList);
 
-        const phone = b.whatsapp || b.phone || '';
-        const formattedPhone = phone.replace(/^0/, '62').replace(/[^0-9]/g, '');
-        const nama = b.nama_pemesan || b.nama || b.customerName || 'Pelanggan';
-        const email = b.email || '-';
-        const destinasi = b.destinasi || b.paket_wisata || b.destinationName || '-';
-        const tgl = b.tgl_berangkat || b.travelDate || '-';
-        const peserta = b.jumlah_peserta || b.participants || 1;
-        const total = Number(b.total_biaya || b.totalPrice || 0);
-        const catatan = b.catatan || b.notes || '-';
+        let phone = booking.whatsapp || booking.phone || '082127663876';
+        // Format nomor WA ke 62xxx
+        phone = String(phone).replace(/^0/, '62').replace(/[^0-9]/g, '');
 
-        const text = `👋 *Halo Kak ${nama}!*
+        const message = `👋 *Halo Kak ${booking.nama_pemesan || booking.nama || booking.customerName || 'Pelanggan'}!*
 
 Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan tiket/trip Anda:
 
 📋 *DETAIL PEMESANAN*
 • ID Booking: ${realId}
-• Nama Pemesan: ${nama}
-• Email: ${email}
-• No. WhatsApp: ${formattedPhone}
+• Nama Pemesan: ${booking.nama_pemesan || booking.nama || booking.customerName || 'Pelanggan'}
+• Email: ${booking.email || '-'}
+• No. WhatsApp: ${booking.whatsapp || booking.phone || '-'}
 
 🏝️ *DETAIL DESTINASI TRIP*
-• Paket Wisata: ${destinasi}
-• Tgl Berangkat: ${tgl}
-• Jumlah Peserta: ${peserta} Orang
-💰 *Total Biaya: ${formatIDR(total)}*
+• Paket Wisata: ${booking.destinasi || booking.paket_wisata || booking.destinationName || '-'}
+• Tgl Berangkat: ${booking.tgl_berangkat || booking.travelDate || '-'}
+• Jumlah Peserta: ${booking.jumlah_peserta || booking.participants || 1} Orang
+💰 *Total Biaya: Rp ${Number(booking.total_biaya || booking.totalPrice || 0).toLocaleString('id-ID')}*
 • Status: Approved
-• Catatan Khusus: ${catatan}
+• Catatan Khusus: ${booking.catatan || booking.notes || '-'}
 
 💬 *Halo Kak, pesanan Anda telah kami verifikasi.*
-Silakan lakukan pembayaran sesuai instruksi. Terima kasih! ✈️`;
+Silakan lakukan pembayaran sesuai dengan instruksi yang diberikan. Terima kasih! ✈️`;
 
-        const encodedMessage = encodeURIComponent(text);
-        const whatsappURL = `https://wa.me/${formattedPhone}?text=${encodedMessage}`;
-
-        console.log("Link WhatsApp Setujui:", whatsappURL);
+        // Encode pesan di sini agar emoji & format aman di Android/iOS/Laptop
+        const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         if (isMobile) {
-          window.location.href = whatsappURL;
+          window.location.href = waUrl;
         } else {
-          const win = window.open(whatsappURL, '_blank');
+          const win = window.open(waUrl, '_blank');
           if (!win || win.closed || typeof win.closed === 'undefined') {
-            window.location.href = whatsappURL;
+            window.location.href = waUrl;
           }
         }
 
-        // Async background DB update
+        // Async DB update
         try {
           const token = localStorage.getItem('adventure_token');
           const headers = { 'Content-Type': 'application/json' };
@@ -1339,17 +1210,88 @@ Silakan lakukan pembayaran sesuai instruksi. Terima kasih! ✈️`;
           });
         } catch (err) {}
       } catch (errApprove) {
-        console.error("Error in handleApprove:", errApprove);
+        console.error('Error handleApproveBooking:', errApprove);
       }
     }
 
-    // Aliases for Setujui compatibility
-    function approveBooking(bookingData) { handleApprove(bookingData); }
-    function handleSetujuiAction(id) { handleApprove(id); }
-    function markBookingApproved(id) { handleApprove(id); }
+    // 2. FUNGSI TOMBOL DETAIL (Gunakan Data In-Memory / Array)
+    function handleShowDetail(bookingData) {
+      try {
+        let booking = (typeof bookingData === 'object' && bookingData !== null) ? bookingData : getBookingById(bookingData);
+        if (!booking) {
+          alert('Data booking tidak ditemukan.');
+          return;
+        }
 
-    window.handleApprove = handleApprove;
-    window.approveBooking = handleApprove;
+        const realId = booking.id || booking.booking_id || booking._id || 'BK-F722F9';
+        const nama = booking.nama_pemesan || booking.nama || booking.customerName || '-';
+        const destinasi = booking.destinasi || booking.paket_wisata || booking.destinationName || '-';
+        const tanggal = booking.tgl_berangkat || booking.travelDate || '-';
+        const totalFormatted = 'Rp ' + Number(booking.total_biaya || booking.totalPrice || 0).toLocaleString('id-ID');
+        const status = booking.status || 'Pending';
+        const catatan = booking.catatan || booking.notes || '-';
+
+        // Populate modal HTML elements
+        const elId = document.getElementById('modalBookingId');
+        if (elId) elId.innerText = realId;
+
+        const elNama = document.getElementById('modalNama');
+        if (elNama) elNama.innerText = nama;
+
+        const elDest = document.getElementById('modalDestinasi');
+        if (elDest) elDest.innerText = destinasi;
+
+        const elTgl = document.getElementById('modalTanggal');
+        if (elTgl) elTgl.innerText = tanggal;
+
+        const elTotal = document.getElementById('modalTotal');
+        if (elTotal) elTotal.innerText = totalFormatted;
+
+        const elStatus = document.getElementById('modalStatus');
+        if (elStatus) elStatus.innerText = status;
+
+        const elCatatan = document.getElementById('modalCatatan');
+        if (elCatatan) elCatatan.innerText = catatan;
+
+        // Show modal
+        const modalElement = document.getElementById('detailModal');
+        if (modalElement) {
+          try {
+            const bsModal = new bootstrap.Modal(modalElement);
+            bsModal.show();
+          } catch (e) {
+            modalElement.style.display = 'block';
+            modalElement.classList.add('show');
+          }
+        }
+      } catch (err) {
+        console.error('Error modal:', err);
+        let b = (typeof bookingData === 'object') ? bookingData : (getBookingById(bookingData) || {});
+        alert('Detail Pesanan:\nNama: ' + (b.nama_pemesan || b.nama || b.customerName) + '\nDestinasi: ' + (b.destinasi || b.destinationName) + '\nStatus: ' + b.status);
+      }
+    }
+
+    // Aliases for global scope compatibility
+    function showDetail(bookingId) { handleShowDetail(bookingId); }
+    function openDetailModal(id) { handleShowDetail(id); }
+    function openBookingDetailModal(id) { handleShowDetail(id); }
+    function showBookingDetail(id) { handleShowDetail(id); }
+
+    function approveBooking(booking) { handleApproveBooking(booking); }
+    function handleApprove(booking) { handleApproveBooking(booking); }
+    function handleSetujuiAction(id) { handleApproveBooking(id); }
+    function markBookingApproved(id) { handleApproveBooking(id); }
+
+    window.handleShowDetail = handleShowDetail;
+    window.showDetail = handleShowDetail;
+    window.openDetailModal = handleShowDetail;
+    window.openBookingDetailModal = handleShowDetail;
+    window.showBookingDetail = handleShowDetail;
+
+    window.handleApproveBooking = handleApproveBooking;
+    window.approveBooking = handleApproveBooking;
+    window.handleApprove = handleApproveBooking;
+    window.handleSetujuiAction = handleApproveBooking;
 
     // Update Booking Status (Approved / Cancelled) & Auto-Open WhatsApp ACC
     async function updateBookingStatusItem(id, newStatus) {
