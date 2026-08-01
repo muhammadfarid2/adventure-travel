@@ -191,7 +191,60 @@
                   </tr>
                 </thead>
                 <tbody id="adminBookingsTable">
-                  <!-- Rendered dynamically -->
+                  <tr>
+                    <td><span class="badge bg-dark font-monospace">BK-3770B5</span></td>
+                    <td>
+                      <strong>Farid</strong><br>
+                      <small class="text-muted"><i class="fab fa-whatsapp text-success me-1"></i>089602652710 | farid12@gmail.com</small>
+                    </td>
+                    <td><strong class="text-dark">Pulau Pari</strong></td>
+                    <td><i class="fas fa-calendar-alt text-primary me-1"></i> 2026-08-13</td>
+                    <td>1 Org</td>
+                    <td class="text-success font-weight-bold">Rp 550.000</td>
+                    <td><span class="badge bg-warning text-dark px-3 py-2 fs-6">Pending</span></td>
+                    <td>
+                      <button class="btn btn-sm btn-info text-white font-weight-bold me-1" onclick="openBookingDetailModal('3770b527-d0f0-4033-acd3-05d5becd5058')"><i class="fas fa-eye me-1"></i> Detail</button>
+                      <button class="btn btn-sm btn-success font-weight-bold me-1" onclick="updateBookingStatusItem('3770b527-d0f0-4033-acd3-05d5becd5058', 'Approved')"><i class="fas fa-check me-1"></i> Setujui</button>
+                      <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1" onclick="updateBookingStatusItem('3770b527-d0f0-4033-acd3-05d5becd5058', 'Cancelled')"><i class="fas fa-ban me-1"></i> Batal</button>
+                      <button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="deleteBookingItem('3770b527-d0f0-4033-acd3-05d5becd5058')"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge bg-dark font-monospace">BK-6C8FC8</span></td>
+                    <td>
+                      <strong>Sely Nurfadila</strong><br>
+                      <small class="text-muted"><i class="fab fa-whatsapp text-success me-1"></i>082127663876 | atuylionnnn@gmail.com</small>
+                    </td>
+                    <td><strong class="text-dark">Gunung Bromo</strong></td>
+                    <td><i class="fas fa-calendar-alt text-primary me-1"></i> 2026-08-16</td>
+                    <td>1 Org</td>
+                    <td class="text-success font-weight-bold">Rp 850.000</td>
+                    <td><span class="badge bg-success px-3 py-2 fs-6">Approved</span></td>
+                    <td>
+                      <button class="btn btn-sm btn-info text-white font-weight-bold me-1" onclick="openBookingDetailModal('6c8fc89d-2e2a-4192-8ade-fe61d5129f46')"><i class="fas fa-eye me-1"></i> Detail</button>
+                      <button class="btn btn-sm btn-success font-weight-bold me-1" onclick="updateBookingStatusItem('6c8fc89d-2e2a-4192-8ade-fe61d5129f46', 'Approved')"><i class="fas fa-check me-1"></i> Setujui</button>
+                      <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1" onclick="updateBookingStatusItem('6c8fc89d-2e2a-4192-8ade-fe61d5129f46', 'Cancelled')"><i class="fas fa-ban me-1"></i> Batal</button>
+                      <button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="deleteBookingItem('6c8fc89d-2e2a-4192-8ade-fe61d5129f46')"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge bg-dark font-monospace">BK-F722F9</span></td>
+                    <td>
+                      <strong>Sely Nurfadila</strong><br>
+                      <small class="text-muted"><i class="fab fa-whatsapp text-success me-1"></i>082127663876 | atuylionnnn@gmail.com</small>
+                    </td>
+                    <td><strong class="text-dark">Pulau Komodo</strong></td>
+                    <td><i class="fas fa-calendar-alt text-primary me-1"></i> 2026-08-16</td>
+                    <td>1 Org</td>
+                    <td class="text-success font-weight-bold">Rp 3.850.000</td>
+                    <td><span class="badge bg-warning text-dark px-3 py-2 fs-6">Pending</span></td>
+                    <td>
+                      <button class="btn btn-sm btn-info text-white font-weight-bold me-1" onclick="openBookingDetailModal('f722f939-1c34-4b07-a814-b71a255e74ff')"><i class="fas fa-eye me-1"></i> Detail</button>
+                      <button class="btn btn-sm btn-success font-weight-bold me-1" onclick="updateBookingStatusItem('f722f939-1c34-4b07-a814-b71a255e74ff', 'Approved')"><i class="fas fa-check me-1"></i> Setujui</button>
+                      <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1" onclick="updateBookingStatusItem('f722f939-1c34-4b07-a814-b71a255e74ff', 'Cancelled')"><i class="fas fa-ban me-1"></i> Batal</button>
+                      <button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="deleteBookingItem('f722f939-1c34-4b07-a814-b71a255e74ff')"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -520,19 +573,29 @@
         currentDestinationsList = getDestinationsData();
       }
 
-      // 2. Fetch Bookings from API
+      // 2. Fetch Bookings from API (With Direct Railway URL Fallback)
       try {
-        const token = localStorage.getItem('adventure_token');
-        const headers = token ? { Authorization: `Bearer ${token}` } : {};
-        const resB = await fetch('/api/bookings', { headers });
+        let resB = await fetch('/api/bookings');
+        if (!resB.ok) {
+          resB = await fetch('https://adventure-travel-production-ba8d.up.railway.app/api/bookings');
+        }
         if (resB.ok) {
           const apiBookings = await resB.json();
-          if (Array.isArray(apiBookings)) {
+          if (Array.isArray(apiBookings) && apiBookings.length > 0) {
             currentBookingsList = apiBookings;
           }
         }
       } catch(err) {
-        console.warn('API error fetching bookings', err);
+        console.warn('Relative API error, trying direct Railway URL', err);
+        try {
+          const resDirect = await fetch('https://adventure-travel-production-ba8d.up.railway.app/api/bookings');
+          if (resDirect.ok) {
+            const apiBookings = await resDirect.json();
+            if (Array.isArray(apiBookings) && apiBookings.length > 0) {
+              currentBookingsList = apiBookings;
+            }
+          }
+        } catch(e) {}
       }
 
       if (!currentBookingsList || currentBookingsList.length === 0) {
