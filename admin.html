@@ -27,8 +27,27 @@
       padding: 30px;
     }
     @media (max-width: 991.98px) {
-      .admin-wrapper { flex-direction: column; }
-      .admin-sidebar { width: 100%; min-height: auto; }
+    /* Modal & Overlay Reset Fix to prevent unclickable buttons */
+    .modal:not(.show) {
+      display: none !important;
+      pointer-events: none !important;
+    }
+    .modal.show {
+      display: block !important;
+      pointer-events: auto !important;
+    }
+    .modal-backdrop:not(.show) {
+      display: none !important;
+      pointer-events: none !important;
+    }
+    .btn, button, a {
+      position: relative;
+      z-index: 10;
+      pointer-events: auto !important;
+      cursor: pointer !important;
+    }
+    table, tbody, tr, td {
+      position: relative;
     }
   </style>
 </head>
@@ -621,6 +640,8 @@
   <script src="js/script.js"></script>
 
   <script>
+    console.log("Admin JS loaded successfully");
+
     function formatIDR(amount) {
       return new Intl.NumberFormat('id-ID', {
         style: 'currency',
@@ -1111,29 +1132,16 @@
               <td class="text-success font-weight-bold">${formatIDR(totalPrice)}</td>
               <td><span class="badge ${badgeClass} px-3 py-2 fs-6 booking-status-badge">${status}</span></td>
               <td>
-          const tr = `
-            <tr data-booking-id="${id}">
-              <td><span class="badge bg-dark font-monospace">${shortId}</span></td>
-              <td>
-                <strong>${custName}</strong><br>
-                <small class="text-muted"><i class="fab fa-whatsapp text-success me-1"></i>${phone} | ${email}</small>
-              </td>
-              <td><strong class="text-dark">${destName}</strong></td>
-              <td><i class="fas fa-calendar-alt text-primary me-1"></i> ${travelDate}</td>
-              <td>${participants} Org</td>
-              <td class="text-success font-weight-bold">${formatIDR(totalPrice)}</td>
-              <td><span class="badge ${badgeClass} px-3 py-2 fs-6 booking-status-badge">${status}</span></td>
-              <td>
-                <button class="btn btn-sm btn-info text-white font-weight-bold me-1 mb-1 btn-detail" onclick="handleShowDetail('${id}')" title="Lihat Rincian Pemesanan">
+                <button type="button" class="btn btn-sm btn-info text-white font-weight-bold me-1 mb-1 btn-detail" onclick="event.stopPropagation(); handleShowDetail('${id}')" title="Lihat Rincian Pemesanan">
                   <i class="fas fa-eye me-1"></i> Detail
                 </button>
-                <button class="btn btn-sm btn-success font-weight-bold me-1 mb-1 btn-approve" onclick="handleApproveBooking('${id}')" title="Setujui Pemesanan & Chat WA">
+                <button type="button" class="btn btn-sm btn-success font-weight-bold me-1 mb-1 btn-approve" onclick="event.stopPropagation(); handleApproveBooking('${id}')" title="Setujui Pemesanan & Chat WA">
                   <i class="fas fa-check me-1"></i> Setujui
                 </button>
-                <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1 mb-1" onclick="updateBookingStatusItem('${id}', 'Cancelled')" title="Batalkan Pemesanan">
+                <button type="button" class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1 mb-1" onclick="event.stopPropagation(); updateBookingStatusItem('${id}', 'Cancelled')" title="Batalkan Pemesanan">
                   <i class="fas fa-ban me-1"></i> Batal
                 </button>
-                <button class="btn btn-sm btn-outline-danger font-weight-bold mb-1" onclick="deleteBookingItem('${id}')" title="Hapus Pemesanan">
+                <button type="button" class="btn btn-sm btn-outline-danger font-weight-bold mb-1" onclick="event.stopPropagation(); deleteBookingItem('${id}')" title="Hapus Pemesanan">
                   <i class="fas fa-trash"></i>
                 </button>
               </td>
