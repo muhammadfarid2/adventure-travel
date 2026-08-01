@@ -1190,8 +1190,8 @@
       });
     }
 
-    // Helper generator pesan WhatsApp dengan Unicode Escape Sequences (100% Bebas Emoji Corrupt)
-    function getWaMessage(booking) {
+    // Helper generator pesan WhatsApp bersih (100% Bebas Emoji Corrupt di HP/Laptop)
+    function getCleanWaMessage(booking) {
       const name = booking.nama_pemesan || booking.nama || booking.customerName || '';
       const bookingId = booking.id || booking.booking_id || booking._id || '';
       const email = booking.email || '';
@@ -1203,30 +1203,32 @@
       const status = booking.status || 'Approved';
       const note = booking.catatan || booking.notes || '-';
 
-      // Menggunakan Unicode Escape Sequence agar 100% aman di semua server/encoding
-      return `\uD83D\uDC4B *Halo Kak ${name}!*
+      return `*Halo Kak ${name}!*
 
 Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan tiket/trip Anda:
 
-\uD83D\uDCCB *DETAIL PEMESANAN*
-\u2022 ID Booking: ${bookingId}
-\u2022 Nama Pemesan: ${name}
-\u2022 Email: ${email}
-\u2022 No. WhatsApp: ${phone}
+📌 *DETAIL PEMESANAN*
+• ID Booking: ${bookingId}
+• Nama Pemesan: ${name}
+• Email: ${email}
+• No. WhatsApp: ${phone}
 
-\uD83C\uDFDD\uFE0F *DETAIL DESTINASI TRIP*
-\u2022 Paket Wisata: ${destination}
-\u2022 Tgl Berangkat: ${date}
-\u2022 Jumlah Peserta: ${qty} Orang
-\uD83D\uDCB2 *Total Biaya: Rp ${total}*
-\u2022 Status: ${status}
-\u2022 Catatan Khusus: ${note}
+✈️ *DETAIL DESTINASI TRIP*
+• Paket Wisata: ${destination}
+• Tgl Berangkat: ${date}
+• Jumlah Peserta: ${qty} Orang
+💵 *Total Biaya: Rp ${total}*
+• Status: ${status}
+• Catatan Khusus: ${note}
 
-\uD83D\uDCAC *Halo Kak, pesanan Anda telah kami verifikasi.*
-Silakan lakukan pembayaran sesuai dengan instruksi yang diberikan. Terima kasih! \u2708\uFE0F`;
+💬 *Halo Kak, pesanan Anda telah kami verifikasi.*
+Silakan lakukan pembayaran sesuai dengan instruksi yang diberikan. Terima kasih!`;
     }
 
-    // 1. FUNGSI TOMBOL SETUJUI (DIRECT TO WHATSAPP WITH UNICODE EMOJI ESCAPES)
+    // Aliases for WhatsApp message generator compatibility
+    function getWaMessage(booking) { return getCleanWaMessage(booking); }
+
+    // 1. FUNGSI TOMBOL SETUJUI (DIRECT TO WHATSAPP)
     function handleApproveBooking(bookingData) {
       try {
         let booking = (typeof bookingData === 'object' && bookingData !== null) ? bookingData : getBookingById(bookingData);
@@ -1242,15 +1244,15 @@ Silakan lakukan pembayaran sesuai dengan instruksi yang diberikan. Terima kasih!
         let phone = booking.whatsapp || booking.phone || booking.telepon || '082127663876';
         const formattedPhone = String(phone).replace(/^0/, '62').replace(/[^0-9]/g, '');
 
-        const fullUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(getWaMessage(booking))}`;
+        const waUrl = "https://wa.me/" + formattedPhone + "?text=" + encodeURIComponent(getCleanWaMessage(booking));
 
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         if (isMobile) {
-          window.location.href = fullUrl;
+          window.location.href = waUrl;
         } else {
-          const win = window.open(fullUrl, '_blank');
+          const win = window.open(waUrl, '_blank');
           if (!win || win.closed || typeof win.closed === 'undefined') {
-            window.location.href = fullUrl;
+            window.location.href = waUrl;
           }
         }
 
