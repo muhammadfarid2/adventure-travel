@@ -1093,29 +1093,26 @@
       if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
       if (!cleanPhone.startsWith('62')) cleanPhone = '62' + cleanPhone;
 
-      const emojiHi = '\uD83D\uDC4B';        // 👋 (Waving Hand)
-      const emojiMap = '\uD83D\uDDFA';       // 🗺️ (World Map)
-      const emojiPalm = '\uD83C\uDF31';      // 🌱 (Seedling)
-      const emojiBackpack = '\uD83C\uDF92';  // 🎒 (Backpack)
-      const emojiDollar = '\uD83D\uDCB5';    // 💵 (Banknote)
-      const emojiCheck = '\u2705';           // ✅ (Check Mark)
-      const emojiSparkles = '\u2728';       // ✨ (Sparkles)
+      const approveText = encodeURIComponent(`Halo Admin, saya menyetujui pemesanan ID ${realId}`);
+      const approveUrl = `https://wa.me/6289517846680?text=${approveText}`;
 
-      const waMsgText = `${emojiHi} Halo Kak *${b.customerName}*!\n\n` +
-        `Kami dari Admin Adventure Travel Indonesia ingin mengonfirmasi pesanan tiket/trip Anda:\n\n` +
-        `${emojiMap} *DETAIL PEMESANAN*\n` +
-        `• ID Booking: ${id}\n` +
+      const waMsgText = `👋 *Halo Kak ${b.customerName}!*\n\n` +
+        `Kami dari Admin *Adventure Travel Indonesia* ingin mengonfirmasi pesanan tiket/trip Anda:\n\n` +
+        `📋 *DETAIL PEMESANAN*\n` +
+        `• ID Booking: ${realId}\n` +
         `• Nama Pemesan: ${b.customerName}\n` +
         `• Email: ${b.email || '-'}\n` +
         `• No. WhatsApp: ${b.phone || '-'}\n\n` +
-        `${emojiBackpack} *DETAIL DESTINASI TRIP*\n` +
+        `🏝️ *DETAIL DESTINASI TRIP*\n` +
         `• Paket Wisata: ${b.destinationName}\n` +
         `• Tgl Berangkat: ${b.travelDate}\n` +
         `• Jumlah Peserta: ${b.participants} Orang\n` +
-        `${emojiDollar} Total Biaya: ${formatIDR(b.totalPrice)}\n` +
+        `💰 *Total Biaya: ${formatIDR(b.totalPrice)}*\n` +
         `• Status: ${b.status || 'Pending'}\n` +
         `• Catatan Khusus: ${b.notes || '-'}\n\n` +
-        `${emojiCheck} Halo Kak, pesanan Anda telah kami verifikasi. Silakan balas pesan ini untuk informasi pembayaran & instruksi keberangkatan selanjutnya. Terima kasih! ${emojiSparkles}`;
+        `💬 *Halo Kak, pesanan Anda telah kami verifikasi.*\n` +
+        `Silakan klik link di bawah ini untuk menyetujui & menerima instruksi pembayaran:\n\n` +
+        `[Setujui & Lanjut Pembayaran] -> ${approveUrl}`;
 
       const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(waMsgText)}`;
 

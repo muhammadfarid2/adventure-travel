@@ -1,4 +1,9 @@
 const Booking = require('../models/Booking');
+const {
+  generateWhatsAppDetailMessage,
+  generateWhatsAppApprovedMessage,
+  getWhatsAppDeepLink
+} = require('../helpers/whatsappHelper');
 
 const getBookings = async (req, res) => {
   try {
@@ -30,7 +35,15 @@ const createBooking = async (req, res) => {
       status: 'Pending'
     });
 
-    res.status(201).json({ message: 'Booking berhasil dibuat', booking });
+    const waMessage = generateWhatsAppDetailMessage(booking);
+    const whatsappUrl = getWhatsAppDeepLink('6289517846680', waMessage);
+
+    res.status(201).json({
+      message: 'Booking berhasil dibuat',
+      booking,
+      whatsappMessage: waMessage,
+      whatsappUrl
+    });
   } catch (err) {
     res.status(500).json({ message: 'Gagal membuat booking', error: err.message });
   }
@@ -43,7 +56,23 @@ const updateBookingStatus = async (req, res) => {
     if (!booking) return res.status(404).json({ message: 'Booking tidak ditemukan' });
 
     await booking.update({ status });
-    res.json({ message: 'Status booking diperbarui', booking });
+
+    let waMessage = '';
+    let whatsappUrl = '';
+    if (status === 'Approved') {
+      waMessage = generateWhatsAppApprovedMessage(booking);
+      whatsappUrl = getWhatsAppDeepLink(booking.phone, waMessage);
+    } else {
+      waMessage = generateWhatsAppDetailMessage(booking);
+      whatsappUrl = getWhatsAppDeepLink(booking.phone, waMessage);
+    }
+
+    res.json({
+      message: 'Status booking diperbarui',
+      booking,
+      whatsappMessage: waMessage,
+      whatsappUrl
+    });
   } catch (err) {
     res.status(500).json({ message: 'Gagal update status booking', error: err.message });
   }
