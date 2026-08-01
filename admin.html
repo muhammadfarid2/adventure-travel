@@ -844,20 +844,57 @@
       });
     }
 
+    function getApprovedWaMessage(b) {
+      const totalFormatted = Number(b.totalPrice || b.total_biaya || 0).toLocaleString('id-ID');
+      const noteText = b.catatan || b.notes || '-';
+      const name = b.customerName || b.nama_pemesan || '-';
+      const email = b.email || '-';
+      const phone = b.phone || b.whatsapp || '-';
+      const dest = b.destinationName || b.destinasi || '-';
+      const date = b.travelDate || b.tgl_berangkat || '-';
+      const participants = b.participants || 1;
+      const bookingId = b.id || b._id;
+
+      return `👋 Halo Kak *${name}*!
+
+Kami dari Admin Adventure Travel Indonesia ingin mengonfirmasi pesanan tiket/trip Anda:
+
+🗺 *DETAIL PEMESANAN*
+• ID Booking: ${bookingId}
+• Nama Pemesan: ${name}
+• Email: ${email}
+• No. WhatsApp: ${phone}
+
+🎒 *DETAIL DESTINASI TRIP*
+• Paket Wisata: ${dest}
+• Tgl Berangkat: ${date}
+• Jumlah Peserta: ${participants} Orang
+💵 Total Biaya: Rp${totalFormatted}
+• Status: Approved
+• Catatan Khusus: ${noteText}
+
+💳 *INFORMASI PEMBAYARAN*
+Silakan transfer ke SeaBank:
+• Rekening: 901151723579
+• Atas Nama: Muhammad Alfaridzi
+
+✅ Halo Kak, pesanan Anda telah kami verifikasi. Silakan balas pesan ini untuk informasi pembayaran & instruksi keberangkatan selanjutnya. Terima kasih! ✨`;
+    }
+
     function handleApproveBooking(id) {
       let booking = getBookingById(id);
       if (!booking) return;
 
       booking.status = 'Approved';
       saveBookingsData(currentBookingsList);
-      updateAdminStats();
-      renderAdminBookingsTable();
-
-      let phone = booking.phone || booking.whatsapp || '082127663876';
-      const formattedPhone = String(phone).replace(/^0/, '62').replace(/[^0-9]/g, '');
-      const rawMsg = `Halo Kak ${booking.customerName || booking.nama_pemesan}, pesanan ${booking.id} untuk trip ${booking.destinationName || booking.destinasi} telah DISETUJUI. Silakan transfer ke SeaBank: 901151723579 a/n PT Adventure Travel. Terima kasih!`;
       
-      window.open("https://api.whatsapp.com/send?phone=" + formattedPhone + "&text=" + encodeURIComponent(rawMsg), '_blank');
+      if (typeof updateAdminStats === 'function') updateAdminStats();
+      if (typeof renderAdminBookingsTable === 'function') renderAdminBookingsTable();
+
+      let phone = String(booking.phone || booking.whatsapp || '082127663876').replace(/^0/, '62').replace(/[^0-9]/g, '');
+      const rawMsg = getApprovedWaMessage(booking);
+      
+      window.open("https://api.whatsapp.com/send?phone=" + phone + "&text=" + encodeURIComponent(rawMsg), '_blank');
     }
 
     function getWaFormattedMessage(b) {
