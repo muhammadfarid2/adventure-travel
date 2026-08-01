@@ -1,0 +1,67 @@
+/* ==================================================
+   ADVENTURE TRAVEL INDONESIA - RESPONSIVE STYLESHEET
+   ================================================== */
+
+@media (max-width: 991.98px) {
+  .hero-content h1 {
+    font-size: 2.8rem;
+  }
+  .hero-content p {
+    font-size: 1.1rem;
+  }
+  .search-box-wrapper {
+    margin-top: 30px;
+    padding: 20px;
+  }
+  .navbar-custom {
+    background: var(--primary-dark) !important;
+    padding: 12px 0;
+  }
+  .navbar-collapse {
+    background: var(--primary-dark);
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  }
+  .section-padding {
+    padding: 60px 0;
+  }
+  .section-title h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+  .hero-buttons .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .stat-number {
+    font-size: 2.3rem;
+  }
+  .booking-card {
+    padding: 25px 18px;
+  }
+  .price-summary-card {
+    margin-top: 25px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .hero-content h1 {
+    font-size: 1.8rem;
+  }
+  .hero-content p {
+    font-size: 0.95rem;
+  }
+  .search-box-wrapper {
+    padding: 15px;
+  }
+  .category-card {
+    height: 240px;
+  }
+}

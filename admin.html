@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Adventure Travel Indonesia</title>
+
+  <link rel="icon" href="https://img.icons8.com/color/48/mountain.png" type="image/png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  
+  <style>
+    .admin-wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+    .admin-sidebar {
+      width: 260px;
+      flex-shrink: 0;
+    }
+    .admin-main {
+      flex-grow: 1;
+      background: #F4F6F9;
+      padding: 30px;
+    }
+    @media (max-width: 991.98px) {
+      .admin-wrapper { flex-direction: column; }
+      .admin-sidebar { width: 100%; min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    <!-- Sidebar -->
+    <div class="admin-sidebar">
+      <div class="d-flex align-items-center mb-4 px-2">
+        <i class="fas fa-user-shield text-warning fa-2x me-2"></i>
+        <div>
+          <h5 class="font-weight-bold text-white mb-0">Admin Panel</h5>
+          <small class="text-warning">Adventure Travel</small>
+        </div>
+      </div>
+
+      <ul class="nav flex-column admin-nav" id="adminTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="tab-overview-btn" data-bs-toggle="tab" href="#tab-overview">
+            <i class="fas fa-chart-line"></i> Ringkasan Statistik
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="tab-destinations-btn" data-bs-toggle="tab" href="#tab-destinations">
+            <i class="fas fa-map-marked-alt"></i> Kelola Destinasi
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="tab-bookings-btn" data-bs-toggle="tab" href="#tab-bookings">
+            <i class="fas fa-calendar-check"></i> Kelola Pemesanan
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="tab-users-btn" data-bs-toggle="tab" href="#tab-users">
+            <i class="fas fa-users"></i> Kelola User
+          </a>
+        </li>
+        <li class="nav-item mt-4">
+          <a class="nav-link text-warning" href="index.html">
+            <i class="fas fa-globe"></i> Lihat Website Utama
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="admin-main">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="font-weight-bold text-dark mb-0">Dashboard Admin</h2>
+          <p class="text-muted mb-0">Kelola destinasi wisata, upload gambar dari laptop, pemesanan & user.</p>
+        </div>
+        <button id="adminLoginBtn" class="btn btn-primary font-weight-bold" onclick="showLoginModal()">
+          <i class="fas fa-sign-in-alt me-1"></i> Login Admin
+        </button>
+      </div>
+
+      <!-- Alert API Status -->
+      <div id="apiStatusAlert" class="alert alert-success d-flex align-items-center shadow-sm" role="alert">
+        <i class="fas fa-database fa-2x me-3 text-success"></i>
+        <div>
+          <strong>Status Sistem Backend:</strong> <span id="systemStatusText" class="font-weight-bold text-success">Online (PostgreSQL Active)</span>
+          <br><small>Default Admin: <strong>admin@adventuretravel.id</strong> / Password: <strong>admin123</strong></small>
+        </div>
+      </div>
+
+      <!-- Tab Content -->
+      <div class="tab-content" id="adminTabContent">
+        
+        <!-- 1. OVERVIEW TAB -->
+        <div class="tab-pane fade show active" id="tab-overview">
+          <div class="row g-4 mb-4">
+            <div class="col-md-3">
+              <div class="admin-stat-card">
+                <div>
+                  <small class="text-muted font-weight-bold">TOTAL DESTINASI</small>
+                  <h2 class="font-weight-bold text-dark m-0" id="statTotalDest">20</h2>
+                </div>
+                <div class="admin-stat-icon"><i class="fas fa-mountain"></i></div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="admin-stat-card">
+                <div>
+                  <small class="text-muted font-weight-bold">TOTAL PEMESANAN</small>
+                  <h2 class="font-weight-bold text-dark m-0" id="statTotalBookings">12</h2>
+                </div>
+                <div class="admin-stat-icon bg-warning-subtle text-warning"><i class="fas fa-calendar-check"></i></div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="admin-stat-card">
+                <div>
+                  <small class="text-muted font-weight-bold">TOTAL USER</small>
+                  <h2 class="font-weight-bold text-dark m-0" id="statTotalUsers">6</h2>
+                </div>
+                <div class="admin-stat-icon bg-info-subtle text-info"><i class="fas fa-users"></i></div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="admin-stat-card">
+                <div>
+                  <small class="text-muted font-weight-bold">ESTIMASI REVENUE</small>
+                  <h3 class="font-weight-bold text-success m-0" id="statTotalRevenue">Rp 18.5M</h3>
+                </div>
+                <div class="admin-stat-icon bg-success-subtle text-success"><i class="fas fa-wallet"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. DESTINATIONS TAB -->
+        <div class="tab-pane fade" id="tab-destinations">
+          <div class="bg-white p-4 rounded-4 shadow-sm border border-light">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h4 class="font-weight-bold m-0"><i class="fas fa-list text-success me-2"></i> Daftar Destinasi Wisata</h4>
+              <button class="btn btn-success font-weight-bold" onclick="openAddDestinationModal()">
+                <i class="fas fa-plus me-1"></i> Tambah Destinasi
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Gambar</th>
+                    <th>Nama Wisata</th>
+                    <th>Kategori</th>
+                    <th>Lokasi</th>
+                    <th>Harga</th>
+                    <th>Rating</th>
+                    <th>Durasi</th>
+                    <th style="min-width: 150px;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="adminDestTable">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. BOOKINGS TAB -->
+        <div class="tab-pane fade" id="tab-bookings">
+          <div class="bg-white p-4 rounded-4 shadow-sm border border-light">
+            <h4 class="font-weight-bold mb-4"><i class="fas fa-calendar-check text-success me-2"></i> Data Pemesanan Trip</h4>
+            
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                  <tr>
+                    <th>ID Booking</th>
+                    <th>Nama Pemesan</th>
+                    <th>Destinasi</th>
+                    <th>Tgl Berangkat</th>
+                    <th>Peserta</th>
+                    <th>Total Biaya</th>
+                    <th>Status</th>
+                    <th style="min-width: 220px;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="adminBookingsTable">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. USERS TAB -->
+        <div class="tab-pane fade" id="tab-users">
+          <div class="bg-white p-4 rounded-4 shadow-sm border border-light">
+            <h4 class="font-weight-bold mb-4"><i class="fas fa-users text-success me-2"></i> Pengguna Terdaftar</h4>
+            
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Nama Lengkap</th>
+                    <th>Email</th>
+                    <th>No. Telepon / WA</th>
+                    <th>Role</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="adminUsersTable">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal Tambah Destinasi -->
+  <div class="modal fade" id="addDestinationModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0">
+        <div class="modal-header bg-success text-white p-4">
+          <h5 class="modal-title font-weight-bold"><i class="fas fa-plus-circle me-2"></i> Tambah Destinasi Wisata Baru</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="addDestinationForm" onsubmit="saveAddDestination(event)">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Nama Destinasi *</label>
+                <input type="text" id="addDestName" class="form-control" placeholder="Contoh: Gunung Ijen" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Kategori *</label>
+                <select id="addDestCategory" class="form-select" required>
+                  <option value="Gunung">Gunung</option>
+                  <option value="Curug">Curug</option>
+                  <option value="Pulau">Pulau</option>
+                  <option value="Bukit">Bukit</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Lokasi *</label>
+                <input type="text" id="addDestLocation" class="form-control" placeholder="Banyuwangi, Jawa Timur" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Harga per Orang (Rp) *</label>
+                <input type="number" id="addDestPrice" class="form-control" placeholder="750000" required>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Durasi Trip *</label>
+                <input type="text" id="addDestDuration" class="form-control" placeholder="2 Hari 1 Malam" value="2 Hari 1 Malam" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Rating *</label>
+                <input type="number" step="0.1" min="1" max="5" id="addDestRating" class="form-control" value="4.9" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label font-weight-bold">Deskripsi Wisata</label>
+              <textarea id="addDestDescription" class="form-control" rows="3" placeholder="Penjelasan singkat keindahan destinasi..."></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label font-weight-bold"><i class="fas fa-laptop me-1 text-primary"></i> Upload Gambar dari Laptop *</label>
+              <input type="file" accept="image/*" id="addDestImageFile" class="form-control mb-2">
+              <small class="text-muted d-block mb-2">Atau masukkan URL Gambar jika ada:</small>
+              <input type="url" id="addDestImageUrl" class="form-control" placeholder="https://images.unsplash.com/...">
+            </div>
+
+            <div class="mb-3 text-center" id="addPreviewBox" style="display: none;">
+              <label class="form-label font-weight-bold small text-muted">Preview Gambar Tambah:</label>
+              <img id="addDestImagePreview" style="max-height: 180px; width: 100%; object-fit: cover; border-radius: 12px; border: 2px solid #2E8B57;" alt="Preview">
+            </div>
+
+            <div class="modal-footer px-0 pb-0 pt-3 border-top-0">
+              <button type="button" class="btn btn-secondary px-4 font-weight-bold" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-success px-4 font-weight-bold"><i class="fas fa-save me-1"></i> Simpan Destinasi</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edit Destinasi -->
+  <div class="modal fade" id="editDestinationModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0">
+        <div class="modal-header bg-warning text-dark p-4">
+          <h5 class="modal-title font-weight-bold"><i class="fas fa-edit me-2"></i> Edit Destinasi & Upload Gambar Baru</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="editDestinationForm" onsubmit="saveEditDestination(event)">
+            <input type="hidden" id="editDestId">
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Nama Destinasi *</label>
+                <input type="text" id="editDestName" class="form-control" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Kategori *</label>
+                <select id="editDestCategory" class="form-select" required>
+                  <option value="Gunung">Gunung</option>
+                  <option value="Curug">Curug</option>
+                  <option value="Pulau">Pulau</option>
+                  <option value="Bukit">Bukit</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Lokasi *</label>
+                <input type="text" id="editDestLocation" class="form-control" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Harga per Orang (Rp) *</label>
+                <input type="number" id="editDestPrice" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Durasi Trip *</label>
+                <input type="text" id="editDestDuration" class="form-control" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Rating *</label>
+                <input type="number" step="0.1" min="1" max="5" id="editDestRating" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label font-weight-bold">Deskripsi Wisata</label>
+              <textarea id="editDestDescription" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label font-weight-bold text-success"><i class="fas fa-upload me-1"></i> Upload Gambar Baru dari Laptop (Pilih File)</label>
+              <input type="file" accept="image/*" id="editDestImageFile" class="form-control mb-2">
+              <small class="text-muted d-block mb-2">Atau perbarui via URL Gambar:</small>
+              <input type="url" id="editDestImageUrl" class="form-control" placeholder="https://images.unsplash.com/...">
+            </div>
+
+            <div class="mb-3 text-center">
+              <label class="form-label font-weight-bold small text-muted">Preview Gambar Saat Ini / Baru:</label>
+              <div>
+                <img id="editDestImagePreview" style="max-height: 200px; width: 100%; object-fit: cover; border-radius: 12px; border: 2px solid #FFD54F;" alt="Preview Edit">
+              </div>
+            </div>
+
+            <div class="modal-footer px-0 pb-0 pt-3 border-top-0">
+              <button type="button" class="btn btn-secondary px-4 font-weight-bold" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-warning px-4 font-weight-bold text-dark"><i class="fas fa-check-circle me-1"></i> Simpan Perubahan</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="adminAuthModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0">
+        <div class="modal-header bg-dark text-white p-4">
+          <h5 class="modal-title font-weight-bold"><i class="fas fa-lock text-warning me-2"></i> Admin Login</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="adminLoginForm" onsubmit="handleAdminModalLogin(event)">
+            <div class="mb-3">
+              <label class="form-label font-weight-bold">Email Admin</label>
+              <input type="email" id="adminEmail" class="form-control" value="admin@adventuretravel.id" required>
+            </div>
+            <div class="mb-4">
+              <label class="form-label font-weight-bold">Password</label>
+              <input type="password" id="adminPassword" class="form-control" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-warning w-100 font-weight-bold py-2">Login Admin</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    let currentDestinationsList = [];
+    let currentBookingsList = [];
+    let addImageBase64 = '';
+    let editImageBase64 = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAdminDashboardData();
+      setupImageFileInputs();
+    });
+
+    // Helper functions for Bookings LocalStorage Persistence
+    function getBookingsData() {
+      let stored = localStorage.getItem('adventure_bookings');
+      if (stored) {
+        try {
+          let parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        } catch(e) {}
+      }
+      const defaultBookings = [
+        { id: 'BK-1001', _id: 'BK-1001', customerName: "Budi Santoso", email: "budi@gmail.com", phone: "081298765432", destinationName: "Gunung Bromo", travelDate: "2026-08-15", participants: 2, totalPrice: 1700000, status: "Approved" },
+        { id: 'BK-1002', _id: 'BK-1002', customerName: "Siti Rahma", email: "siti@gmail.com", phone: "081311223344", destinationName: "Pulau Komodo", travelDate: "2026-08-20", participants: 1, totalPrice: 3850000, status: "Pending" },
+        { id: 'BK-1003', _id: 'BK-1003', customerName: "Andi Wijaya", email: "andi@gmail.com", phone: "081455667788", destinationName: "Curug Cibaliung", travelDate: "2026-08-10", participants: 4, totalPrice: 1400000, status: "Approved" },
+        { id: 'BK-1004', _id: 'BK-1004', customerName: "Dewi Lestari", email: "dewi@gmail.com", phone: "081599887766", destinationName: "Gunung Prau", travelDate: "2026-08-25", participants: 3, totalPrice: 1950000, status: "Pending" }
+      ];
+      localStorage.setItem('adventure_bookings', JSON.stringify(defaultBookings));
+      return defaultBookings;
+    }
+
+    function saveBookingsData(list) {
+      currentBookingsList = list;
+      localStorage.setItem('adventure_bookings', JSON.stringify(list));
+    }
+
+    // File Input Listeners for Live Laptop Image Preview
+    function setupImageFileInputs() {
+      const addFileInput = document.getElementById('addDestImageFile');
+      const addPreviewImg = document.getElementById('addDestImagePreview');
+      const addPreviewBox = document.getElementById('addPreviewBox');
+
+      addFileInput?.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            addImageBase64 = event.target.result;
+            addPreviewImg.src = addImageBase64;
+            addPreviewBox.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      const editFileInput = document.getElementById('editDestImageFile');
+      const editPreviewImg = document.getElementById('editDestImagePreview');
+
+      editFileInput?.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            editImageBase64 = event.target.result;
+            editPreviewImg.src = editImageBase64;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    async function loadAdminDashboardData() {
+      const statusText = document.getElementById('systemStatusText');
+
+      // 1. Fetch Destinations
+      try {
+        const res = await fetch('/api/destinations');
+        if (res.ok) {
+          currentDestinationsList = await res.json();
+          statusText.textContent = "REST API Express + MongoDB Terhubung & Aktif!";
+          statusText.className = "text-success font-weight-bold";
+        } else {
+          currentDestinationsList = getDestinationsData();
+          statusText.textContent = "Mode Standalone & LocalStorage Persistence Active";
+        }
+      } catch (err) {
+        currentDestinationsList = getDestinationsData();
+        statusText.textContent = "Offline Preview Mode Active";
+      }
+
+      // 2. Fetch Bookings
+      try {
+        const token = localStorage.getItem('adventure_token');
+        const resB = await fetch('/api/bookings', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (resB.ok) {
+          currentBookingsList = await resB.json();
+        } else {
+          currentBookingsList = getBookingsData();
+        }
+      } catch(err) {
+        currentBookingsList = getBookingsData();
+      }
+
+      saveDestinationsData(currentDestinationsList);
+      saveBookingsData(currentBookingsList);
+
+      updateAdminStats();
+      renderAdminDestTable(currentDestinationsList);
+      renderAdminBookingsTable(currentBookingsList);
+      renderAdminUsersTable();
+    }
+
+    function updateAdminStats() {
+      const statTotalDest = document.getElementById('statTotalDest');
+      if (statTotalDest) statTotalDest.textContent = currentDestinationsList.length;
+
+      const statTotalBookings = document.getElementById('statTotalBookings');
+      if (statTotalBookings) statTotalBookings.textContent = currentBookingsList.length;
+
+      const statTotalRevenue = document.getElementById('statTotalRevenue');
+      if (statTotalRevenue) {
+        const totalRev = currentBookingsList
+          .filter(b => b.status === 'Approved')
+          .reduce((sum, b) => sum + (b.totalPrice || 0), 0);
+        statTotalRevenue.textContent = formatIDR(totalRev);
+      }
+    }
+
+    // Destinations Table Render & Functions
+    function renderAdminDestTable(dests) {
+      const tbody = document.getElementById('adminDestTable');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+      if (dests.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">Belum ada destinasi wisata. Klik "Tambah Destinasi" untuk menambah baru.</td></tr>';
+        return;
+      }
+
+      dests.forEach(item => {
+        const id = item.id || item._id;
+        const tr = `
+          <tr>
+            <td><img src="${item.image}" style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;"></td>
+            <td><strong>${item.name}</strong></td>
+            <td><span class="badge bg-success">${item.category}</span></td>
+            <td>${item.location}</td>
+            <td class="text-success font-weight-bold">${formatIDR(item.price)}</td>
+            <td><i class="fas fa-star text-warning"></i> ${item.rating}</td>
+            <td>${item.duration}</td>
+            <td>
+              <button class="btn btn-sm btn-warning text-dark font-weight-bold me-1" onclick="openEditDestinationModal('${id}')" title="Edit Destinasi & Gambar">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn btn-sm btn-danger font-weight-bold" onclick="deleteDestinationItem('${id}')" title="Hapus Destinasi">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+        tbody.insertAdjacentHTML('beforeend', tr);
+      });
+    }
+
+    // Open Add Modal
+    function openAddDestinationModal() {
+      document.getElementById('addDestinationForm').reset();
+      document.getElementById('addPreviewBox').style.display = 'none';
+      addImageBase64 = '';
+      const modal = new bootstrap.Modal(document.getElementById('addDestinationModal'));
+      modal.show();
+    }
+
+    // Save Add Destination
+    async function saveAddDestination(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('addDestName').value;
+      const category = document.getElementById('addDestCategory').value;
+      const location = document.getElementById('addDestLocation').value;
+      const price = parseFloat(document.getElementById('addDestPrice').value);
+      const duration = document.getElementById('addDestDuration').value;
+      const rating = parseFloat(document.getElementById('addDestRating').value);
+      const description = document.getElementById('addDestDescription').value;
+      const imageUrlInput = document.getElementById('addDestImageUrl').value;
+      const fileInput = document.getElementById('addDestImageFile');
+
+      let finalImage = addImageBase64 || imageUrlInput || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800';
+
+      const newId = 'dest_' + Date.now();
+      const newDest = {
+        id: newId,
+        _id: newId,
+        name,
+        category,
+        location,
+        price,
+        duration,
+        rating,
+        description,
+        image: finalImage
+      };
+
+      try {
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('category', category);
+        formData.append('location', location);
+        formData.append('price', price);
+        formData.append('duration', duration);
+        formData.append('rating', rating);
+        formData.append('description', description);
+        if (fileInput.files[0]) {
+          formData.append('image', fileInput.files[0]);
+        } else {
+          formData.append('image', finalImage);
+        }
+
+        const res = await fetch('/api/destinations', {
+          method: 'POST',
+          body: formData
+        });
+        if (res.ok) {
+          const resData = await res.json();
+          if (resData.destination) {
+            newDest.image = resData.destination.image;
+          }
+        }
+      } catch (err) {
+        console.log('Backend sync offline, saving to LocalStorage.', err);
+      }
+
+      currentDestinationsList.unshift(newDest);
+      saveDestinationsData(currentDestinationsList);
+
+      const modalEl = document.getElementById('addDestinationModal');
+      bootstrap.Modal.getInstance(modalEl).hide();
+
+      updateAdminStats();
+      renderAdminDestTable(currentDestinationsList);
+
+      alert(`Destinasi "${name}" dan gambarnya berhasil ditambahkan!`);
+    }
+
+    // Open Edit Modal & Prefill Inputs
+    function openEditDestinationModal(id) {
+      const item = currentDestinationsList.find(d => d.id === id || d._id === id);
+      if (!item) {
+        alert('Destinasi tidak ditemukan.');
+        return;
+      }
+
+      document.getElementById('editDestId').value = id;
+      document.getElementById('editDestName').value = item.name;
+      document.getElementById('editDestCategory').value = item.category;
+      document.getElementById('editDestLocation').value = item.location;
+      document.getElementById('editDestPrice').value = item.price;
+      document.getElementById('editDestDuration').value = item.duration;
+      document.getElementById('editDestRating').value = item.rating;
+      document.getElementById('editDestDescription').value = item.description || '';
+      document.getElementById('editDestImageUrl').value = item.image.startsWith('data:') ? '' : item.image;
+      document.getElementById('editDestImagePreview').src = item.image;
+      document.getElementById('editDestImageFile').value = '';
+      editImageBase64 = '';
+
+      const modal = new bootstrap.Modal(document.getElementById('editDestinationModal'));
+      modal.show();
+    }
+
+    // Save Edit Destination
+    async function saveEditDestination(e) {
+      e.preventDefault();
+
+      const id = document.getElementById('editDestId').value;
+      const name = document.getElementById('editDestName').value;
+      const category = document.getElementById('editDestCategory').value;
+      const location = document.getElementById('editDestLocation').value;
+      const price = parseFloat(document.getElementById('editDestPrice').value);
+      const duration = document.getElementById('editDestDuration').value;
+      const rating = parseFloat(document.getElementById('editDestRating').value);
+      const description = document.getElementById('editDestDescription').value;
+      const imageUrlInput = document.getElementById('editDestImageUrl').value;
+      const fileInput = document.getElementById('editDestImageFile');
+
+      const index = currentDestinationsList.findIndex(d => d.id === id || d._id === id);
+      if (index === -1) return;
+
+      let finalImage = editImageBase64 || imageUrlInput || currentDestinationsList[index].image;
+
+      currentDestinationsList[index] = {
+        ...currentDestinationsList[index],
+        name,
+        category,
+        location,
+        price,
+        duration,
+        rating,
+        description,
+        image: finalImage
+      };
+
+      try {
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('category', category);
+        formData.append('location', location);
+        formData.append('price', price);
+        formData.append('duration', duration);
+        formData.append('rating', rating);
+        formData.append('description', description);
+        if (fileInput.files[0]) {
+          formData.append('image', fileInput.files[0]);
+        } else {
+          formData.append('image', finalImage);
+        }
+
+        const res = await fetch(`/api/destinations/${id}`, {
+          method: 'PUT',
+          body: formData
+        });
+        if (res.ok) {
+          const resData = await res.json();
+          if (resData.destination) {
+            currentDestinationsList[index].image = resData.destination.image;
+          }
+        }
+      } catch (err) {
+        console.log('Backend sync offline, saving to LocalStorage.', err);
+      }
+
+      saveDestinationsData(currentDestinationsList);
+
+      const modalEl = document.getElementById('editDestinationModal');
+      bootstrap.Modal.getInstance(modalEl).hide();
+
+      renderAdminDestTable(currentDestinationsList);
+
+      alert(`Destinasi "${name}" dan gambarnya berhasil diperbarui!`);
+    }
+
+    // Delete Destination
+    async function deleteDestinationItem(id) {
+      const item = currentDestinationsList.find(d => d.id === id || d._id === id);
+      if (!item) return;
+
+      if (confirm(`Apakah Anda yakin ingin menghapus destinasi "${item.name}"?`)) {
+        try {
+          await fetch(`/api/destinations/${id}`, { method: 'DELETE' });
+        } catch (e) {}
+
+        currentDestinationsList = currentDestinationsList.filter(d => d.id !== id && d._id !== id);
+        saveDestinationsData(currentDestinationsList);
+        updateAdminStats();
+        renderAdminDestTable(currentDestinationsList);
+      }
+    }
+
+    // Render Admin Bookings Table
+    function renderAdminBookingsTable(bookings = currentBookingsList) {
+      const tbody = document.getElementById('adminBookingsTable');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+      if (!bookings || bookings.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">Belum ada pemesanan trip dari pelanggan.</td></tr>';
+        return;
+      }
+
+      bookings.forEach(b => {
+        const id = b.id || b._id;
+        let badgeClass = 'bg-warning text-dark';
+        if (b.status === 'Approved') badgeClass = 'bg-success';
+        if (b.status === 'Cancelled') badgeClass = 'bg-danger';
+
+        const tr = `
+          <tr>
+            <td><span class="badge bg-dark font-monospace">${id}</span></td>
+            <td>
+              <strong>${b.customerName}</strong><br>
+              <small class="text-muted"><i class="fab fa-whatsapp text-success me-1"></i>${b.phone} | ${b.email}</small>
+            </td>
+            <td><strong class="text-dark">${b.destinationName}</strong></td>
+            <td><i class="fas fa-calendar-alt text-primary me-1"></i> ${b.travelDate}</td>
+            <td>${b.participants} Org</td>
+            <td class="text-success font-weight-bold">${formatIDR(b.totalPrice)}</td>
+            <td><span class="badge ${badgeClass} px-3 py-2 fs-6">${b.status}</span></td>
+            <td>
+              <button class="btn btn-sm btn-info text-white font-weight-bold me-1" onclick="openBookingDetailModal('${id}')" title="Lihat Rincian Pemesanan">
+                <i class="fas fa-eye me-1"></i> Detail
+              </button>
+              <button class="btn btn-sm btn-success font-weight-bold me-1" onclick="updateBookingStatusItem('${id}', 'Approved')" title="Setujui Pemesanan">
+                <i class="fas fa-check me-1"></i> Setujui
+              </button>
+              <button class="btn btn-sm btn-outline-warning text-dark font-weight-bold me-1" onclick="updateBookingStatusItem('${id}', 'Cancelled')" title="Batalkan Pemesanan">
+                <i class="fas fa-ban me-1"></i> Batal
+              </button>
+              <button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="deleteBookingItem('${id}')" title="Hapus Pemesanan">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+        tbody.insertAdjacentHTML('beforeend', tr);
+      });
+    }
+
+    // Open Booking Detail Modal
+    function openBookingDetailModal(id) {
+      const b = currentBookingsList.find(item => item.id === id || item._id === id);
+      if (!b) {
+        alert('Data booking tidak ditemukan.');
+        return;
+      }
+
+      const dest = (currentDestinationsList || []).find(d => 
+        (d.name || '').toLowerCase() === (b.destinationName || '').toLowerCase() || 
+        d.id === b.destinationId || 
+        d._id === b.destinationId
+      );
+
+      let cleanPhone = (b.phone || '').replace(/\D/g, '');
+      if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
+      if (!cleanPhone.startsWith('62')) cleanPhone = '62' + cleanPhone;
+
+      const emojiHi = '\uD83D\uDC4B';        // 👋 (Waving Hand)
+      const emojiMap = '\uD83D\uDDFA';       // 🗺️ (World Map)
+      const emojiPalm = '\uD83C\uDF31';      // 🌱 (Seedling)
+      const emojiBackpack = '\uD83C\uDF92';  // 🎒 (Backpack)
+      const emojiDollar = '\uD83D\uDCB5';    // 💵 (Banknote)
+      const emojiCheck = '\u2705';           // ✅ (Check Mark)
+      const emojiSparkles = '\u2728';       // ✨ (Sparkles)
+
+      const waMsgText = `${emojiHi} Halo Kak *${b.customerName}*!\n\n` +
+        `Kami dari Admin Adventure Travel Indonesia ingin mengonfirmasi pesanan tiket/trip Anda:\n\n` +
+        `${emojiMap} *DETAIL PEMESANAN:*\n` +
+        `• ID Booking   : ${id}\n` +
+        `• Nama Pemesan : ${b.customerName}\n` +
+        `• Email        : ${b.email || '-'}\n` +
+        `• No. WhatsApp : ${b.phone || '-'}\n\n` +
+        `${emojiBackpack} *DETAIL DESTINASI TRIP:*\n` +
+        `• Paket Wisata : ${b.destinationName}\n` +
+        `• Tgl Berangkat: ${b.travelDate}\n` +
+        `• Jumlah Peserta: ${b.participants} Orang\n` +
+        `${emojiDollar} Total Biaya  : ${formatIDR(b.totalPrice)}\n` +
+        `• Status       : ${b.status || 'Pending'}\n` +
+        `• Catatan Khusus: ${b.notes || '-'}\n\n` +
+        `${emojiCheck} Halo Kak, pesanan Anda telah kami verifikasi. Silakan balas pesan ini untuk informasi pembayaran & instruksi keberangkatan selanjutnya. Terima kasih! ${emojiSparkles}`;
+
+      const waUrl = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(waMsgText)}`;
+
+
+
+
+      let badgeClass = 'bg-warning text-dark';
+      if (b.status === 'Approved') badgeClass = 'bg-success';
+      if (b.status === 'Cancelled') badgeClass = 'bg-danger';
+
+      const createdAtFormatted = b.createdAt ? new Date(b.createdAt).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : 'Terbaru';
+
+      const modalHtml = `
+        <div class="modal fade" id="adminBookingDetailModal" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+              <div class="modal-header bg-dark text-white p-4">
+                <div>
+                  <h5 class="modal-title font-weight-bold text-white mb-0"><i class="fas fa-file-invoice text-warning me-2"></i> Rincian Pemesanan Trip</h5>
+                  <small class="text-warning font-monospace">ID BOOKING: ${id}</small> | <small class="text-muted">Dibuat: ${createdAtFormatted}</small>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body p-4">
+                
+                <!-- Status & Quick Action Bar -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center bg-light p-3 rounded-3 mb-4 border">
+                  <div>
+                    <span class="text-muted small d-block">Status Pemesanan:</span>
+                    <span class="badge ${badgeClass} px-3 py-2 fs-6 mt-1">${b.status}</span>
+                  </div>
+                  <div class="btn-group mt-2 mt-sm-0">
+                    <button class="btn btn-sm btn-success font-weight-bold" onclick="updateBookingStatusItem('${id}', 'Approved'); bootstrap.Modal.getInstance(document.getElementById('adminBookingDetailModal')).hide();">
+                      <i class="fas fa-check me-1"></i> Setujui
+                    </button>
+                    <button class="btn btn-sm btn-warning text-dark font-weight-bold" onclick="updateBookingStatusItem('${id}', 'Cancelled'); bootstrap.Modal.getInstance(document.getElementById('adminBookingDetailModal')).hide();">
+                      <i class="fas fa-ban me-1"></i> Batalkan
+                    </button>
+                  </div>
+                </div>
+
+                <div class="row g-4">
+                  <!-- User Info Box -->
+                  <div class="col-md-6">
+                    <div class="p-3 bg-white border rounded-3 h-100 shadow-sm">
+                      <h6 class="font-weight-bold text-success mb-3 border-bottom pb-2">
+                        <i class="fas fa-user-check me-2"></i> Detail Pemesan
+                      </h6>
+                      <table class="table table-borderless table-sm m-0">
+                        <tr>
+                          <td class="text-muted" style="width:110px;">Nama:</td>
+                          <td><strong>${b.customerName}</strong></td>
+                        </tr>
+                        <tr>
+                          <td class="text-muted">Email:</td>
+                          <td><a href="mailto:${b.email}">${b.email}</a></td>
+                        </tr>
+                        <tr>
+                          <td class="text-muted">WhatsApp:</td>
+                          <td><strong>${b.phone}</strong></td>
+                        </tr>
+                      </table>
+                      <div class="mt-3 pt-2 border-top">
+                        <a href="${waUrl}" target="_blank" class="btn btn-sm btn-success font-weight-bold w-100 py-2" style="background-color: #25D366; border: none;">
+                          <i class="fab fa-whatsapp fa-lg me-1"></i> Chat WhatsApp Pemesan
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Trip Info Box -->
+                  <div class="col-md-6">
+                    <div class="p-3 bg-white border rounded-3 h-100 shadow-sm">
+                      <h6 class="font-weight-bold text-success mb-3 border-bottom pb-2">
+                        <i class="fas fa-compass me-2"></i> Detail Destinasi Trip
+                      </h6>
+                      <table class="table table-borderless table-sm m-0">
+                        <tr>
+                          <td class="text-muted" style="width:110px;">Destinasi:</td>
+                          <td><strong class="text-dark fs-6">${b.destinationName}</strong></td>
+                        </tr>
+                        <tr>
+                          <td class="text-muted">Kategori:</td>
+                          <td><span class="badge bg-secondary">${dest ? dest.category : 'Wisata Alam'}</span></td>
+                        </tr>
+                        <tr>
+                          <td class="text-muted">Lokasi:</td>
+                          <td>${dest ? dest.location : 'Indonesia'}</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+
+                  <!-- Departure & Pricing Box -->
+                  <div class="col-12">
+                    <div class="p-3 bg-white border rounded-3 shadow-sm">
+                      <h6 class="font-weight-bold text-success mb-3 border-bottom pb-2">
+                        <i class="fas fa-calculator me-2"></i> Keberangkatan & Pembayaran
+                      </h6>
+                      <div class="row text-center g-3">
+                        <div class="col-md-4">
+                          <small class="text-muted d-block">Tanggal Keberangkatan</small>
+                          <strong class="fs-6 text-primary"><i class="fas fa-calendar-alt me-1"></i> ${b.travelDate}</strong>
+                        </div>
+                        <div class="col-md-4">
+                          <small class="text-muted d-block">Jumlah Peserta</small>
+                          <strong class="fs-6 text-dark"><i class="fas fa-users me-1"></i> ${b.participants} Orang</strong>
+                        </div>
+                        <div class="col-md-4">
+                          <small class="text-muted d-block">Total Pembayaran</small>
+                          <strong class="fs-5 text-success"><i class="fas fa-wallet me-1"></i> ${formatIDR(b.totalPrice)}</strong>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Special Requests / Notes Box -->
+                  <div class="col-12">
+                    <div class="p-3 bg-light border rounded-3">
+                      <h6 class="font-weight-bold text-dark mb-2">
+                        <i class="fas fa-sticky-note me-2 text-warning"></i> Catatan / Permintaan Khusus
+                      </h6>
+                      <p class="mb-0 text-muted fst-italic">
+                        ${b.notes ? `"${b.notes}"` : 'Tidak ada catatan atau permintaan khusus.'}
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="modal-footer bg-light p-3">
+                <button type="button" class="btn btn-secondary px-4 font-weight-bold rounded-pill" data-bs-dismiss="modal">Tutup</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const existing = document.getElementById('adminBookingDetailModal');
+      if (existing) existing.remove();
+
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+      const modalEl = document.getElementById('adminBookingDetailModal');
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+
+
+    // Update Booking Status (Approved / Cancelled) & Auto-Open WhatsApp ACC
+    async function updateBookingStatusItem(id, newStatus) {
+      const index = currentBookingsList.findIndex(b => b.id === id || b._id === id);
+      if (index === -1) return;
+
+      const b = currentBookingsList[index];
+      b.status = newStatus;
+
+      try {
+        const token = localStorage.getItem('adventure_token');
+        await fetch(`/api/bookings/${id}/status`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+      } catch (err) {}
+
+      saveBookingsData(currentBookingsList);
+      updateAdminStats();
+      renderAdminBookingsTable(currentBookingsList);
+
+      if (newStatus === 'Approved') {
+        let cleanPhone = (b.phone || '').replace(/\D/g, '');
+        if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
+        if (!cleanPhone.startsWith('62')) cleanPhone = '62' + cleanPhone;
+
+        const emojiParty = '\uD83C\uDF89';    // 🎉
+        const emojiCheck = '\u2705';         // ✅
+        const emojiMap = '\uD83D\uDDFA';     // 🗺️
+        const emojiCard = '\uD83D\uDCB3';    // 💳
+        const emojiSparkles = '\u2728';     // ✨
+
+        const accMessage = 
+          `${emojiParty} *KABAR GEMBIRA! PEMESANAN ANDA DISETUJUI (ACC)* ${emojiParty}\n\n` +
+          `Halo Kak *${b.customerName}*, pemesanan trip Anda di *Adventure Travel Indonesia* telah diverifikasi dan disetujui oleh Admin!\n\n` +
+          `${emojiMap} *DETAIL PEMESANAN APPROVED:*\n` +
+          `• ID Booking   : ${id}\n` +
+          `• Paket Wisata : ${b.destinationName}\n` +
+          `• Tgl Berangkat: ${b.travelDate}\n` +
+          `• Jumlah Peserta: ${b.participants} Orang\n` +
+          `• Total Biaya  : ${formatIDR(b.totalPrice)}\n` +
+          `• Status       : ${emojiCheck} APPROVED / DISETUJUI\n\n` +
+          `${emojiCard} *INSTRUKSI SELANJUTNYA:*\n` +
+          `Silakan lakukan pembayaran DP/Pelunasan ke rekening resmi kami:\n` +
+          `• *Bank BCA*: 123-456-7890 a/n PT Adventure Travel\n` +
+          `• *Bank Mandiri*: 098-765-4321 a/n PT Adventure Travel\n\n` +
+          `Setelah melakukan transfer, mohon kirimkan foto bukti transfer ke chat ini ya Kak. Terima kasih! ${emojiSparkles}`;
+
+        const encodedAccMessage = encodeURIComponent(accMessage);
+        window.open(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodedAccMessage}`, '_blank');
+        alert(`Status pemesanan ${id} (${b.customerName}) berhasil DISETUJU (Approved)! Link WhatsApp Bot ACC otomatis dibuka.`);
+      } else {
+        alert(`Status pemesanan ${id} (${b.customerName}) berhasil diubah menjadi "${newStatus}".`);
+      }
+    }
+
+
+    // Delete Booking Item
+    async function deleteBookingItem(id) {
+      const item = currentBookingsList.find(b => b.id === id || b._id === id);
+      if (!item) return;
+
+      if (confirm(`Apakah Anda yakin ingin menghapus pemesanan dari "${item.customerName}" (${item.destinationName})?`)) {
+        try {
+          const token = localStorage.getItem('adventure_token');
+          await fetch(`/api/bookings/${id}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` }
+          });
+        } catch (err) {}
+
+        currentBookingsList = currentBookingsList.filter(b => b.id !== id && b._id !== id);
+        saveBookingsData(currentBookingsList);
+        updateAdminStats();
+        renderAdminBookingsTable(currentBookingsList);
+      }
+    }
+
+    async function renderAdminUsersTable() {
+      const tbody = document.getElementById('adminUsersTable');
+      if (!tbody) return;
+
+      let usersList = [];
+      try {
+        const res = await fetch('/api/users');
+        if (res.ok) {
+          usersList = await res.json();
+        }
+      } catch (err) {
+        console.log('Backend users sync offline, loading registered users from LocalStorage.');
+      }
+
+      if (!usersList || usersList.length === 0) {
+        let registeredLocal = JSON.parse(localStorage.getItem('adventure_registered_users') || '[]');
+        const adminDefault = { id: 'admin1', name: "Administrator Adventure", email: "admin@adventuretravel.id", phone: "089517846680", role: "admin" };
+        usersList = [adminDefault, ...registeredLocal.filter(u => u.email !== 'admin@adventuretravel.id')];
+      }
+
+      tbody.innerHTML = '';
+      if (usersList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted">Belum ada pengguna terdaftar.</td></tr>';
+        return;
+      }
+
+      usersList.forEach(u => {
+        const id = u.id || u._id;
+        const isAdmin = (u.email && u.email.toLowerCase() === 'admin@adventuretravel.id') || u.role === 'admin';
+        const actionBtn = isAdmin
+          ? `<span class="badge bg-light text-muted border px-3 py-2"><i class="fas fa-shield-alt me-1 text-warning"></i> Admin Utama</span>`
+          : `<button class="btn btn-sm btn-outline-danger font-weight-bold" onclick="deleteUserItem('${id}', '${u.name}')" title="Hapus User"><i class="fas fa-trash me-1"></i> Hapus</button>`;
+
+        const tr = `
+          <tr>
+            <td><strong>${u.name}</strong></td>
+            <td>${u.email}</td>
+            <td><i class="fab fa-whatsapp text-success me-1"></i> ${u.phone || '-'}</td>
+            <td><span class="badge ${isAdmin ? 'bg-danger' : 'bg-primary'} px-3 py-2 fs-6">${u.role || 'user'}</span></td>
+            <td>${actionBtn}</td>
+          </tr>
+        `;
+        tbody.insertAdjacentHTML('beforeend', tr);
+      });
+    }
+
+    async function deleteUserItem(id, name) {
+      if (confirm(`Apakah Anda yakin ingin menghapus pengguna "${name}" dari sistem?`)) {
+        try {
+          await fetch(`/api/users/${id}`, { method: 'DELETE' });
+        } catch (err) {}
+
+        let registeredLocal = JSON.parse(localStorage.getItem('adventure_registered_users') || '[]');
+        registeredLocal = registeredLocal.filter(u => u.id !== id && u._id !== id);
+        localStorage.setItem('adventure_registered_users', JSON.stringify(registeredLocal));
+
+        renderAdminUsersTable();
+        alert(`Pengguna "${name}" berhasil dihapus dari sistem.`);
+      }
+    }
+
+    function showLoginModal() {
+      const modal = new bootstrap.Modal(document.getElementById('adminAuthModal'));
+      modal.show();
+    }
+
+    async function handleAdminModalLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          if (data.user.role !== 'admin') {
+            alert('Akses Ditolak! Akun ini bukan akun Admin.');
+            return;
+          }
+          localStorage.setItem('adventure_user', JSON.stringify(data.user));
+          if (data.token) localStorage.setItem('adventure_token', data.token);
+          alert('Login Admin Berhasil!');
+          const modalEl = document.getElementById('adminAuthModal');
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
+          window.location.reload();
+          return;
+        } else {
+          alert(data.message || 'Email atau kata sandi yang Anda masukkan salah. Silakan periksa kembali!');
+          return;
+        }
+      } catch (err) {}
+
+      if (email.toLowerCase() === 'admin@adventuretravel.id' && password === 'admin123') {
+        const adminUser = { id: 'admin1', name: 'Administrator Adventure', email: 'admin@adventuretravel.id', role: 'admin', phone: '089517846680' };
+        localStorage.setItem('adventure_user', JSON.stringify(adminUser));
+        alert('Login Admin Berhasil!');
+        const modalEl = document.getElementById('adminAuthModal');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        if (modal) modal.hide();
+        window.location.reload();
+      } else {
+        alert('Email atau kata sandi yang Anda masukkan salah. Silakan periksa kembali!');
+      }
+    }
+
+
+  </script>
+</body>
+</html>

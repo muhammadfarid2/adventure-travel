@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adventure Travel Indonesia | Jelajahi Keindahan Alam Nusantara</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Pemesanan wisata alam Indonesia profesional: Pendakian Gunung, Wisata Curug, Wisata Pulau, dan Wisata Bukit dengan pelayanan terbaik dan aman.">
+  <meta name="keywords" content="Adventure Travel Indonesia, Pendakian Gunung, Wisata Curug, Wisata Pulau, Wisata Bukit, Bromo, Rinjani, Komodo, Trip Murah">
+  <meta property="og:title" content="Adventure Travel Indonesia | Explore The Beauty of Indonesia">
+  <meta property="og:description" content="Temukan destinasi wisata alam terbaik Indonesia dengan pengalaman tak terlupakan.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200">
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://img.icons8.com/color/48/mountain.png" type="image/png">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- AOS Animation CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Swiper JS CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+  <!-- Custom Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/animation.css">
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="spinner"></div>
+    <h4 class="font-weight-bold" style="letter-spacing: 2px;">ADVENTURE TRAVEL</h4>
+    <p class="small opacity-75">Menyiapkan Petualanganmu...</p>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="fas fa-mountain text-warning me-2"></i>Adventure<span>Travel</span>
+      </a>
+      <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">Tentang Kami</a></li>
+          <li class="nav-item"><a class="nav-link" href="destination.html">Destinasi</a></li>
+          <li class="nav-item"><a class="nav-link" href="gallery.html">Galeri</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Kontak</a></li>
+          <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+            <a class="nav-link btn-nav-book text-dark px-4" href="booking.html"><i class="fas fa-compass me-1"></i> Book Trip</a>
+          </li>
+        </ul>
+        <div id="navbarAuthContainer" class="d-inline-block"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section parallax-bg">
+    <div class="container">
+      <div class="hero-content" data-aos="zoom-in" data-aos-duration="1000">
+        <span class="badge bg-warning text-dark font-weight-bold mb-3 px-3 py-2 rounded-pill shadow">
+          <i class="fas fa-fire me-1"></i> Indonesia Official Outdoor Adventure Provider
+        </span>
+        <h1 class="display-3 font-weight-bold">
+          <span id="typingText">Explore The Beauty of Indonesia</span><span class="typing-cursor"></span>
+        </h1>
+        <p class="lead">
+          Temukan destinasi wisata alam terbaik mulai dari Gunung, Curug, Pulau hingga Bukit dengan pengalaman aman, profesional, dan tak terlupakan.
+        </p>
+        <div class="hero-buttons">
+          <a href="destination.html" class="btn btn-primary-custom pulse-button"><i class="fas fa-paper-plane me-2"></i> Explore Now</a>
+          <a href="booking.html" class="btn btn-outline-custom"><i class="fas fa-calendar-check me-2"></i> Book Trip</a>
+        </div>
+
+        <!-- Interactive Quick Search Bar -->
+        <div class="search-box-wrapper" data-aos="fade-up" data-aos-delay="300">
+          <form class="row g-2 align-items-center search-form" onsubmit="event.preventDefault(); location.href='destination.html?search=' + encodeURIComponent(document.getElementById('heroSearchInput').value);">
+            <div class="col-md-5">
+              <div class="input-group">
+                <span class="input-group-text bg-white border-0"><i class="fas fa-search text-success"></i></span>
+                <input type="text" id="heroSearchInput" class="form-control" placeholder="Cari Gunung, Curug, Pulau, Bukit...">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <select class="form-select" id="heroCategorySelect" onchange="location.href='destination.html?category=' + this.value;">
+                <option value="All">Semua Kategori Wisata</option>
+                <option value="Gunung">Pendakian Gunung</option>
+                <option value="Curug">Wisata Curug / Air Terjun</option>
+                <option value="Pulau">Wisata Pulau & Bahari</option>
+                <option value="Bukit">Wisata Bukit & Savana</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <button type="submit" class="btn btn-success w-100 font-weight-bold py-3 rounded-md shadow">
+                <i class="fas fa-search me-1"></i> Cari Wisata
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="section-padding bg-light">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">
+        <span class="subtitle">KATEGORI WISATA</span>
+        <h2>Jelajahi Alam Indonesia</h2>
+        <p>Pilih kategori petualangan favoritmu dan rasakan sensasi menyatu dengan keindahan alam Nusantara.</p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Gunung -->
+        <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <a href="destination.html?category=Gunung">
+            <div class="category-card">
+              <img src="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=600" alt="Gunung">
+              <div class="overlay">
+                <h3>Pendakian Gunung</h3>
+                <p>Bromo, Rinjani, Prau & Semeru</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Curug -->
+        <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+          <a href="destination.html?category=Curug">
+            <div class="category-card">
+              <img src="https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?q=80&w=600" alt="Curug">
+              <div class="overlay">
+                <h3>Wisata Curug</h3>
+                <p>Air terjun alami & kolam jernih</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Pulau -->
+        <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+          <a href="destination.html?category=Pulau">
+            <div class="category-card">
+              <img src="https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?q=80&w=600" alt="Pulau">
+              <div class="overlay">
+                <h3>Wisata Pulau</h3>
+                <p>Sailing Komodo, Pari & Derawan</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Bukit -->
+        <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+          <a href="destination.html?category=Bukit">
+            <div class="category-card">
+              <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=600" alt="Bukit">
+              <div class="overlay">
+                <h3>Wisata Bukit</h3>
+                <p>Sunrise Sikunir & Bukit Pergasingan</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Destinations Section -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">
+        <span class="subtitle">DESTINASI POPULER</span>
+        <h2>Paket Wisata Terfavorit</h2>
+        <p>Destinasi pilihan dengan ulasan tertinggi dan pengalaman terlengkap untuk momen spesialmu.</p>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="gallery-filter-btns" data-aos="fade-up">
+        <button class="filter-btn dest-filter-btn active" data-category="All">Semua</button>
+        <button class="filter-btn dest-filter-btn" data-category="Gunung">Gunung</button>
+        <button class="filter-btn dest-filter-btn" data-category="Curug">Curug</button>
+        <button class="filter-btn dest-filter-btn" data-category="Pulau">Pulau</button>
+        <button class="filter-btn dest-filter-btn" data-category="Bukit">Bukit</button>
+      </div>
+
+      <!-- Destinations Grid -->
+      <div class="row" id="destinationsGrid">
+        <!-- Rendered dynamically via script.js -->
+      </div>
+
+      <div class="text-center mt-5" data-aos="fade-up">
+        <a href="destination.html" class="btn btn-primary-custom"><i class="fas fa-th-large me-2"></i> Lihat Semua Destinasi (20+)</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Animated Statistics Counter -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="100">
+          <div class="stat-box">
+            <i class="fas fa-map-marked-alt"></i>
+            <div class="stat-number" data-target="20">0</div>
+            <div class="stat-label">Destinasi Alam</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="200">
+          <div class="stat-box">
+            <i class="fas fa-users"></i>
+            <div class="stat-number" data-target="5000">0</div>
+            <div class="stat-label">Wisatawan Puas</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="300">
+          <div class="stat-box">
+            <i class="fas fa-smile-beam"></i>
+            <div class="stat-number" data-target="99">0</div>
+            <div class="stat-label">% Rating Kepuasan</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="400">
+          <div class="stat-box">
+            <i class="fas fa-award"></i>
+            <div class="stat-number" data-target="10">0</div>
+            <div class="stat-label">Tahun Pengalaman</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial Slider Section -->
+  <section class="section-padding bg-light">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">
+        <span class="subtitle">TESTIMONI PELANGGAN</span>
+        <h2>Kata Mereka Tentang Kami</h2>
+        <p>Kisah nyata pengalaman para penjelajah bersama Adventure Travel Indonesia.</p>
+      </div>
+
+      <div class="swiper testimonial-swiper" data-aos="fade-up">
+        <div class="swiper-wrapper">
+          <!-- Testimonial 1 -->
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <i class="fas fa-quote-right quote-icon"></i>
+              <div class="client-info">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200" alt="Rizky">
+                <div>
+                  <h5 class="client-name">Rizky Febrian</h5>
+                  <span class="client-role"><i class="fas fa-star text-warning"></i> 5.0 (Trip Gunung Bromo)</span>
+                </div>
+              </div>
+              <p class="testimonial-text">"Pendakian Gunung Bromo bersama Adventure Travel sangat memuaskan! Tour guide ramah dan sangat memperhatikan keselamatan peserta dari awal sampai akhir."</p>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <i class="fas fa-quote-right quote-icon"></i>
+              <div class="client-info">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200" alt="Clarissa">
+                <div>
+                  <h5 class="client-name">Clarissa Maharani</h5>
+                  <span class="client-role"><i class="fas fa-star text-warning"></i> 5.0 (Sailing Pulau Komodo)</span>
+                </div>
+              </div>
+              <p class="testimonial-text">"Sailing Komodo-nya sungguh luar biasa! Makanan berlimpah dan fasilitas kapal sangat bersih. Momen sunset di Pulau Padar tidak akan pernah saya lupakan!"</p>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <i class="fas fa-quote-right quote-icon"></i>
+              <div class="client-info">
+                <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?q=80&w=200" alt="Fahri">
+                <div>
+                  <h5 class="client-name">Fahri Hidayat</h5>
+                  <span class="client-role"><i class="fas fa-star text-warning"></i> 5.0 (Curug Cibaliung)</span>
+                </div>
+              </div>
+              <p class="testimonial-text">"Trekking ke Curug Cibaliung airnya jernih banget. Pelayanan ramah sejak reservasi sampai paska tour. Sangat direkomendasikan!"</p>
+            </div>
+          </div>
+
+          <!-- Testimonial 4 -->
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <i class="fas fa-quote-right quote-icon"></i>
+              <div class="client-info">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200" alt="Nabila">
+                <div>
+                  <h5 class="client-name">Nabila Putri</h5>
+                  <span class="client-role"><i class="fas fa-star text-warning"></i> 5.0 (Gunung Prau)</span>
+                </div>
+              </div>
+              <p class="testimonial-text">"Sunrise Puncak Prau spektakuler! Tenda dan logistik disiapkan sangat profesional. Tim ramah dan asyik diajak ngobrol."</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination mt-4"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner Section -->
+  <section class="py-5" style="background: linear-gradient(135deg, #073E27, #0B5D3B); color: white;">
+    <div class="container text-center py-4" data-aos="zoom-in">
+      <h2 class="font-weight-bold mb-3 display-5">Siap Memulai Petualangan Impianmu?</h2>
+      <p class="lead mb-4 max-w-700 mx-auto opacity-90">Pesan paket liburan wisata alam sekarang dan dapatkan diskon spesial 15% untuk booking grup!</p>
+      <a href="booking.html" class="btn btn-warning btn-lg font-weight-bold px-5 py-3 rounded-pill shadow-lg"><i class="fas fa-check-circle me-2"></i> Pesan Sekarang</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <a class="navbar-brand text-white font-weight-bold fs-3 mb-3 d-inline-block" href="#">
+            <i class="fas fa-mountain text-warning me-2"></i>Adventure<span>Travel</span>
+          </a>
+          <p>Pelopor penyedia tur wisata alam profesional Indonesia. Melayani pendakian gunung, wisata air terjun/curug, eksplorasi pulau tropis, dan keindahan bukit sabana.</p>
+          <div class="social-links mt-3">
+            <a href="https://facebook.com/" class="social-icon" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com/" class="social-icon" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://youtube.com/" class="social-icon" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://wa.me/6289517846680?text=Halo%20Admin,%20saya%20ingin%20bertanya%20seputar%20paket%20wisata" class="social-icon" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          </div>
+
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+          <h4>Menu Utama</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">Tentang Kami</a></li>
+            <li><a href="destination.html">Destinasi</a></li>
+            <li><a href="gallery.html">Galeri Foto</a></li>
+            <li><a href="booking.html">Booking Trip</a></li>
+            <li><a href="contact.html">Kontak Kami</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h4>Destinasi Utama</h4>
+          <ul class="footer-links">
+            <li><a href="destination.html?category=Gunung">Pendakian Gunung Bromo & Rinjani</a></li>
+            <li><a href="destination.html?category=Curug">Wisata Curug Cibaliung & Leuwi Hejo</a></li>
+            <li><a href="destination.html?category=Pulau">Sailing Pulau Komodo & Derawan</a></li>
+            <li><a href="destination.html?category=Bukit">Bukit Pergasingan & Sikunir</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h4>Kontak Informasi</h4>
+          <p><i class="fas fa-map-marker-alt text-warning me-2"></i> Pabuaran, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16916</p>
+
+          <p><i class="fas fa-phone-alt text-warning me-2"></i> +62 895-1784-6680</p>
+          <p><i class="fas fa-envelope text-warning me-2"></i> info@adventuretravel.id</p>
+          <p><i class="fas fa-clock text-warning me-2"></i> Buka 24/7 Layanan Customer</p>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p class="mb-0">&copy; 2026 <strong>Adventure Travel Indonesia</strong>. All Rights Reserved. Designed for Nature Lovers.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <div id="backToTop"><i class="fas fa-arrow-up"></i></div>
+
+  <!-- JS Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- Custom Scripts -->
+  <script src="js/script.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/slider.js"></script>
+</body>
+</html>
