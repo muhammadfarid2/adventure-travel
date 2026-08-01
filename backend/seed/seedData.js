@@ -28,25 +28,37 @@ const seedPostgreSQLDatabase = async (options = { force: false }) => {
 
 
 
-    // Check existing data
-    const existingUsers = await User.count();
+    // 1. Always Ensure Default Admin User Exists
+    const adminEmail = 'admin@adventuretravel.id';
+    let adminUser = await User.findOne({ where: { email: adminEmail } });
+    if (!adminUser) {
+      const salt = await bcrypt.genSalt(10);
+      const adminPassword = await bcrypt.hash('admin123', salt);
+      await User.create({
+        name: 'Administrator Adventure',
+        email: adminEmail,
+        password: adminPassword,
+        phone: '089517846680',
+        role: 'admin'
+      });
+      console.log(`[PostgreSQL Seed] Created Default Admin User (${adminEmail}).`);
+    } else {
+      const salt = await bcrypt.genSalt(10);
+      adminUser.password = await bcrypt.hash('admin123', salt);
+      adminUser.role = 'admin';
+      await adminUser.save();
+      console.log(`[PostgreSQL Seed] Reset/Verified Admin User (${adminEmail}).`);
+    }
+
+    // Check existing data for destinations
     const existingDestinations = await Destination.count();
 
-    if (existingUsers > 0 && existingDestinations > 0 && !options.force) {
-      console.log('[PostgreSQL Seed] Database already contains initial data. Auto-seed verified.');
+    if (existingDestinations > 0 && !options.force) {
+      console.log('[PostgreSQL Seed] Database already contains destination data. Auto-seed verified.');
       return;
     }
 
     console.log('[PostgreSQL Seed] Seeding initial database records...');
-
-    // 1. Users (ONLY 1 Default Main Admin)
-    const salt = await bcrypt.genSalt(10);
-    const adminPassword = await bcrypt.hash('admin123', salt);
-
-    const users = await User.bulkCreate([
-      { name: 'Administrator Adventure', email: 'admin@adventuretravel.id', password: adminPassword, phone: '089517846680', role: 'admin' }
-    ]);
-    console.log(`[PostgreSQL Seed] Seeded ${users.length} Default Admin User (Email: admin@adventuretravel.id).`);
 
 
     // 2. Destinations (20 Total)

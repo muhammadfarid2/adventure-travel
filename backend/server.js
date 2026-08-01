@@ -37,13 +37,12 @@ app.use(helmet({
   contentSecurityPolicy: false
 }));
 
-// CORS Configuration for Production
-const allowedOrigins = process.env.FRONTEND_URL && process.env.FRONTEND_URL !== '*'
-  ? process.env.FRONTEND_URL.split(',')
-  : '*';
-
+// CORS Configuration for Production (Mobile & Web Compatible)
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    // Dynamically mirror incoming origin to satisfy credentials: true requirement on mobile browsers (iOS Safari / Android Chrome)
+    callback(null, true);
+  },
   credentials: true
 }));
 
