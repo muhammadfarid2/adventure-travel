@@ -23,6 +23,33 @@
     border-radius: 12px;
     margin-top: 15px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    text-align: center !important;
+  }
+  .navbar-collapse .navbar-nav {
+    text-align: center !important;
+    width: 100% !important;
+  }
+  .navbar-collapse .nav-item {
+    margin: 4px 0 !important;
+    width: 100% !important;
+  }
+  #navbarAuthContainer {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 12px 0 6px 0 !important;
+    text-align: center !important;
+  }
+  #navbarAuthContainer .btn,
+  .navbar-collapse .btn-nav-book {
+    width: 100% !important;
+    max-width: 280px !important;
+    margin: 0 auto !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
   }
   .section-padding {
     padding: 60px 0;
