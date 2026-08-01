@@ -1274,22 +1274,7 @@
       const realId = b.id || b._id || id;
       b.status = newStatus;
 
-      try {
-        const token = localStorage.getItem('adventure_token');
-        await fetch(`/api/bookings/${realId}/status`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify({ status: newStatus })
-        });
-      } catch (err) {}
-
-      saveBookingsData(currentBookingsList);
-      updateAdminStats();
-      renderAdminBookingsTable(currentBookingsList);
-
+      // If Approved, trigger WhatsApp IMMEDIATELY on user click gesture (before async await)
       if (newStatus === 'Approved') {
         let cleanPhone = (b.phone || '').replace(/\D/g, '');
         if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.substring(1);
@@ -1319,10 +1304,30 @@
 
         const encodedAccMessage = encodeURIComponent(accMessage);
         const waUrl = `https://wa.me/${cleanPhone}?text=${encodedAccMessage}`;
+
+        // Direct browser open on user click gesture
         window.open(waUrl, '_blank') || (window.location.href = waUrl);
       } else {
         alert(`Status pemesanan ${realId} (${b.customerName}) berhasil diubah menjadi "${newStatus}".`);
       }
+
+      // Update local UI immediately
+      saveBookingsData(currentBookingsList);
+      updateAdminStats();
+      renderAdminBookingsTable(currentBookingsList);
+
+      // Background API sync
+      try {
+        const token = localStorage.getItem('adventure_token');
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        await fetch(`/api/bookings/${realId}/status`, {
+          method: 'PUT',
+          headers,
+          body: JSON.stringify({ status: newStatus })
+        });
+      } catch (err) {}
     }
 
 
