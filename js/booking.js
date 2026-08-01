@@ -88,21 +88,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (summaryTotalPrice) summaryTotalPrice.textContent = formatIDR(total);
   }
 
-  // Auto-fill booking form with active logged-in user data
+  // Auto-fill booking form disabled to keep input fields clean for all users
   function autofillUserData() {
-    const user = typeof getLoggedInUser === 'function' ? getLoggedInUser() : null;
-    if (user) {
-      const nameInput = document.getElementById('nameInput');
-      const emailInput = document.getElementById('emailInput');
-      const phoneInput = document.getElementById('phoneInput');
-
-      if (nameInput && user.name) nameInput.value = user.name;
-      if (emailInput && user.email) emailInput.value = user.email;
-      if (phoneInput && user.phone) phoneInput.value = user.phone;
-    }
+    // Left empty per user request so fields start blank
   }
 
-  autofillUserData();
+  // autofillUserData();
 
 
   destinationSelect?.addEventListener('change', (e) => {
