@@ -1,115 +1,89 @@
 const { Sequelize } = require('sequelize');
-const path = require('path');
-const fs = require('fs');
-const child_process = require('child_process');
-
-const rawDbUrl = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/adventure_travel';
-const dbUrl = typeof rawDbUrl === 'string' ? rawDbUrl.trim().replace(/^["'`]|["'`]$/g, '').trim() : '';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-// Check if DATABASE_URL points to a cloud database or requires SSL
-const isRailwayInternal = dbUrl.includes('railway.internal');
-const isCloudPostgres = dbUrl.includes('supabase') || 
-                        dbUrl.includes('neon.tech') || 
-                        dbUrl.includes('render.com') || 
-                        dbUrl.includes('amazonaws.com') || 
-                        dbUrl.includes('railway') || 
-                        dbUrl.includes('rlwy.net') || 
-                        dbUrl.includes('sslmode=require');
+// Helper to find a valid PostgreSQL URL from various Railway / Cloud env vars
+const getValidPostgresUrl = () => {
+  const candidates = [
+    process.env.DATABASE_URL,
+    process.env.DATABASE_PUBLIC_URL,
+    process.env.DATABASE_PRIVATE_URL,
+    process.env.POSTGRES_URL
+  ];
 
-const isLocalhost = dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1');
-
-// Synchronously check if local PostgreSQL port 5432 is open
-const isLocalPgActive = () => {
-  if (!isLocalhost) return false;
-  try {
-    const script = "const n=require('net'),s=n.connect(5432,'127.0.0.1',()=>process.exit(0));s.on('error',()=>process.exit(1));s.on('timeout',()=>process.exit(1));";
-    child_process.execSync(`node -e "${script}"`, { stdio: 'ignore', timeout: 1000 });
-    return true;
-  } catch (e) {
-    return false;
+  for (const raw of candidates) {
+    if (raw && typeof raw === 'string') {
+      const cleaned = raw.trim().replace(/^["'`]|["'`]$/g, '').trim();
+      if (cleaned.startsWith('postgres://') || cleaned.startsWith('postgresql://')) {
+        return cleaned;
+      }
+    }
   }
+  return null;
 };
 
+const postgresUrl = getValidPostgresUrl();
+const isRailwayInternal = postgresUrl ? postgresUrl.includes('railway.internal') : false;
+const isCloudPostgres = postgresUrl ? (
+  postgresUrl.includes('supabase') || 
+  postgresUrl.includes('neon.tech') || 
+  postgresUrl.includes('render.com') || 
+  postgresUrl.includes('amazonaws.com') || 
+  postgresUrl.includes('railway') || 
+  postgresUrl.includes('rlwy.net') || 
+  postgresUrl.includes('sslmode=require')
+) : Boolean(process.env.PGHOST);
+
 let sequelize;
-const usePostgres = (isCloudPostgres || (!isLocalhost) || isLocalPgActive()) && dbUrl.length > 0;
 
-if (usePostgres) {
-  let dialectOptions = {};
-  if (process.env.DB_SSL === 'false' || isRailwayInternal) {
-    dialectOptions = {};
-  } else if (process.env.DB_SSL === 'true' || isProduction || isCloudPostgres) {
-    dialectOptions = {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      }
-    };
-  }
-
-  try {
-    sequelize = new Sequelize(dbUrl, {
-      dialect: 'postgres',
-      logging: false,
-      dialectOptions,
-      pool: {
-        max: 10,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
-      }
-    });
-  } catch (parseErr) {
-    console.warn(`[PostgreSQL Warning]: Failed to parse DATABASE_URL (${parseErr.message}). Using SQLite fallback.`);
-    const dataDir = path.join(__dirname, '../data');
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true });
+let dialectOptions = {};
+if (process.env.DB_SSL === 'false' || isRailwayInternal) {
+  dialectOptions = {};
+} else if (process.env.DB_SSL === 'true' || isProduction || isCloudPostgres) {
+  dialectOptions = {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
     }
-    sequelize = new Sequelize({
-      dialect: 'sqlite',
-      storage: path.join(dataDir, 'database.sqlite'),
-      logging: false
-    });
-  }
+  };
+}
+
+if (postgresUrl) {
+  console.log('[Database Config]: Initializing PostgreSQL via URL connection string...');
+  sequelize = new Sequelize(postgresUrl, {
+    dialect: 'postgres',
+    logging: false,
+    dialectOptions,
+    pool: { max: 10, min: 0, acquire: 30000, idle: 10000 }
+  });
+} else if (process.env.PGHOST && process.env.PGDATABASE) {
+  console.log('[Database Config]: Initializing PostgreSQL via PGHOST parameters...');
+  sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSER || 'postgres', process.env.PGPASSWORD || '', {
+    host: process.env.PGHOST,
+    port: process.env.PGPORT || 5432,
+    dialect: 'postgres',
+    logging: false,
+    dialectOptions,
+    pool: { max: 10, min: 0, acquire: 30000, idle: 10000 }
+  });
 } else {
-  const dataDir = path.join(__dirname, '../data');
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
-  sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: path.join(dataDir, 'database.sqlite'),
-    logging: false
+  // Fallback to standard PostgreSQL local string
+  const defaultUrl = 'postgres://postgres:postgres@localhost:5432/adventure_travel';
+  console.log('[Database Config]: Using default PostgreSQL connection string...');
+  sequelize = new Sequelize(defaultUrl, {
+    dialect: 'postgres',
+    logging: false,
+    pool: { max: 5, min: 0, acquire: 10000, idle: 5000 }
   });
 }
 
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    if (sequelize.getDialect() === 'postgres') {
-      console.log('[PostgreSQL Connected]: Successfully connected to PostgreSQL Database!');
-    } else {
-      console.log('\n======================================================================');
-      console.log('[PostgreSQL Notice]: Localhost PostgreSQL server is not active on port 5432.');
-      console.log('[PostgreSQL Cloud Setup Guide]:');
-      console.log(' To connect to PostgreSQL Cloud (Neon / Supabase):');
-      console.log(' 1. Create a free PostgreSQL Cloud DB on Neon (https://neon.tech) or Supabase (https://supabase.com).');
-      console.log(' 2. Copy your connection URL: postgres://user:password@ep-xyz.neon.tech/neondb?sslmode=require');
-      console.log(' 3. Set DATABASE_URL in your root .env file.');
-      console.log('[Standalone Persistence]: Running with local SQLite database storage.');
-      console.log('======================================================================\n');
-      console.log('[Database Storage]: Local persistent database ready.');
-    }
+    console.log('[PostgreSQL Connected]: Successfully connected to PostgreSQL Database!');
   } catch (error) {
-    if (sequelize.getDialect() === 'postgres') {
-      console.warn(`[PostgreSQL Warning]: Could not connect to database server (${error.message}).`);
-    } else {
-      console.error('[Database Error]: Failed to connect to database storage:', error.message);
-    }
+    console.warn(`[PostgreSQL Warning]: Database connection attempt failed (${error.message}).`);
   }
 };
 
 module.exports = { sequelize, connectDB };
-
-
